@@ -1,0 +1,15 @@
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\GSM RCV.ASM 91 : Using default destination of 1 (file).
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\GSM RCV.ASM 108 : Found label after column 1. (ISR)
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\GSM RCV.ASM 134 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\GSM RCV.ASM 136 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\GSM RCV.ASM 137 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\GSM RCV.ASM 138 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\GSM RCV.ASM 140 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\GSM RCV.ASM 142 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\GSM RCV.ASM 144 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\GSM RCV.ASM 157 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\GSM RCV.ASM 158 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\GSM RCV.ASM 163 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\GSM RCV.ASM 167 : Found label after column 1. (WAIT)
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\GSM RCV.ASM 170 : Found label after column 1. (WW)
+Warning[205] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\GSM RCV.ASM 173 : Found directive in column 1. (END)

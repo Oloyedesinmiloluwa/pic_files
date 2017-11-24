@@ -1,0 +1,55 @@
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 58 : Symbol not previously defined (STORE)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 60 : Symbol not previously defined (READLOOP)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 63 : Symbol not previously defined (ALPHABET)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 64 : Symbol not previously defined (FILE2)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 65 : Symbol not previously defined (ALPHABET)
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 71 : Using default destination of 1 (file).
+Error[128]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 72 : Missing argument(s)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 74 : Symbol not previously defined (FILE2)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 76 : Symbol not previously defined (STORE)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 78 : Symbol not previously defined (STORE)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 80 : Symbol not previously defined (STORE)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 82 : Symbol not previously defined (STORE)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 84 : Symbol not previously defined (STORE)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 86 : Symbol not previously defined (STORE)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 88 : Symbol not previously defined (STORE)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 90 : Symbol not previously defined (STORE)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 92 : Symbol not previously defined (STORE)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 94 : Symbol not previously defined (STORE)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 96 : Symbol not previously defined (STORE)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 98 : Symbol not previously defined (STORE)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 100 : Symbol not previously defined (STORE)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 102 : Symbol not previously defined (STORE)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 104 : Symbol not previously defined (STORE)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 106 : Symbol not previously defined (STORE)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 111 : Symbol not previously defined (EECON1)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 111 : Symbol not previously defined (WREN)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 113 : Symbol not previously defined (STORE)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 114 : Symbol not previously defined (EEDATA)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 116 : Symbol not previously defined (EEADR)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 119 : Symbol not previously defined (EECON2)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 121 : Symbol not previously defined (EECON2)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 122 : Symbol not previously defined (EECON1)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 122 : Symbol not previously defined (WR)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 123 : Symbol not previously defined (EECON1)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 123 : Symbol not previously defined (WR)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 125 : Symbol not previously defined (EECON1)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 125 : Symbol not previously defined (WREN)
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 131 : Using default destination of 1 (file).
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 133 : Symbol not previously defined (SAVED)
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 134 : Using default destination of 1 (file).
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 136 : Symbol not previously defined (EEADR)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 138 : Symbol not previously defined (EECON1)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 138 : Symbol not previously defined (RD)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 140 : Symbol not previously defined (EEDATA)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 141 : Symbol not previously defined (STORE)
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 183 : Using default destination of 1 (file).
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 191 : Using default destination of 1 (file).
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 214 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 216 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 218 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 220 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 221 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 236 : Symbol not previously defined (DEFAULT)
+Error[121]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 237 : Illegal label (CHECK)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\CAPTURE INT.ASM 237 : Symbol not previously defined (COMPLETE)

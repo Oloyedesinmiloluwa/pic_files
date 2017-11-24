@@ -1,0 +1,19 @@
+Warning[205] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM 16F877.ASM 29 : Found directive in column 1. (LIST)
+Warning[205] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM 16F877.ASM 30 : Found directive in column 1. (ORG)
+Warning[203] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM 16F877.ASM 31 : Found opcode in column 1. (GOTO)
+Warning[205] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM 16F877.ASM 34 : Found directive in column 1. (__CONFIG)
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM 16F877.ASM 50 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM 16F877.ASM 60 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM 16F877.ASM 72 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM 16F877.ASM 74 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM 16F877.ASM 75 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM 16F877.ASM 77 : Found label after column 1. (DONE)
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM 16F877.ASM 77 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM 16F877.ASM 80 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM 16F877.ASM 92 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM 16F877.ASM 94 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM 16F877.ASM 96 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM 16F877.ASM 98 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Error[122]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM 16F877.ASM 118 : Illegal opcode (LEASE)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM 16F877.ASM 119 : Symbol not previously defined (RELEASE)
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM 16F877.ASM 121 : Using default destination of 1 (file).

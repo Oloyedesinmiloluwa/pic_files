@@ -1,0 +1,305 @@
+MPASM  5.14                         GSM R.ASM   9-21-2015  20:06:51         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  00000001            00001 TMR0    EQU     1
+  00000002            00002 PC              EQU     2
+  00000003            00003 STATUS  EQU     3
+  00000005            00004 PORTA   EQU     5
+  00000006            00005 PORTB   EQU     6
+  00000007            00006 PORTC   EQU     7
+  00000008            00007 PORTD   EQU     8
+  00000009            00008 PORTE   EQU     9
+  00000085            00009 TRISA   EQU     85H
+  00000086            00010 TRISB   EQU     86H
+  00000087            00011 TRISC   EQU     87H
+  00000088            00012 TRISD   EQU     88H
+  00000089            00013 TRISE   EQU     89H
+  00000081            00014 OPTION_R        EQU 81H
+  00000002            00015 ZEROBIT EQU     2
+                      00016 ;CCP1CON        EQU     17H
+  0000000B            00017 INTCON  EQU 0BH
+  00000007            00018 GIE             EQU     7
+  0000008C            00019 PIE1    EQU     8CH
+  0000000C            00020 PIR1    EQU     0CH
+  00000006            00021 PEIE    EQU     6
+  00000002            00022 CCP1IF  EQU     2
+  00000002            00023 CCP1IE  EQU     2
+  00000000            00024 EDGE    EQU     0
+  00000001            00025 READY   EQU     1
+  0000000C            00026 EEDATA          EQU     0CH
+  0000000D            00027 EEADR           EQU     0DH
+  0000008C            00028 EECON1          EQU     8CH
+  0000008D            00029 EECON2          EQU     8DH
+  00000000            00030 RD EQU 0 ;read bit in EECON1
+  00000001            00031 WR EQU 1 ;Write bit in EECON1
+  00000002            00032 WREN EQU 2
+  00000018            00033 RCSTA   EQU 18H
+  00000098            00034 TXSTA   EQU     98H
+  00000099            00035 SPBRG   EQU     99H
+  00000004            00036 TXIE    EQU     4
+  00000005            00037 RCIE    EQU     5
+  00000004            00038 CREN    EQU     4
+  00000005            00039 TXEN    EQU     5
+  00000004            00040 TXIF    EQU 4
+  00000005            00041 RCIF    EQU     5
+  00000019            00042 TXREG   EQU     19H
+  0000001A            00043 RCREG   EQU     1AH
+  00000000            00044 FRAME   EQU     0
+  00000002            00045 FERR    EQU     2               
+  00000020            00046 COUNT   EQU     20H
+  00000021            00047 RECV    EQU     21H
+  00000022            00048 FLAG    EQU     22H
+  00000023            00049 C3              EQU     23H
+  00000024            00050 C4              EQU     24H
+  00000025            00051 C5              EQU     25H
+  00000026            00052 DISP1   EQU     26H
+  00000069            00053 TSTATUS         EQU     69H
+MPASM  5.14                         GSM R.ASM   9-21-2015  20:06:51         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  0000006A            00054 TW              EQU     6AH
+  0000006B            00055 TPORTB          EQU     6BH
+  0000006C            00056 TNUM    EQU     6CH             
+  0000006D            00057 COUNTER         EQU     6DH
+  0000006E            00058 NUM             EQU     6EH
+  0000006F            00059 COUNTER2 EQU    6FH
+  0000002B            00060 ALPHA   EQU             2BH
+  0000002C            00061 DELAYCOUNT      EQU     2CH     
+  0000002D            00062 SHIFTCOUNT      EQU     2DH     
+  0000002E            00063 STORE   EQU             2EH
+  0000003A            00064 FILE1   EQU             3AH
+  0000003B            00065 F2      EQU             3BH
+                      00066 
+                      00067         LIST    P=16F877A
+0000                  00068         ORG             0
+0000   2831           00069         GOTO    START
+0004                  00070         ORG             4
+0004   281C           00071         GOTO    ISR
+2007   3F3A           00072         __CONFIG        H'3F3A'
+                      00073 ;SUBROUTINE
+0005   0181           00074 DELAYP15 CLRF TMR0 ;START TMR0.
+0006   0801           00075 LOOPB MOVF TMR0,W ;READ TMR0 INTO W.
+0007   3C02           00076                 SUBLW .2 ;TIME-3  195
+0008   1D03           00077         BTFSS STATUS,ZEROBIT ;Check TIME-W ¼ 0
+0009   2806           00078         GOTO LOOPB ;Time is not ¼ 3.
+000A   3400           00079         RETLW 0
+                      00080 
+                      00081 
+000B   30FF           00082 DELAYWAIT MOVLW .255                    ;for waiti
+000C   00AC           00083                 MOVWF   DELAYCOUNT
+Message[305]: Using default destination of 1 (file).
+000D   0BAC           00084 DEL3    DECFSZ  DELAYCOUNT
+000E   2816           00085                 GOTO    DELAY4
+000F   3400           00086                 RETLW   .0
+0010   0181           00087 DELAYP5 CLRF TMR0 ;START TMR0.
+0011   0801           00088 LOOPe MOVF TMR0,W ;READ TMR0 INTO W.
+0012   3CFD           00089                 SUBLW .253      ;3  195
+0013   1D03           00090         BTFSS STATUS,ZEROBIT ;Check TIME-W ¼ 0
+0014   2811           00091         GOTO LOOPe ;Time is not ¼ 3.
+0015   3400           00092         RETLW 0
+                      00093                 
+0016   0181           00094 DELAY4 CLRF TMR0 ;START TMR0.
+0017   0801           00095 LOOPC MOVF TMR0,W ;READ TMR0 INTO W.
+0018   3CFF           00096                 SUBLW .255 ;TIME-3
+0019   1D03           00097         BTFSS STATUS,ZEROBIT ;Check TIME-W ¼ 0
+001A   2817           00098         GOTO LOOPC ;Time is not ¼ 3.
+001B   280D           00099         GOTO DEL3
+                      00100 
+                      00101 
+001C   00EA           00102 ISR             MOVWF   TW
+001D   0E03           00103                 SWAPF   STATUS,W
+001E   00E9           00104                 MOVWF   TSTATUS
+001F   0806           00105                 MOVF    PORTB,W
+MPASM  5.14                         GSM R.ASM   9-21-2015  20:06:51         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0020   00EB           00106                 MOVWF   TPORTB
+0021   1022           00107                 BCF             FLAG,FRAME
+0022   1918           00108                 BTFSC   RCSTA,FERR
+0023   1422           00109                 BSF             FLAG,FRAME
+0024   081A           00110                 MOVF    RCREG,W
+0025   00A1           00111                 MOVWF   RECV
+0026   1422           00112                 BSF             FLAG,0
+0027   1406           00113                 BSF             PORTB,0
+0028   2010           00114                 CALL    DELAYP5
+0029   1006           00115                 BCF             PORTB,0
+002A   2010           00116                 CALL    DELAYP5
+                      00117 
+002B   086B           00118                 MOVF    TPORTB,W
+002C   0086           00119                 MOVWF   PORTB
+002D   0E69           00120                 SWAPF   TSTATUS,W
+002E   0083           00121                 MOVWF   STATUS
+002F   086A           00122                 MOVF    TW,W
+0030   0009           00123                 RETFIE
+                      00124 
+0031                  00125 START   
+0031   1683           00126                 BSF             STATUS,5
+0032   3001           00127                 MOVLW   .1
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0033   0086           00128                 MOVWF   TRISB
+0034   3080           00129                 MOVLW   B'10000000'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0035   0087           00130                 MOVWF   TRISC
+                      00131 ;               BSF             TRISC,7    ;receive     INPUT
+                      00132 ;               BCF             TRISC,6         ;transmit OUTPUT
+0036   3007           00133                 MOVLW   07H
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0037   0081           00134                 MOVWF   OPTION_R
+0038   0183           00135                 CLRF    STATUS
+0039   0186           00136                 CLRF    PORTB
+003A   0187           00137                 CLRF    PORTC   
+003B   01A2           00138                 CLRF    FLAG
+003C   01A1           00139                 CLRF    RECV
+003D   1683           00140                 BSF             STATUS,5
+003E   3082           00141                 MOVLW   .130
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+003F   0099           00142                 MOVWF   SPBRG; FOR BAUD RATE
+0040   3024           00143                 MOVLW   24H;B'00100100' trasmit ealed high speed
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0041   0098           00144                 MOVWF   TXSTA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0042   160C           00145                 BSF             PIE1,TXIE
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0043   168C           00146                 BSF             PIE1,RCIE
+0044   0183           00147                 CLRF    STATUS
+0045   018B           00148                 CLRF    INTCON
+0046   3090           00149                 MOVLW   90H     ;10010000
+0047   0098           00150                 MOVWF   RCSTA
+                      00151         
+MPASM  5.14                         GSM R.ASM   9-21-2015  20:06:51         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0048   170B           00152                 BSF             INTCON,PEIE
+0049   178B           00153                 BSF             INTCON,GIE
+004A   128C           00154                 BCF             PIR1,RCIF
+004B   1022           00155                 BCF             FLAG,0
+                      00156                 
+Warning[207]: Found label after column 1. (WAIT)
+004C   1C22           00157         WAIT    BTFSS   FLAG,0
+004D   284C           00158                         GOTO    WAIT
+004E   0821           00159                         MOVF    RECV,W
+Warning[207]: Found label after column 1. (WW)
+004F   1506           00160         WW              BSF             PORTB,2
+0050   284F           00161                         GOTO    WW
+                      00162         
+                      00163         END
+MPASM  5.14                         GSM R.ASM   9-21-2015  20:06:51         PAGE  5
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ALPHA                             0000002B
+C3                                00000023
+C4                                00000024
+C5                                00000025
+CCP1IE                            00000002
+CCP1IF                            00000002
+COUNT                             00000020
+COUNTER                           0000006D
+COUNTER2                          0000006F
+CREN                              00000004
+DEL3                              0000000D
+DELAY4                            00000016
+DELAYCOUNT                        0000002C
+DELAYP15                          00000005
+DELAYP5                           00000010
+DELAYWAIT                         0000000B
+DISP1                             00000026
+EDGE                              00000000
+EEADR                             0000000D
+EECON1                            0000008C
+EECON2                            0000008D
+EEDATA                            0000000C
+F2                                0000003B
+FERR                              00000002
+FILE1                             0000003A
+FLAG                              00000022
+FRAME                             00000000
+GIE                               00000007
+INTCON                            0000000B
+ISR                               0000001C
+LOOPB                             00000006
+LOOPC                             00000017
+LOOPe                             00000011
+NUM                               0000006E
+OPTION_R                          00000081
+PC                                00000002
+PEIE                              00000006
+PIE1                              0000008C
+PIR1                              0000000C
+PORTA                             00000005
+PORTB                             00000006
+PORTC                             00000007
+PORTD                             00000008
+PORTE                             00000009
+RCIE                              00000005
+RCIF                              00000005
+RCREG                             0000001A
+RCSTA                             00000018
+RD                                00000000
+READY                             00000001
+RECV                              00000021
+SHIFTCOUNT                        0000002D
+SPBRG                             00000099
+MPASM  5.14                         GSM R.ASM   9-21-2015  20:06:51         PAGE  6
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+START                             00000031
+STATUS                            00000003
+STORE                             0000002E
+TMR0                              00000001
+TNUM                              0000006C
+TPORTB                            0000006B
+TRISA                             00000085
+TRISB                             00000086
+TRISC                             00000087
+TRISD                             00000088
+TRISE                             00000089
+TSTATUS                           00000069
+TW                                0000006A
+TXEN                              00000005
+TXIE                              00000004
+TXIF                              00000004
+TXREG                             00000019
+TXSTA                             00000098
+WAIT                              0000004C
+WR                                00000001
+WREN                              00000002
+WW                                0000004F
+ZEROBIT                           00000002
+__16F877A                         00000001
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : X---XXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX X--------------- ---------------- ----------------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    78
+Program Memory Words Free:  8114
+
+
+Errors   :     0
+Warnings :     2 reported,     0 suppressed
+Messages :     8 reported,     0 suppressed
+
+

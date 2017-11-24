@@ -1,0 +1,210 @@
+MPASM  5.14                INPUT SCANNIN2.ASM   8-9-2014  10:52:20         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ;HEADER FOR 16F84
+  00000003            00002 STATUS  EQU     3
+  00000005            00003 PORTA   EQU     5
+  00000006            00004 PORTB   EQU     6
+  00000001            00005 TMR0    EQU     1
+  00000085            00006 TRISA   EQU     85H
+  00000086            00007 TRISB   EQU     86H
+  00000002            00008 ZEROBIT EQU     2
+  0000000C            00009 COUNT   EQU     0CH
+  00000081            00010 OPTION_R EQU    81H
+                      00011 
+                      00012         LIST P=16F84
+0000                  00013         ORG 0
+0000   2843           00014         GOTO    START
+                      00015 
+Warning[205]: Found directive in column 1. (__CONFIG)
+2007   3FF0           00016 __CONFIG H'3FF0'
+                      00017 
+                      00018 ;SUBROUTINE SECTION
+0001   0181           00019 DELAYP5 CLRF    TMR0
+0002   0801           00020 LOOPA   MOVF    TMR0,W
+0003   3C10           00021         SUBLW   .16
+0004   1D03           00022         BTFSS   STATUS,ZEROBIT
+0005   2802           00023         GOTO    LOOPA
+0006   3400           00024         RETLW   0
+                      00025 
+0007   0181           00026 DELAYP25 CLRF   TMR0
+0008   0801           00027 LOOPB   MOVF    TMR0,W
+0009   3C08           00028         SUBLW   .8
+000A   1D03           00029         BTFSS   STATUS,ZEROBIT
+000B   2808           00030         GOTO    LOOPB
+000C   3400           00031         RETLW   0
+                      00032 
+000D   0181           00033 DELAY1  CLRF    TMR0
+000E   0801           00034 LOOPC   MOVF    TMR0,W
+000F   3C20           00035         SUBLW   .32
+0010   1D03           00036         BTFSS   STATUS,ZEROBIT
+0011   280E           00037         GOTO    LOOPC
+0012   3400           00038         RETLW   0
+0013   0181           00039 DELAY125 CLRF   TMR0
+0014   0801           00040 LOOPD   MOVF    TMR0,W
+0015   3C04           00041         SUBLW   .4
+0016   1D03           00042         BTFSS   STATUS,ZEROBIT
+0017   2814           00043         GOTO    LOOPD
+0018   3400           00044         RETLW   0
+0019   3002           00045 DELAY2  MOVLW   .2
+001A   008C           00046         MOVWF   COUNT
+001B   200D           00047 DEC     CALL    DELAY1
+Message[305]: Using default destination of 1 (file).
+001C   0B8C           00048         DECFSZ  COUNT
+001D   281B           00049         GOTO    DEC                                                                                     
+                                                                                                                    
+001E   3400           00050         RETLW   0
+MPASM  5.14                INPUT SCANNIN2.ASM   8-9-2014  10:52:20         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00051 
+001F   1486           00052 LIGHT0  BSF             PORTB,1
+0020   1506           00053                 BSF             PORTB,2
+0021   1586           00054                 BSF             PORTB,3
+0022   2007           00055                 CALL    DELAYP25
+0023   1086           00056                 BCF             PORTB,1
+0024   1106           00057                 BCF             PORTB,2
+0025   1186           00058                 BCF             PORTB,3
+0026   2007           00059                 CALL    DELAYP25
+0027   3400           00060                 RETLW   0
+0028   1406           00061 LIGHT1  BSF             PORTB,0
+0029   1506           00062                 BSF             PORTB,2
+002A   1586           00063                 BSF             PORTB,3
+002B   2007           00064                 CALL    DELAYP25
+002C   1006           00065                 BCF             PORTB,0
+002D   1106           00066                 BCF             PORTB,2
+002E   1186           00067                 BCF             PORTB,3
+002F   2007           00068                 CALL    DELAYP25
+0030   3400           00069                 RETLW   0
+0031   1486           00070 LIGHT2  BSF             PORTB,1
+0032   1406           00071                 BSF             PORTB,0
+0033   1586           00072                 BSF             PORTB,3
+0034   2007           00073                 CALL    DELAYP25
+0035   1086           00074                 BCF             PORTB,1
+0036   1006           00075                 BCF             PORTB,0
+0037   1186           00076                 BCF             PORTB,3
+0038   2007           00077                 CALL    DELAYP25
+0039   3400           00078                 RETLW   0
+003A   1486           00079 LIGHT3  BSF             PORTB,1
+003B   1506           00080                 BSF             PORTB,2
+003C   1406           00081                 BSF             PORTB,0
+003D   2007           00082                 CALL    DELAYP25
+003E   1086           00083                 BCF             PORTB,1
+003F   1106           00084                 BCF             PORTB,2
+0040   1006           00085                 BCF             PORTB,0
+0041   2007           00086                 CALL    DELAYP25
+0042   3400           00087                 RETLW   0
+                      00088 ;CONFIGURATION SECTION
+0043   1683           00089 START   BSF     STATUS,5
+0044   3007           00090         MOVLW   B'00000111'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0045   0085           00091         MOVWF   TRISA
+0046   3000           00092         MOVLW   B'00000000'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0047   0086           00093         MOVWF   TRISB
+0048   3007           00094         MOVLW   B'00000111'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0049   0081           00095         MOVWF   OPTION_R
+004A   1283           00096         BCF     STATUS,5
+004B   0185           00097         CLRF    PORTA
+004C   0186           00098         CLRF    PORTB
+                      00099         ;PROGRAM STARTS NOW
+004D   1805           00100 SW0             BTFSC   PORTA,0
+MPASM  5.14                INPUT SCANNIN2.ASM   8-9-2014  10:52:20         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+004E   285A           00101                 GOTO    TURN0
+004F   1006           00102                 BCF             PORTB,0
+                      00103                 
+0050   1885           00104 SW1             BTFSC   PORTA,1
+0051   285D           00105                 GOTO    TURN1
+0052   1086           00106                 BCF             PORTB,1
+                      00107 
+0053   1905           00108 SW2             BTFSC   PORTA,2
+0054   2860           00109                 GOTO    TURN2
+0055   1106           00110                 BCF             PORTB,2
+0056   1985           00111 SW3             BTFSC   PORTA,3
+0057   2863           00112                 GOTO    TURN3
+0058   1186           00113                 BCF             PORTB,3
+0059   284D           00114                 GOTO    SW0
+                      00115 
+005A   1406           00116 TURN0   BSF             PORTB,0
+005B   201F           00117                 CALL    LIGHT0
+005C   2850           00118                 GOTO    SW1
+005D   1486           00119 TURN1   BSF             PORTB,1
+005E   2028           00120                 CALL    LIGHT1
+005F   2853           00121                 GOTO    SW2
+0060   1506           00122 TURN2   BSF             PORTB,2
+0061   2031           00123                 CALL    LIGHT2
+0062   2856           00124                 GOTO    SW3
+0063   1586           00125 TURN3   BSF             PORTB,3
+0064   203A           00126                 CALL    LIGHT3
+0065   284D           00127                 GOTO    SW0
+                      00128                 END
+MPASM  5.14                INPUT SCANNIN2.ASM   8-9-2014  10:52:20         PAGE  4
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+COUNT                             0000000C
+DEC                               0000001B
+DELAY1                            0000000D
+DELAY125                          00000013
+DELAY2                            00000019
+DELAYP25                          00000007
+DELAYP5                           00000001
+LIGHT0                            0000001F
+LIGHT1                            00000028
+LIGHT2                            00000031
+LIGHT3                            0000003A
+LOOPA                             00000002
+LOOPB                             00000008
+LOOPC                             0000000E
+LOOPD                             00000014
+OPTION_R                          00000081
+PORTA                             00000005
+PORTB                             00000006
+START                             00000043
+STATUS                            00000003
+SW0                               0000004D
+SW1                               00000050
+SW2                               00000053
+SW3                               00000056
+TMR0                              00000001
+TRISA                             00000085
+TRISB                             00000086
+TURN0                             0000005A
+TURN1                             0000005D
+TURN2                             00000060
+TURN3                             00000063
+ZEROBIT                           00000002
+__16F84                           00000001
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXX---------- ----------------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:   102
+Program Memory Words Free:   922
+
+
+Errors   :     0
+Warnings :     1 reported,     0 suppressed
+Messages :     4 reported,     0 suppressed
+
+

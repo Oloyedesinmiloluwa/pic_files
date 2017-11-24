@@ -1,0 +1,7 @@
+Warning[205] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\VOLTAGE INDICATOR WITH LCD.ASM 20 : Found directive in column 1. (__CONFIG)
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\VOLTAGE INDICATOR WITH LCD.ASM 41 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\VOLTAGE INDICATOR WITH LCD.ASM 43 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\VOLTAGE INDICATOR WITH LCD.ASM 45 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\VOLTAGE INDICATOR WITH LCD.ASM 47 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\VOLTAGE INDICATOR WITH LCD.ASM 49 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Error[173]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\VOLTAGE INDICATOR WITH LCD.ASM 97 : Source file path exceeds 62 characters (C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\VOLTAGE INDICATOR WITH LCD.ASM)

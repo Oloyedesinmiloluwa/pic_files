@@ -1,0 +1,13 @@
+Warning[205] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\LARGECOUNT.ASM 18 : Found directive in column 1. (__CONFIG)
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\LARGECOUNT.ASM 22 : Found label after column 1. (DELAY)
+Warning[203] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\LARGECOUNT.ASM 27 : Found opcode in column 1. (RETLW)
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\LARGECOUNT.ASM 60 : Using default destination of 1 (file).
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\LARGECOUNT.ASM 63 : Using default destination of 1 (file).
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\LARGECOUNT.ASM 78 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\LARGECOUNT.ASM 80 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\LARGECOUNT.ASM 82 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Warning[202] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\LARGECOUNT.ASM 96 : Argument out of range.  Least significant bits used.
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\LARGECOUNT.ASM 97 : Using default destination of 1 (file).
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\LARGECOUNT.ASM 103 : Using default destination of 1 (file).
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\LARGECOUNT.ASM 115 : Using default destination of 1 (file).
+Warning[205] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\LARGECOUNT.ASM 124 : Found directive in column 1. (END)

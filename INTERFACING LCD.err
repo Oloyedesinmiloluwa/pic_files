@@ -1,0 +1,7 @@
+Warning[205] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\INTERFACING LCD.ASM 11 : Found directive in column 1. (LIST)
+Warning[205] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\INTERFACING LCD.ASM 12 : Found directive in column 1. (ORG)
+Warning[203] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\INTERFACING LCD.ASM 13 : Found opcode in column 1. (GOTO)
+Warning[205] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\INTERFACING LCD.ASM 16 : Found directive in column 1. (__CONFIG)
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\INTERFACING LCD.ASM 323 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\INTERFACING LCD.ASM 325 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\INTERFACING LCD.ASM 327 : Register in operand not in bank 0.  Ensure that bank bits are correct.

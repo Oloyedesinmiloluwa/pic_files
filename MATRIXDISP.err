@@ -1,0 +1,36 @@
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 121 : Using default destination of 1 (file).
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 148 : Using default destination of 1 (file).
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 150 : Using default destination of 1 (file).
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 167 : Found label after column 1. (.)
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 168 : Found label after column 1. (.)
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 169 : Found label after column 1. (.)
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 170 : Found label after column 1. (.)
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 178 : Using default destination of 1 (file).
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 224 : Using default destination of 1 (file).
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 228 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 240 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 242 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 243 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 245 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 247 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 269 : Using default destination of 1 (file).
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 274 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 331 : Using default destination of 1 (file).
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 609 : Using default destination of 1 (file).
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 628 : Using default destination of 1 (file).
+Error[108]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 897 : Illegal character (/)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 1107 : Symbol not previously defined (XH)
+Error[112]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 1107 : Missing operator
+Error[128]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 1301 : Missing argument(s)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 1310 : Symbol not previously defined (R_bb)
+Error[128]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 1326 : Missing argument(s)
+Error[113]   C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 1335 : Symbol not previously defined (R_bb)
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 1403 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 1405 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 1407 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 1409 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 1411 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 1413 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 1414 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 1518 : Found label after column 1. (BEGIN)
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIXDISP.ASM 1541 : Using default destination of 1 (file).

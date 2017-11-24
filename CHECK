@@ -1,0 +1,49 @@
+
+
+BEGIN BSF ADCON0,2 ;Take Measurement.
+WAIT BTFSC ADCON0,2 ;Wait until reading done.
+GOTO WAIT
+MOVF ADRES,W ;Move A/D Result into W
+CLRF PORTB ;Clear PortB.
+SUBLW .26 ;26-,W. W is altered
+BTFSC STATUS,CARRY ;Is W4 or 526
+GOTO BEGIN ;W is 526 (0.5v)
+MOVF ADRES,W ;Move A/D Result into W
+BSF PORTB,0 ;Turn on B0.
+SUBLW .51 ;51-,W. W is altered
+BTFSC STATUS,CARRY ;Is W4 or 551
+GOTO BEGIN ;W is 551 (1.0v)
+MOVF ADRES,W ;Move A/D Result into W
+BSF PORTB,1 ;Turn on B1.
+SUBLW .77 ;77-,W. W is altered
+BTFSC STATUS,CARRY ;Is W4 or 577
+GOTO BEGIN ;W is 577 (1.5v)
+Analogue to digital conversion 183
+MOVF ADRES,W ;Move A/D Result into W
+BSF PORTB,2 ;Turn on B2.
+SUBLW .102 ;102-,W. W is altered
+BTFSC STATUS,CARRY ;Is W4 or 5102
+GOTO BEGIN ;W is 5102 (2.0v)
+MOVF ADRES,W ;Move A/D Result into W
+BSF PORTB,3 ;Turn on B3.
+SUBLW .128 ;128-,W. W is altered
+BTFSC STATUS,CARRY ;Is W4 or 5128
+GOTO BEGIN ;W is 5128 (2.5v)
+MOVF ADRES,W ;Move A/D Result into W
+BSF PORTB,4 ;Turn on B4.
+SUBLW .153 ;153-,W. W is altered
+BTFSC STATUS,CARRY ;Is W4 or 5153
+GOTO BEGIN ;W is 5153 (3.0v)
+MOVF ADRES,W ;Move A/D Result into W
+BSF PORTB,5 ;Turn on B5.
+SUBLW .179 ;179-,W. W is altered
+BTFSC STATUS,CARRY ;Is W4 or 5179
+GOTO BEGIN ;W is 5179 (3.5v)
+MOVF ADRES,W ;Move A/D Result into W
+BSF PORTB,6 ;Turn on B6.
+SUBLW .204 ;204-,W. W is altered
+BTFSC STATUS,CARRY ;Is W4 or 5204
+GOTO BEGIN ;W is 5204 (4.0v)
+BSF PORTB,7 ;Turn on B7.
+GOTO BEGIN
+END

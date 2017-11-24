@@ -1,0 +1,218 @@
+MPASM  5.14                        KEYPAD.ASM   8-9-2014  16:57:53         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ; HEADER84.ASM for 16F84. This sets PORTA as an INPUT 
+                      00002 ; and PORTB as an OUTPUT (NB 0 means output).
+                      00003 ;The OPTION Register is set to /256 to give timing pulses of 1/32 of a second.
+                      00004 ;1second and 0.5 second delays are included in the subroutine section.
+                      00005 ;*******************************************************
+                      00006 ; EQUATES SECTION
+  00000001            00007 TMR0            EQU 1           ;means TMR0 is file 1.
+  00000003            00008 STATUS          EQU 3           ;means STATUS is file 3.
+  00000005            00009 PORTA           EQU 5           ;means PORTA is file 5.
+  00000006            00010 PORTB           EQU 6           ;means PORTB is file 6.
+  00000085            00011 TRISA           EQU 85H         ;TRISA (the PORTA I/O selection) is file 85H
+  00000086            00012 TRISB           EQU 86H         ;TRISB (the PORTB I/O selection) is file 86H
+  00000081            00013 OPTION_R        EQU 81H         ;the OPTION register is file 81H
+  00000002            00014 ZEROBIT         EQU 2           ;means ZEROBIT is bit 2.
+  0000000C            00015 COUNT           EQU 0CH         ; COUNT is file 0C, a register to count events.
+                      00016 ;*********************************************************
+Warning[205]: Found directive in column 1. (LIST)
+                      00017 LIST    P=16F84 ;we are using the 16F84.
+Warning[205]: Found directive in column 1. (ORG)
+0000                  00018 ORG     0       ;the start address in memory is 0
+Warning[203]: Found opcode in column 1. (GOTO)
+0000   280D           00019 GOTO    START ;goto start!
+                      00020 ;******************************************************************
+                      00021 ; Configuration Bits
+Warning[205]: Found directive in column 1. (__CONFIG)
+2007   3FF0           00022 __CONFIG H'3FF0' ;selects LP oscillator, WDT off, PUT on,
+                      00023 ;Code Protection disabled.
+                      00024 ;*****************************************************
+                      00025 ;SUBROUTINE SECTION.
+                      00026 ; 1 second delay.
+0001   0181           00027 DELAY1  CLRF    TMR0    ;START TMR0.
+0002   0801           00028 LOOPA   MOVF    TMR0,W  ;READ TMR0 INTO W.
+0003   3C20           00029                 SUBLW   .32     ;TIME - 32
+0004   1D03           00030                 BTFSS   STATUS,ZEROBIT ; Check TIME-W¼0
+0005   2802           00031                 GOTO    LOOPA   ;Time is not¼32.
+0006   3400           00032                 RETLW   0               ;Time is 32, return.
+                      00033 ; 0.5 second delay.
+                      00034 
+0007   0181           00035 DELAYP5 CLRF    TMR0    ;START TMR0.
+0008   0801           00036 LOOPB   MOVF    TMR0,W  ;READ TMR0 INTO W.
+0009   3C10           00037                 SUBLW   .16     ;TIME - 16
+000A   1D03           00038                 BTFSS   STATUS,ZEROBIT ; Check TIME-W¼0
+000B   2808           00039                 GOTO    LOOPB   ;Time is not¼16.
+000C   3400           00040                 RETLW   0       ;Time is 16, return.
+                      00041 ;*********************************************************
+                      00042 ;CONFIGURATION SECTION.
+000D   1683           00043 START   BSF     STATUS,5 ;Turns to Bank1.
+000E   3000           00044                 MOVLW   B'00000000'     ;5bits of PORTA are I/P
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000F   0085           00045                 MOVWF   TRISA
+0010   30F8           00046                 MOVLW   B'11111000'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0011   0086           00047                 MOVWF   TRISB           ;PORTB is OUTPUT
+MPASM  5.14                        KEYPAD.ASM   8-9-2014  16:57:53         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0012   3007           00048                 MOVLW   B'00000111'     ;Prescaler is /256
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0013   0081           00049                 MOVWF   OPTION_R        ;TIMER is 1/32 secs.
+0014   1283           00050                 BCF     STATUS,5        ;Return to Bank0.
+0015   0185           00051                 CLRF    PORTA           ;Clears PortA.
+0016   0186           00052                 CLRF    PORTB           ;Clears PortB.
+                      00053 ;*********************************************************
+0017   1006           00054 COL1    BCF             PORTB,0
+0018   1486           00055                 BSF             PORTB,1
+0019   1506           00056                 BSF             PORTB,2
+001A   1D86           00057 TEST1   BTFSS   PORTB,3
+001B   2839           00058                 GOTO    SET1
+001C   1E06           00059 TEST4   BTFSS   PORTB,4
+001D   283C           00060                 GOTO    SET4
+001E   1E86           00061 TEST7   BTFSS   PORTB,5
+001F   283F           00062                 GOTO    SET7
+0020   1F06           00063 TEST11  BTFSS   PORTB,6
+0021   2842           00064                 GOTO    SET11
+0022   1086           00065 COL2    BCF             PORTB,1
+0023   1406           00066                 BSF             PORTB,0
+0024   1506           00067                 BSF             PORTB,2
+0025   1D86           00068 TEST2   BTFSS   PORTB,3
+0026   2845           00069                 GOTO    SET2
+0027   1E06           00070 TEST5   BTFSS   PORTB,4
+0028   2848           00071                 GOTO    SET5
+0029   1E86           00072 TEST8   BTFSS   PORTB,5
+002A   284B           00073                 GOTO    SET8
+002B   1F06           00074 TEST10  BTFSS   PORTB,6
+002C   284E           00075                 GOTO    SET10
+002D   1106           00076 COL3    BCF             PORTB,2
+002E   1406           00077                 BSF             PORTB,0
+002F   1486           00078                 BSF             PORTB,1
+0030   1D86           00079 TEST3   BTFSS   PORTB,3
+0031   2851           00080                 GOTO    SET3
+0032   1E06           00081 TEST6   BTFSS   PORTB,4
+0033   2854           00082                 GOTO    SET6
+0034   1E86           00083 TEST9   BTFSS   PORTB,5
+0035   2857           00084                 GOTO    SET9
+0036   1F06           00085 TEST12  BTFSS   PORTB,6
+0037   285A           00086                 GOTO    SET12   
+0038   2817           00087                 GOTO    COL1
+0039   3001           00088 SET1    MOVLW   .1
+003A   0085           00089                 MOVWF   PORTA
+003B   281C           00090                 GOTO    TEST4
+003C   3004           00091 SET4    MOVLW   .4
+003D   0085           00092                 MOVWF   PORTA
+003E   281E           00093                 GOTO    TEST7
+003F   3007           00094 SET7    MOVLW   .7
+0040   0085           00095                 MOVWF   PORTA
+0041   2820           00096                 GOTO    TEST11
+0042   300B           00097 SET11   MOVLW   .11
+0043   0085           00098                 MOVWF   PORTA
+0044   2822           00099                 GOTO    COL2
+MPASM  5.14                        KEYPAD.ASM   8-9-2014  16:57:53         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0045   3002           00100 SET2    MOVLW   .2
+0046   0085           00101                 MOVWF   PORTA
+0047   281C           00102                 GOTO    TEST4
+0048   3005           00103 SET5    MOVLW   .5
+0049   0085           00104                 MOVWF   PORTA
+004A   281E           00105                 GOTO    TEST7
+004B   3008           00106 SET8    MOVLW   .8
+004C   0085           00107                 MOVWF   PORTA
+004D   2820           00108                 GOTO    TEST11
+004E   300A           00109 SET10   MOVLW   .10
+004F   0085           00110                 MOVWF   PORTA
+0050   282D           00111                 GOTO    COL3
+0051   3003           00112 SET3    MOVLW   .3
+0052   0085           00113                 MOVWF   PORTA
+0053   281C           00114                 GOTO    TEST4
+0054   3006           00115 SET6    MOVLW   .6
+0055   0085           00116                 MOVWF   PORTA
+0056   281E           00117                 GOTO    TEST7
+0057   3009           00118 SET9    MOVLW   .9
+0058   0085           00119                 MOVWF   PORTA
+0059   2820           00120                 GOTO    TEST11
+005A   300C           00121 SET12   MOVLW   .12
+005B   0085           00122                 MOVWF   PORTA
+005C   2817           00123                 GOTO    COL1
+                      00124                 END
+MPASM  5.14                        KEYPAD.ASM   8-9-2014  16:57:53         PAGE  4
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+COL1                              00000017
+COL2                              00000022
+COL3                              0000002D
+COUNT                             0000000C
+DELAY1                            00000001
+DELAYP5                           00000007
+LOOPA                             00000002
+LOOPB                             00000008
+OPTION_R                          00000081
+PORTA                             00000005
+PORTB                             00000006
+SET1                              00000039
+SET10                             0000004E
+SET11                             00000042
+SET12                             0000005A
+SET2                              00000045
+SET3                              00000051
+SET4                              0000003C
+SET5                              00000048
+SET6                              00000054
+SET7                              0000003F
+SET8                              0000004B
+SET9                              00000057
+START                             0000000D
+STATUS                            00000003
+TEST1                             0000001A
+TEST10                            0000002B
+TEST11                            00000020
+TEST12                            00000036
+TEST2                             00000025
+TEST3                             00000030
+TEST4                             0000001C
+TEST5                             00000027
+TEST6                             00000032
+TEST7                             0000001E
+TEST8                             00000029
+TEST9                             00000034
+TMR0                              00000001
+TRISA                             00000085
+TRISB                             00000086
+ZEROBIT                           00000002
+__16F84                           00000001
+MPASM  5.14                        KEYPAD.ASM   8-9-2014  16:57:53         PAGE  5
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXX--- ---------------- ----------------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    93
+Program Memory Words Free:   931
+
+
+Errors   :     0
+Warnings :     4 reported,     0 suppressed
+Messages :     3 reported,     0 suppressed
+
+

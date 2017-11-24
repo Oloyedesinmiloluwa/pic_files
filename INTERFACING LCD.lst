@@ -1,0 +1,562 @@
+MPASM  5.14               INTERFACING LCD.ASM   8-24-2014  15:32:44         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  00000001            00001 TMR0            EQU 1           ;means TMR0 is file 1.
+  00000003            00002 STATUS          EQU 3           ;means STATUS is file 3.
+  00000005            00003 PORTA           EQU 5           ;means PORTA is file 5.
+  00000006            00004 PORTB           EQU 6           ;means PORTB is file 6.
+  00000085            00005 TRISA           EQU 85H         ;TRISA (the PORTA I/O selection) is file 85H
+  00000086            00006 TRISB           EQU 86H         ;TRISB (the PORTB I/O selection) is file 86H
+  00000081            00007 OPTION_R        EQU 81H         ;the OPTION register is file 81H
+  00000002            00008 ZEROBIT         EQU 2           ;means ZEROBIT is bit 2.
+  0000000C            00009 COUNT           EQU 0CH         ; COUNT is file 0C, a register to count events.
+                      00010 ;*********************************************************
+Warning[205]: Found directive in column 1. (LIST)
+                      00011 LIST    P=16F84 ;we are using the 16F84.
+Warning[205]: Found directive in column 1. (ORG)
+0000                  00012 ORG     0       ;the start address in memory is 0
+Warning[203]: Found opcode in column 1. (GOTO)
+0000   290E           00013 GOTO    START ;goto start!
+                      00014 ;******************************************************************
+                      00015 ; Configuration Bits
+Warning[205]: Found directive in column 1. (__CONFIG)
+2007   3FF0           00016 __CONFIG H'3FF0' ;selects LP oscillator, WDT off, PUT on,
+                      00017 ;Code Protection disabled.
+                      00018 ;*****************************************************
+                      00019 ;SUBROUTINE SECTION.
+                      00020 ; 1 second delay.
+0001   0181           00021 DELAY1  CLRF    TMR0    ;START TMR0.
+0002   0801           00022 LOOPA   MOVF    TMR0,W  ;READ TMR0 INTO W.
+0003   3C20           00023                 SUBLW   .32     ;TIME - 32
+0004   1D03           00024                 BTFSS   STATUS,ZEROBIT ; Check TIME-W¼0
+0005   2802           00025                 GOTO    LOOPA   ;Time is not¼32.
+0006   3400           00026                 RETLW   0               ;Time is 32, return.
+                      00027 ; 0.5 second delay.
+                      00028 
+0007   0181           00029 DELAYP1 CLRF    TMR0    ;START TMR0.
+0008   0801           00030 LOOPB   MOVF    TMR0,W  ;READ TMR0 INTO W.
+0009   3C03           00031                 SUBLW   .3      ;TIME - 16
+000A   1D03           00032                 BTFSS   STATUS,ZEROBIT ; Check TIME-W¼0
+000B   2808           00033                 GOTO    LOOPB   ;Time is not¼16.
+000C   3400           00034                 RETLW   0       ;Time is 16, return.
+000D   0185           00035 CLRDISP CLRF    PORTA
+000E   3000           00036                 MOVLW   0H
+000F   0086           00037                 MOVWF   PORTB
+0010   2016           00038                 CALL    CLOCK
+0011   3001           00039                 MOVLW   1
+0012   0086           00040                 MOVWF   PORTB
+0013   2016           00041                 CALL    CLOCK
+0014   2007           00042                 CALL    DELAYP1
+0015   3400           00043                 RETLW   0
+0016   1505           00044 CLOCK   BSF             PORTA,2
+0017   0000           00045                 NOP
+0018   1105           00046                 BCF             PORTA,2
+0019   0000           00047                 NOP
+001A   3400           00048                 RETLW   0
+                      00049 
+MPASM  5.14               INTERFACING LCD.ASM   8-24-2014  15:32:44         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+001B   3002           00050 A               MOVLW   2
+001C   0085           00051                 MOVWF   PORTA
+001D   3004           00052                 MOVLW   4H
+001E   0086           00053                 MOVWF   PORTB
+001F   2016           00054                 CALL    CLOCK
+0020   3001           00055                 MOVLW   1H
+0021   0086           00056                 MOVWF   PORTB
+0022   2016           00057                 CALL    CLOCK
+0023   3400           00058                 RETLW   0
+                      00059 
+0024   3002           00060 BB              MOVLW   2
+0025   0085           00061                 MOVWF   PORTA
+0026   3004           00062                 MOVLW   4H
+0027   0086           00063                 MOVWF   PORTB
+0028   2016           00064                 CALL    CLOCK
+0029   3002           00065                 MOVLW   2H
+002A   0086           00066                 MOVWF   PORTB
+002B   2016           00067                 CALL    CLOCK
+002C   3400           00068                 RETLW   0
+                      00069 
+002D   3002           00070 C               MOVLW   2
+002E   0085           00071                 MOVWF   PORTA
+002F   3004           00072                 MOVLW   4H
+0030   0086           00073                 MOVWF   PORTB
+0031   2016           00074                 CALL    CLOCK
+0032   3003           00075                 MOVLW   3H
+0033   0086           00076                 MOVWF   PORTB
+0034   2016           00077                 CALL    CLOCK
+0035   3400           00078                 RETLW   0
+                      00079 
+0036   3002           00080 D               MOVLW   2
+0037   0085           00081                 MOVWF   PORTA
+0038   3004           00082                 MOVLW   4H
+0039   0086           00083                 MOVWF   PORTB
+003A   2016           00084                 CALL    CLOCK
+003B   3004           00085                 MOVLW   4H
+003C   0086           00086                 MOVWF   PORTB
+003D   2016           00087                 CALL    CLOCK
+003E   3400           00088                 RETLW   0
+                      00089 
+003F   3002           00090 E               MOVLW   2
+0040   0085           00091                 MOVWF   PORTA
+0041   3004           00092                 MOVLW   4H
+0042   0086           00093                 MOVWF   PORTB
+0043   2016           00094                 CALL    CLOCK
+0044   3005           00095                 MOVLW   5H
+0045   0086           00096                 MOVWF   PORTB
+0046   2016           00097                 CALL    CLOCK
+0047   3400           00098                 RETLW   0
+                      00099 
+0048   3002           00100 F               MOVLW   2
+0049   0085           00101                 MOVWF   PORTA
+004A   3004           00102                 MOVLW   4H
+MPASM  5.14               INTERFACING LCD.ASM   8-24-2014  15:32:44         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+004B   0086           00103                 MOVWF   PORTB
+004C   2016           00104                 CALL    CLOCK
+004D   3006           00105                 MOVLW   6H
+004E   0086           00106                 MOVWF   PORTB
+004F   2016           00107                 CALL    CLOCK
+0050   3400           00108                 RETLW   0
+                      00109 
+0051   3002           00110 G               MOVLW   2
+0052   0085           00111                 MOVWF   PORTA
+0053   3004           00112                 MOVLW   4H
+0054   0086           00113                 MOVWF   PORTB
+0055   2016           00114                 CALL    CLOCK
+0056   3007           00115                 MOVLW   7H
+0057   0086           00116                 MOVWF   PORTB
+0058   2016           00117                 CALL    CLOCK
+0059   3400           00118                 RETLW   0
+                      00119 
+005A   3002           00120 H               MOVLW   2
+005B   0085           00121                 MOVWF   PORTA
+005C   3004           00122                 MOVLW   4H
+005D   0086           00123                 MOVWF   PORTB
+005E   2016           00124                 CALL    CLOCK
+005F   3008           00125                 MOVLW   8H
+0060   0086           00126                 MOVWF   PORTB
+0061   2016           00127                 CALL    CLOCK
+0062   3400           00128                 RETLW   0
+                      00129 
+0063   3002           00130 I               MOVLW   2
+0064   0085           00131                 MOVWF   PORTA
+0065   3004           00132                 MOVLW   4H
+0066   0086           00133                 MOVWF   PORTB
+0067   2016           00134                 CALL    CLOCK
+0068   3009           00135                 MOVLW   9H
+0069   0086           00136                 MOVWF   PORTB
+006A   2016           00137                 CALL    CLOCK
+006B   3400           00138                 RETLW   0
+                      00139 
+006C   3002           00140 J               MOVLW   2
+006D   0085           00141                 MOVWF   PORTA
+006E   3004           00142                 MOVLW   4H
+006F   0086           00143                 MOVWF   PORTB
+0070   2016           00144                 CALL    CLOCK
+0071   300A           00145                 MOVLW   0AH
+0072   0086           00146                 MOVWF   PORTB
+0073   2016           00147                 CALL    CLOCK
+0074   3400           00148                 RETLW   0
+                      00149 
+0075   3002           00150 K               MOVLW   2
+0076   0085           00151                 MOVWF   PORTA
+0077   3004           00152                 MOVLW   4H
+0078   0086           00153                 MOVWF   PORTB
+0079   2016           00154                 CALL    CLOCK
+007A   300B           00155                 MOVLW   0BH
+MPASM  5.14               INTERFACING LCD.ASM   8-24-2014  15:32:44         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+007B   0086           00156                 MOVWF   PORTB
+007C   2016           00157                 CALL    CLOCK
+007D   3400           00158                 RETLW   0
+                      00159 
+007E   3002           00160 L               MOVLW   2
+007F   0085           00161                 MOVWF   PORTA
+0080   3004           00162                 MOVLW   4H
+0081   0086           00163                 MOVWF   PORTB
+0082   2016           00164                 CALL    CLOCK
+0083   300C           00165                 MOVLW   0CH
+0084   0086           00166                 MOVWF   PORTB
+0085   2016           00167                 CALL    CLOCK
+0086   3400           00168                 RETLW   0
+                      00169 
+0087   3002           00170 M               MOVLW   2
+0088   0085           00171                 MOVWF   PORTA
+0089   3004           00172                 MOVLW   4H
+008A   0086           00173                 MOVWF   PORTB
+008B   2016           00174                 CALL    CLOCK
+008C   300D           00175                 MOVLW   0DH
+008D   0086           00176                 MOVWF   PORTB
+008E   2016           00177                 CALL    CLOCK
+008F   3400           00178                 RETLW   0
+                      00179 
+0090   3002           00180 N               MOVLW   2
+0091   0085           00181                 MOVWF   PORTA
+0092   3004           00182                 MOVLW   4H
+0093   0086           00183                 MOVWF   PORTB
+0094   2016           00184                 CALL    CLOCK
+0095   300E           00185                 MOVLW   0EH
+0096   0086           00186                 MOVWF   PORTB
+0097   2016           00187                 CALL    CLOCK
+0098   3400           00188                 RETLW   0
+                      00189 
+0099   3002           00190 O               MOVLW   2
+009A   0085           00191                 MOVWF   PORTA
+009B   3004           00192                 MOVLW   4H
+009C   0086           00193                 MOVWF   PORTB
+009D   2016           00194                 CALL    CLOCK
+009E   300F           00195                 MOVLW   0FH
+009F   0086           00196                 MOVWF   PORTB
+00A0   2016           00197                 CALL    CLOCK
+00A1   3400           00198                 RETLW   0
+                      00199 
+00A2   3002           00200 P               MOVLW   2
+00A3   0085           00201                 MOVWF   PORTA
+00A4   3005           00202                 MOVLW   5H
+00A5   0086           00203                 MOVWF   PORTB
+00A6   2016           00204                 CALL    CLOCK
+00A7   3000           00205                 MOVLW   0H
+00A8   0086           00206                 MOVWF   PORTB
+00A9   2016           00207                 CALL    CLOCK
+00AA   3400           00208                 RETLW   0
+MPASM  5.14               INTERFACING LCD.ASM   8-24-2014  15:32:44         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00209 
+00AB   3002           00210 Q               MOVLW   2
+00AC   0085           00211                 MOVWF   PORTA
+00AD   3005           00212                 MOVLW   5H
+00AE   0086           00213                 MOVWF   PORTB
+00AF   2016           00214                 CALL    CLOCK
+00B0   3001           00215                 MOVLW   1H
+00B1   0086           00216                 MOVWF   PORTB
+00B2   2016           00217                 CALL    CLOCK
+00B3   3400           00218                 RETLW   0
+                      00219 
+00B4   3002           00220 R               MOVLW   2
+00B5   0085           00221                 MOVWF   PORTA
+00B6   3005           00222                 MOVLW   5H
+00B7   0086           00223                 MOVWF   PORTB
+00B8   2016           00224                 CALL    CLOCK
+00B9   3002           00225                 MOVLW   2H
+00BA   0086           00226                 MOVWF   PORTB
+00BB   2016           00227                 CALL    CLOCK
+00BC   3400           00228                 RETLW   0
+                      00229 
+00BD   3002           00230 S               MOVLW   2
+00BE   0085           00231                 MOVWF   PORTA
+00BF   3005           00232                 MOVLW   5H
+00C0   0086           00233                 MOVWF   PORTB
+00C1   2016           00234                 CALL    CLOCK
+00C2   3003           00235                 MOVLW   3H
+00C3   0086           00236                 MOVWF   PORTB
+00C4   2016           00237                 CALL    CLOCK
+00C5   3400           00238                 RETLW   0
+                      00239 
+00C6   3002           00240 T               MOVLW   2
+00C7   0085           00241                 MOVWF   PORTA
+00C8   3005           00242                 MOVLW   5H
+00C9   0086           00243                 MOVWF   PORTB
+00CA   2016           00244                 CALL    CLOCK
+00CB   3004           00245                 MOVLW   4H
+00CC   0086           00246                 MOVWF   PORTB
+00CD   2016           00247                 CALL    CLOCK
+00CE   3400           00248                 RETLW   0
+                      00249 
+00CF   3002           00250 U               MOVLW   2
+00D0   0085           00251                 MOVWF   PORTA
+00D1   3005           00252                 MOVLW   5H
+00D2   0086           00253                 MOVWF   PORTB
+00D3   2016           00254                 CALL    CLOCK
+00D4   3005           00255                 MOVLW   5H
+00D5   0086           00256                 MOVWF   PORTB
+00D6   2016           00257                 CALL    CLOCK
+00D7   3400           00258                 RETLW   0
+                      00259 
+00D8   3002           00260 V               MOVLW   2
+00D9   0085           00261                 MOVWF   PORTA
+MPASM  5.14               INTERFACING LCD.ASM   8-24-2014  15:32:44         PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+00DA   3005           00262                 MOVLW   5H
+00DB   0086           00263                 MOVWF   PORTB
+00DC   2016           00264                 CALL    CLOCK
+00DD   3006           00265                 MOVLW   6H
+00DE   0086           00266                 MOVWF   PORTB
+00DF   2016           00267                 CALL    CLOCK
+00E0   3400           00268                 RETLW   0
+                      00269 
+00E1   3002           00270 W               MOVLW   2
+00E2   0085           00271                 MOVWF   PORTA
+00E3   3005           00272                 MOVLW   5H
+00E4   0086           00273                 MOVWF   PORTB
+00E5   2016           00274                 CALL    CLOCK
+00E6   3007           00275                 MOVLW   7H
+00E7   0086           00276                 MOVWF   PORTB
+00E8   2016           00277                 CALL    CLOCK
+00E9   3400           00278                 RETLW   0
+                      00279 
+00EA   3002           00280 X               MOVLW   2
+00EB   0085           00281                 MOVWF   PORTA
+00EC   3005           00282                 MOVLW   5H
+00ED   0086           00283                 MOVWF   PORTB
+00EE   2016           00284                 CALL    CLOCK
+00EF   3008           00285                 MOVLW   8H
+00F0   0086           00286                 MOVWF   PORTB
+00F1   2016           00287                 CALL    CLOCK
+00F2   3400           00288                 RETLW   0
+                      00289 
+00F3   3002           00290 Y               MOVLW   2
+00F4   0085           00291                 MOVWF   PORTA
+00F5   3005           00292                 MOVLW   5H
+00F6   0086           00293                 MOVWF   PORTB
+00F7   2016           00294                 CALL    CLOCK
+00F8   3009           00295                 MOVLW   9H
+00F9   0086           00296                 MOVWF   PORTB
+00FA   2016           00297                 CALL    CLOCK
+00FB   3400           00298                 RETLW   0
+                      00299 
+00FC   3002           00300 Z               MOVLW   2
+00FD   0085           00301                 MOVWF   PORTA
+00FE   3005           00302                 MOVLW   5H
+00FF   0086           00303                 MOVWF   PORTB
+0100   2016           00304                 CALL    CLOCK
+0101   300A           00305                 MOVLW   0AH
+0102   0086           00306                 MOVWF   PORTB
+0103   2016           00307                 CALL    CLOCK
+0104   3400           00308                 RETLW   0
+                      00309 
+0105   3002           00310 COMA    MOVLW   2
+0106   0085           00311                 MOVWF   PORTA
+0107   3002           00312                 MOVLW   2H
+0108   0086           00313                 MOVWF   PORTB
+0109   2016           00314                 CALL    CLOCK
+MPASM  5.14               INTERFACING LCD.ASM   8-24-2014  15:32:44         PAGE  7
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+010A   300C           00315                 MOVLW   0CH
+010B   0086           00316                 MOVWF   PORTB
+010C   2016           00317                 CALL    CLOCK
+010D   3400           00318                 RETLW   0
+                      00319 ;*********************************************************
+                      00320 ;CONFIGURATION SECTION.
+010E   1683           00321 START   BSF     STATUS,5 ;Turns to Bank1.
+010F   3000           00322                 MOVLW   B'00000000'     ;5bits of PORTA are I/P
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0110   0085           00323                 MOVWF   TRISA
+0111   3000           00324                 MOVLW   B'00000000'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0112   0086           00325                 MOVWF   TRISB           ;PORTB is OUTPUT
+0113   3007           00326                 MOVLW   B'00000111'     ;Prescaler is /256
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0114   0081           00327                 MOVWF   OPTION_R        ;TIMER is 1/32 secs.
+0115   1283           00328                 BCF     STATUS,5        ;Return to Bank0.
+0116   0185           00329                 CLRF    PORTA           ;Clears PortA.
+0117   0186           00330                 CLRF    PORTB           ;Clears PortB.
+                      00331 ;DISPLAY CONFIGURATION
+0118   3003           00332                 MOVLW   03H
+0119   0086           00333                 MOVWF   PORTB
+011A   2016           00334                 CALL    CLOCK           ;DEFAULT        8BIT MODE
+011B   2007           00335                 CALL    DELAYP1
+011C   3002           00336                 MOVLW   02H
+011D   0086           00337                 MOVWF   PORTB
+011E   2016           00338                 CALL    CLOCK
+011F   2007           00339                 CALL    DELAYP1
+0120   3002           00340                 MOVLW   02H                     ;SET 4 BIT
+0121   0086           00341                 MOVWF   PORTB
+0122   2016           00342                 CALL    CLOCK
+0123   2007           00343                 CALL    DELAYP1
+0124   3008           00344                 MOVLW   08H                     ;LINE 2, 5*7 DOT
+0125   0086           00345                 MOVWF   PORTB
+0126   2016           00346                 CALL    CLOCK           
+0127   2007           00347                 CALL    DELAYP1
+0128   3000           00348                 MOVLW   0H                      ;DISPLAY ON/CURSOR OFF
+0129   0086           00349                 MOVWF   PORTB
+012A   2016           00350                 CALL    CLOCK
+012B   300C           00351                 MOVLW   0CH
+012C   0086           00352                 MOVWF   PORTB
+012D   2016           00353                 CALL    CLOCK
+012E   2007           00354                 CALL    DELAYP1
+012F   3000           00355                 MOVLW   0H                      ;INCREMENT CURSOR
+0130   0086           00356                 MOVWF   PORTB
+0131   2016           00357                 CALL    CLOCK
+0132   3006           00358                 MOVLW   6H
+0133   0086           00359                 MOVWF   PORTB
+0134   2016           00360                 CALL    CLOCK
+                      00361                 
+                      00362 ;PROGRAM        STARTS
+0135   200D           00363 BEGIN           CALL    CLRDISP
+0136   0185           00364                 CLRF    PORTA
+MPASM  5.14               INTERFACING LCD.ASM   8-24-2014  15:32:44         PAGE  8
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0137   3008           00365                 MOVLW   8H
+0138   0086           00366                 MOVWF   PORTB
+0139   2016           00367                 CALL    CLOCK
+013A   3000           00368                 MOVLW   0H
+013B   0086           00369                 MOVWF   PORTB
+013C   2016           00370                 CALL    CLOCK
+                      00371         
+013D   205A           00372                 CALL    H
+013E   2063           00373                 CALL    I
+013F   2105           00374                 CALL    COMA
+0140   2001           00375                 CALL    DELAY1
+0141   200D           00376 FLASH   CALL    CLRDISP
+0142   3008           00377                 MOVLW   8H
+0143   0086           00378                 MOVWF   PORTB
+0144   2016           00379                 CALL    CLOCK
+0145   3004           00380                 MOVLW   4H
+0146   0086           00381                 MOVWF   PORTB
+0147   2016           00382                 CALL    CLOCK
+                      00383                 
+0148   20BD           00384                 CALL    S
+0149   20CF           00385                 CALL    U
+014A   2090           00386                 CALL    N
+014B   2090           00387                 CALL    N
+014C   2099           00388                 CALL    O
+014D   207E           00389                 CALL    L
+014E   0185           00390                 CLRF    PORTA
+014F   300C           00391                 MOVLW   0CH
+0150   0086           00392                 MOVWF   PORTB
+0151   2016           00393                 CALL    CLOCK
+0152   3002           00394                 MOVLW   2H
+0153   0086           00395                 MOVWF   PORTB
+0154   2016           00396                 CALL    CLOCK
+0155   2007           00397                 CALL    DELAYP1
+                      00398 
+0156   203F           00399                 CALL    E
+0157   2007           00400                 CALL    DELAYP1
+0158   207E           00401                 CALL    L
+0159   2007           00402                 CALL    DELAYP1
+015A   203F           00403                 CALL    E
+015B   2007           00404                 CALL    DELAYP1
+015C   202D           00405                 CALL    C
+015D   2007           00406                 CALL    DELAYP1
+015E   20C6           00407                 CALL    T
+015F   2007           00408                 CALL    DELAYP1
+0160   20B4           00409                 CALL    R
+0161   2007           00410                 CALL    DELAYP1
+0162   2099           00411                 CALL    O
+0163   2007           00412                 CALL    DELAYP1
+0164   2090           00413                 CALL    N
+0165   2007           00414                 CALL    DELAYP1
+0166   2063           00415                 CALL    I
+0167   2007           00416                 CALL    DELAYP1
+0168   202D           00417                 CALL    C       
+MPASM  5.14               INTERFACING LCD.ASM   8-24-2014  15:32:44         PAGE  9
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0169   2007           00418                 CALL    DELAYP1
+016A   20BD           00419                 CALL    S
+016B   2001           00420                 CALL    DELAY1
+016C   2941           00421                 GOTO    FLASH
+                      00422 
+016D   2935           00423                 GOTO    BEGIN
+                      00424                 END
+MPASM  5.14               INTERFACING LCD.ASM   8-24-2014  15:32:44         PAGE 10
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+A                                 0000001B
+BB                                00000024
+BEGIN                             00000135
+C                                 0000002D
+CLOCK                             00000016
+CLRDISP                           0000000D
+COMA                              00000105
+COUNT                             0000000C
+D                                 00000036
+DELAY1                            00000001
+DELAYP1                           00000007
+E                                 0000003F
+F                                 00000048
+FLASH                             00000141
+G                                 00000051
+H                                 0000005A
+I                                 00000063
+J                                 0000006C
+K                                 00000075
+L                                 0000007E
+LOOPA                             00000002
+LOOPB                             00000008
+M                                 00000087
+N                                 00000090
+O                                 00000099
+OPTION_R                          00000081
+P                                 000000A2
+PORTA                             00000005
+PORTB                             00000006
+Q                                 000000AB
+R                                 000000B4
+S                                 000000BD
+START                             0000010E
+STATUS                            00000003
+T                                 000000C6
+TMR0                              00000001
+TRISA                             00000085
+TRISB                             00000086
+U                                 000000CF
+V                                 000000D8
+W                                 000000E1
+X                                 000000EA
+Y                                 000000F3
+Z                                 000000FC
+ZEROBIT                           00000002
+__16F84                           00000001
+MPASM  5.14               INTERFACING LCD.ASM   8-24-2014  15:32:44         PAGE 11
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0080 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+00C0 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0100 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0140 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXX-- ----------------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:   366
+Program Memory Words Free:   658
+
+
+Errors   :     0
+Warnings :     4 reported,     0 suppressed
+Messages :     3 reported,     0 suppressed
+
+

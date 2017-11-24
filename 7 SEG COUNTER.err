@@ -1,0 +1,10 @@
+Warning[205] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\7 SEG COUNTER.ASM 17 : Found directive in column 1. (__CONFIG)
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\7 SEG COUNTER.ASM 21 : Found label after column 1. (DELAY)
+Warning[203] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\7 SEG COUNTER.ASM 26 : Found opcode in column 1. (RETLW)
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\7 SEG COUNTER.ASM 59 : Using default destination of 1 (file).
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\7 SEG COUNTER.ASM 63 : Using default destination of 1 (file).
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\7 SEG COUNTER.ASM 78 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\7 SEG COUNTER.ASM 80 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\7 SEG COUNTER.ASM 82 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\7 SEG COUNTER.ASM 92 : Using default destination of 1 (file).
+Warning[205] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\7 SEG COUNTER.ASM 105 : Found directive in column 1. (END)

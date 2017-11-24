@@ -1,0 +1,27 @@
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 141 : Using default destination of 1 (file).
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 143 : Using default destination of 1 (file).
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 160 : Found label after column 1. (.)
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 161 : Found label after column 1. (.)
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 162 : Found label after column 1. (.)
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 163 : Found label after column 1. (.)
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 171 : Using default destination of 1 (file).
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 212 : Using default destination of 1 (file).
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 216 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 228 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 230 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 231 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 233 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 235 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 253 : Using default destination of 1 (file).
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 259 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 316 : Using default destination of 1 (file).
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 580 : Using default destination of 1 (file).
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 599 : Using default destination of 1 (file).
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 936 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 938 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 940 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 942 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 944 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 946 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 947 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATIX1.ASM 1049 : Found label after column 1. (BEGIN)

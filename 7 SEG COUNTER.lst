@@ -1,0 +1,187 @@
+MPASM  5.14                 7 SEG COUNTER.ASM   8-16-2014  16:16:54         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ;HEADER FOR 16F84
+  00000002            00002 PC              EQU     2
+  00000003            00003 STATUS  EQU     3
+  00000005            00004 PORTA   EQU     5
+  00000006            00005 PORTB   EQU     6
+  00000001            00006 TMR0    EQU     1
+  00000085            00007 TRISA   EQU     85H
+  00000086            00008 TRISB   EQU     86H
+  00000002            00009 ZEROBIT EQU     2
+  0000000C            00010 COUNT   EQU     0CH
+  00000081            00011 OPTION_R EQU    81H
+                      00012 
+                      00013         LIST P=16F84
+0000                  00014         ORG 0
+0000   2830           00015         GOTO    START
+                      00016 
+Warning[205]: Found directive in column 1. (__CONFIG)
+2007   3FF0           00017 __CONFIG H'3FF0'
+                      00018 
+                      00019 ;SUBROUTINE SECTION
+                      00020 ;3/32 second delay.
+Warning[207]: Found label after column 1. (DELAY)
+0001   0181           00021         DELAY CLRF TMR0 ;START TMR0.
+0002   0801           00022 LOOPA MOVF TMR0,W ;READ TMR0 INTO W.
+0003   3C03           00023         SUBLW .3 ;TIME - 3
+0004   1D03           00024         BTFSS STATUS, ZEROBIT ;Check TIME-W¼0
+0005   2802           00025         GOTO LOOPA ;Time is not¼3.
+Warning[203]: Found opcode in column 1. (RETLW)
+0006   3400           00026 RETLW 0 ;Time is 3, return.
+                      00027 
+0007   0181           00028 DELAYP1 CLRF    TMR0
+0008   0801           00029 LOOPQ   MOVF    TMR0,W
+0009   3C03           00030         SUBLW   .3
+000A   1D03           00031         BTFSS   STATUS,ZEROBIT
+000B   2808           00032         GOTO    LOOPQ
+000C   3400           00033         RETLW   0
+                      00034 
+                      00035 
+                      00036 
+000D   0181           00037 DELAYP25 CLRF   TMR0
+000E   0801           00038 LOOPB   MOVF    TMR0,W
+000F   3C08           00039         SUBLW   .8
+0010   1D03           00040         BTFSS   STATUS,ZEROBIT
+0011   280E           00041         GOTO    LOOPB
+0012   3400           00042         RETLW   0
+                      00043 
+0013   0181           00044 DELAY1  CLRF    TMR0
+0014   0801           00045 LOOPC   MOVF    TMR0,W
+0015   3C20           00046         SUBLW   .32
+0016   1D03           00047         BTFSS   STATUS,ZEROBIT
+0017   2814           00048         GOTO    LOOPC
+0018   3400           00049         RETLW   0
+0019   0181           00050 DELAY125 CLRF   TMR0
+MPASM  5.14                 7 SEG COUNTER.ASM   8-16-2014  16:16:54         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+001A   0801           00051 LOOPD   MOVF    TMR0,W
+001B   3C04           00052         SUBLW   .4
+001C   1D03           00053         BTFSS   STATUS,ZEROBIT
+001D   281A           00054         GOTO    LOOPD
+001E   3400           00055         RETLW   0
+001F   3002           00056 DELAY2  MOVLW   .2
+0020   008C           00057         MOVWF   COUNT
+0021   2013           00058 DEC     CALL    DELAY1
+Message[305]: Using default destination of 1 (file).
+0022   0B8C           00059         DECFSZ  COUNT
+0023   2821           00060         GOTO    DEC                                                                                     
+                                                                                                                    
+0024   3400           00061         RETLW   0
+                      00062         
+Message[305]: Using default destination of 1 (file).
+0025   0782           00063 TABLE   ADDWF   PC
+0026   343F           00064                 RETLW   B'00111111'     ;0
+0027   3406           00065                 RETLW   B'00000110'     ;1
+0028   345B           00066                 RETLW   B'01011011'     ;2
+0029   344F           00067                 RETLW   B'01001111'     ;3
+002A   3466           00068                 RETLW   B'01100110'     ;4
+002B   346D           00069                 RETLW   B'01101101'     ;5
+002C   347C           00070                 RETLW   B'01111100'     ;6
+002D   3407           00071                 RETLW   B'00000111'     ;7
+002E   347F           00072                 RETLW   B'01111111'     ;8
+002F   3467           00073                 RETLW   B'01100111'     ;9
+                      00074 
+                      00075         ;CONFIGURATION SECTION
+0030   1683           00076 START   BSF     STATUS,5
+0031   3007           00077         MOVLW   B'00000111'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0032   0085           00078         MOVWF   TRISA
+0033   3000           00079         MOVLW   B'00000000'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0034   0086           00080         MOVWF   TRISB
+0035   3007           00081         MOVLW   B'00000111'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0036   0081           00082         MOVWF   OPTION_R
+0037   1283           00083         BCF     STATUS,5
+0038   0185           00084         CLRF    PORTA
+0039   0186           00085         CLRF    PORTB
+                      00086 
+                      00087 ;PROGRAM STARTS NOW
+003A   018C           00088                 CLRF    COUNT
+003B   1C05           00089 CHECK   BTFSS   PORTA,0
+003C   283B           00090                 GOTO    CHECK
+003D   2007           00091                 CALL    DELAYP1
+Message[305]: Using default destination of 1 (file).
+003E   0A8C           00092                 INCF    COUNT
+003F   080C           00093                 MOVF    COUNT,W
+0040   3C0A           00094                 SUBLW   .10
+0041   1D03           00095                 BTFSS   STATUS,ZEROBIT
+0042   2844           00096                 GOTO    GO
+MPASM  5.14                 7 SEG COUNTER.ASM   8-16-2014  16:16:54         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0043   018C           00097                 CLRF    COUNT
+0044   080C           00098 GO              MOVF    COUNT,W
+0045   2025           00099                 CALL    TABLE
+0046   0086           00100                 MOVWF   PORTB
+0047   1805           00101 REMOVE  BTFSC   PORTA,0
+0048   2847           00102                 GOTO    REMOVE
+0049   2007           00103                 CALL    DELAYP1
+004A   283B           00104                 GOTO    CHECK
+Warning[205]: Found directive in column 1. (END)
+                      00105 END
+MPASM  5.14                 7 SEG COUNTER.ASM   8-16-2014  16:16:54         PAGE  4
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+CHECK                             0000003B
+COUNT                             0000000C
+DEC                               00000021
+DELAY                             00000001
+DELAY1                            00000013
+DELAY125                          00000019
+DELAY2                            0000001F
+DELAYP1                           00000007
+DELAYP25                          0000000D
+GO                                00000044
+LOOPA                             00000002
+LOOPB                             0000000E
+LOOPC                             00000014
+LOOPD                             0000001A
+LOOPQ                             00000008
+OPTION_R                          00000081
+PC                                00000002
+PORTA                             00000005
+PORTB                             00000006
+REMOVE                            00000047
+START                             00000030
+STATUS                            00000003
+TABLE                             00000025
+TMR0                              00000001
+TRISA                             00000085
+TRISB                             00000086
+ZEROBIT                           00000002
+__16F84                           00000001
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXX----- ---------------- ---------------- ----------------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    75
+Program Memory Words Free:   949
+
+
+Errors   :     0
+Warnings :     4 reported,     0 suppressed
+Messages :     6 reported,     0 suppressed
+
+

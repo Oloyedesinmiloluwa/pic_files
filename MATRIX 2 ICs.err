@@ -1,0 +1,28 @@
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 141 : Using default destination of 1 (file).
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 143 : Using default destination of 1 (file).
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 160 : Found label after column 1. (.)
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 161 : Found label after column 1. (.)
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 162 : Found label after column 1. (.)
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 163 : Found label after column 1. (.)
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 171 : Using default destination of 1 (file).
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 212 : Using default destination of 1 (file).
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 216 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 228 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 230 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 231 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 233 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 235 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 253 : Using default destination of 1 (file).
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 259 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 316 : Using default destination of 1 (file).
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 580 : Using default destination of 1 (file).
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 599 : Using default destination of 1 (file).
+Warning[202] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 746 : Argument out of range.  Least significant bits used.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 937 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 939 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 941 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 943 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 945 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 947 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 948 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Warning[207] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\MATRIX 2 ICS.ASM 1050 : Found label after column 1. (BEGIN)

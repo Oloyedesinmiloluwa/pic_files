@@ -1,0 +1,143 @@
+MPASM  5.14                1ST TO TRIGGER.ASM   8-9-2014  11:27:13         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ; HEADER84.ASM for 16F84. This sets PORTA as an INPUT 
+                      00002 ; and PORTB as an OUTPUT (NB 0 means output).
+                      00003 ;The OPTION Register is set to /256 to give timing pulses of 1/32 of a second.
+                      00004 ;1second and 0.5 second delays are included in the subroutine section.
+                      00005 ;*******************************************************
+                      00006 ; EQUATES SECTION
+  00000001            00007 TMR0            EQU 1           ;means TMR0 is file 1.
+  00000003            00008 STATUS          EQU 3           ;means STATUS is file 3.
+  00000005            00009 PORTA           EQU 5           ;means PORTA is file 5.
+  00000006            00010 PORTB           EQU 6           ;means PORTB is file 6.
+  00000085            00011 TRISA           EQU 85H         ;TRISA (the PORTA I/O selection) is file 85H
+  00000086            00012 TRISB           EQU 86H         ;TRISB (the PORTB I/O selection) is file 86H
+  00000081            00013 OPTION_R        EQU 81H         ;the OPTION register is file 81H
+  00000002            00014 ZEROBIT         EQU 2           ;means ZEROBIT is bit 2.
+  0000000C            00015 COUNT           EQU 0CH         ; COUNT is file 0C, a register to count events.
+                      00016 ;*********************************************************
+Warning[205]: Found directive in column 1. (LIST)
+                      00017 LIST    P=16F84 ;we are using the 16F84.
+Warning[205]: Found directive in column 1. (ORG)
+0000                  00018 ORG     0       ;the start address in memory is 0
+Warning[203]: Found opcode in column 1. (GOTO)
+0000   280D           00019 GOTO    START ;goto start!
+                      00020 ;******************************************************************
+                      00021 ; Configuration Bits
+Warning[205]: Found directive in column 1. (__CONFIG)
+2007   3FF0           00022 __CONFIG H'3FF0' ;selects LP oscillator, WDT off, PUT on,
+                      00023 ;Code Protection disabled.
+                      00024 ;*****************************************************
+                      00025 ;SUBROUTINE SECTION.
+                      00026 ; 1 second delay.
+0001   0181           00027 DELAY1  CLRF    TMR0    ;START TMR0.
+0002   0801           00028 LOOPA   MOVF    TMR0,W  ;READ TMR0 INTO W.
+0003   3C20           00029                 SUBLW   .32     ;TIME - 32
+0004   1D03           00030                 BTFSS   STATUS,ZEROBIT ; Check TIME-W¼0
+0005   2802           00031                 GOTO    LOOPA   ;Time is not¼32.
+0006   3400           00032                 RETLW   0               ;Time is 32, return.
+                      00033 ; 0.5 second delay.
+                      00034 
+0007   0181           00035 DELAYP5 CLRF    TMR0    ;START TMR0.
+0008   0801           00036 LOOPB   MOVF    TMR0,W  ;READ TMR0 INTO W.
+0009   3C10           00037                 SUBLW   .16     ;TIME - 16
+000A   1D03           00038                 BTFSS   STATUS,ZEROBIT ; Check TIME-W¼0
+000B   2808           00039                 GOTO    LOOPB   ;Time is not¼16.
+000C   3400           00040                 RETLW   0       ;Time is 16, return.
+                      00041 ;*********************************************************
+                      00042 ;CONFIGURATION SECTION.
+000D   1683           00043 START   BSF     STATUS,5 ;Turns to Bank1.
+000E   301F           00044                 MOVLW   B'00011111'     ;5bits of PORTA are I/P
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000F   0085           00045                 MOVWF   TRISA
+0010   3000           00046                 MOVLW   B'00000000'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0011   0086           00047                 MOVWF   TRISB           ;PORTB is OUTPUT
+MPASM  5.14                1ST TO TRIGGER.ASM   8-9-2014  11:27:13         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0012   3007           00048                 MOVLW   B'00000111'     ;Prescaler is /256
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0013   0081           00049                 MOVWF   OPTION_R        ;TIMER is 1/32 secs.
+0014   1283           00050                 BCF     STATUS,5        ;Return to Bank0.
+0015   0185           00051                 CLRF    PORTA           ;Clears PortA.
+0016   0186           00052                 CLRF    PORTB           ;Clears PortB.
+                      00053 ;*********************************************************
+                      00054 ;Program starts now.
+0017   1805           00055 SW0             BTFSC   PORTA,0
+0018   2824           00056                 GOTO    TURN0
+0019   1006           00057                 BCF             PORTB,0
+001A   1885           00058 SW1             BTFSC   PORTA,1
+001B   2826           00059                 GOTO    TURN1
+001C   1086           00060                 BCF             PORTB,1
+001D   1905           00061 SW2             BTFSC   PORTA,2
+001E   2828           00062                 GOTO    TURN2
+001F   1106           00063                 BCF             PORTB,2
+0020   1985           00064 SW3             BTFSC   PORTA,3
+0021   282A           00065                 GOTO    TURN3
+0022   1186           00066                 BCF             PORTB,3
+0023   2817           00067                 GOTO    SW0
+                      00068                 
+0024   1406           00069 TURN0   BSF             PORTB,0
+0025   2824           00070                 GOTO    TURN0
+0026   1486           00071 TURN1   BSF             PORTB,1
+0027   2826           00072                 GOTO    TURN1
+0028   1506           00073 TURN2   BSF             PORTB,2
+0029   2828           00074                 GOTO    TURN2
+002A   1586           00075 TURN3   BSF             PORTB,3
+002B   282A           00076                 GOTO    TURN3
+                      00077                 END
+MPASM  5.14                1ST TO TRIGGER.ASM   8-9-2014  11:27:13         PAGE  3
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+COUNT                             0000000C
+DELAY1                            00000001
+DELAYP5                           00000007
+LOOPA                             00000002
+LOOPB                             00000008
+OPTION_R                          00000081
+PORTA                             00000005
+PORTB                             00000006
+START                             0000000D
+STATUS                            00000003
+SW0                               00000017
+SW1                               0000001A
+SW2                               0000001D
+SW3                               00000020
+TMR0                              00000001
+TRISA                             00000085
+TRISB                             00000086
+TURN0                             00000024
+TURN1                             00000026
+TURN2                             00000028
+TURN3                             0000002A
+ZEROBIT                           00000002
+__16F84                           00000001
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXX---- ----------------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    44
+Program Memory Words Free:   980
+
+
+Errors   :     0
+Warnings :     4 reported,     0 suppressed
+Messages :     3 reported,     0 suppressed
+
+

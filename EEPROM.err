@@ -1,0 +1,9 @@
+Warning[205] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM.ASM 18 : Found directive in column 1. (LIST)
+Warning[215] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM.ASM 18 : Processor superseded by command line.  Verify processor symbol.
+Warning[205] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM.ASM 19 : Found directive in column 1. (ORG)
+Warning[203] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM.ASM 20 : Found opcode in column 1. (GOTO)
+Warning[205] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM.ASM 23 : Found directive in column 1. (__CONFIG)
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM.ASM 66 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM.ASM 68 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM.ASM 70 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] C:\USERS\PUBLIC\DOCUMENTS\PIC FILES\EEPROM.ASM 84 : Using default destination of 1 (file).

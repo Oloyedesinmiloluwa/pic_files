@@ -1,0 +1,186 @@
+MPASM  5.14                            TX.ASM   8-11-2015  3:07:29         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  00000001            00001 TMR0    EQU     1
+  00000002            00002 PC              EQU     2
+  00000003            00003 STATUS  EQU     3
+  00000005            00004 PORTA   EQU     5
+  00000006            00005 PORTB   EQU     6
+  00000007            00006 PORTC   EQU     7
+  00000008            00007 PORTD   EQU     8
+  00000009            00008 PORTE   EQU     9
+  00000085            00009 TRISA   EQU     85H
+  00000086            00010 TRISB   EQU     86H
+  00000087            00011 TRISC   EQU     87H
+  00000088            00012 TRISD   EQU     88H
+  00000089            00013 TRISE   EQU     89H
+  00000081            00014 OPTION_R        EQU 81H
+  00000002            00015 ZEROBIT EQU     2
+  0000000C            00016 PIR1    EQU     0CH
+  00000018            00017 RCSTA   EQU 18H
+  00000098            00018 TXSTA   EQU     98H
+  00000099            00019 SPBRG   EQU     99H
+  00000004            00020 TXIE    EQU     4
+  00000005            00021 RCIE    EQU     5
+  00000004            00022 CREN    EQU     4
+  00000005            00023 TXEN    EQU     5
+  00000004            00024 TXIF    EQU 4
+  00000005            00025 RCIF    EQU     5
+  00000019            00026 TXREG   EQU     19H
+  0000001A            00027 RCREG   EQU     1AH
+  00000000            00028 FRAME   EQU     0
+  00000002            00029 FERR    EQU     2               
+  00000020            00030 COUNT   EQU     20H
+  00000021            00031 RECV    EQU     21H
+  00000022            00032 FLAG    EQU     22H
+                      00033         LIST    P=16F877A
+                      00034 
+0000                  00035         ORG             0
+0000   2807           00036         GOTO    START
+2007   3F3A           00037         __CONFIG        H'3F3A'
+                      00038 ;SUBROUTINE
+0001   0181           00039 DELAYP15 CLRF TMR0 ;START TMR0.
+0002   0801           00040 LOOPB MOVF TMR0,W ;READ TMR0 INTO W.
+0003   3C02           00041                 SUBLW .2 ;TIME-3  195
+0004   1D03           00042         BTFSS STATUS,ZEROBIT ;Check TIME-W ¼ 0
+0005   2802           00043         GOTO LOOPB ;Time is not ¼ 3.
+0006   3400           00044         RETLW 0
+                      00045         
+0007                  00046 START
+Warning[203]: Found opcode in column 1. (BSF)
+0007   1683           00047 BSF             STATUS,5
+0008   3001           00048                 MOVLW   .1
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0009   0086           00049                 MOVWF   TRISB
+000A   3000           00050                 MOVLW   .0
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+MPASM  5.14                            TX.ASM   8-11-2015  3:07:29         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+000B   0085           00051                 MOVWF   TRISA
+000C   3080           00052                 MOVLW   B'10000000'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000D   0087           00053                 MOVWF   TRISC
+                      00054 ;               BSF             TRISC,7    ;receive     INPUT
+                      00055 ;               BCF             TRISC,6         ;transmit OUTPUT
+000E   3000           00056                 MOVLW   .0
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000F   0088           00057                 MOVWF   TRISD
+0010   3000           00058                 MOVLW   .0
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0011   0089           00059                 MOVWF   TRISE
+0012   3007           00060                 MOVLW   07H
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0013   0081           00061                 MOVWF   OPTION_R
+0014   0183           00062                 CLRF    STATUS
+0015   0185           00063                 CLRF    PORTA
+0016   0186           00064                 CLRF    PORTB
+0017   0187           00065                 CLRF    PORTC
+0018   0188           00066                 CLRF    PORTD           
+0019   0189           00067                 CLRF    PORTE   
+001A   01A2           00068                 CLRF    FLAG
+001B   1683           00069                 BSF             STATUS,5
+001C   300C           00070                 MOVLW   .12
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+001D   0099           00071                 MOVWF   SPBRG; FOR BAUD RATE
+001E   3014           00072                 MOVLW   14H;B'00101000' trasmit ealed high speed
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+001F   0098           00073                 MOVWF   TXSTA
+                      00074         ;       BSF             PIE1,TXIE
+                      00075         ;       BSF             PIE1,RCIE
+0020   0183           00076                 CLRF    STATUS
+                      00077 ;               CLRF    INTCON
+                      00078         ;       MOVLW   90H     ;10010000
+                      00079         ;       MOVWF   RCSTA
+                      00080         ;       BSF             INTCON,GIE
+                      00081         ;       BSF             INTCON,PEIE
+                      00082 
+0021   1806           00083 WAITT   BTFSC   PORTB,0
+0022   2821           00084                 GOTO    WAITT
+0023   1486           00085                 BSF             PORTB,1
+0024   3055           00086                 MOVLW   55H
+0025   0099           00087                 MOVWF   TXREG           ;SEND DATA
+                      00088         ;       BSF             PIR1,TXIF
+Warning[207]: Found label after column 1. (WAIT)
+0026   1E0C           00089         WAIT    BTFSS   PIR1,TXIF
+0027   2826           00090                         GOTO    WAIT
+Warning[207]: Found label after column 1. (QAIT)
+0028   303F           00091         QAIT    MOVLW   03FH
+0029   0086           00092                         MOVWF   PORTB
+002A   2828           00093                         GOTO    QAIT
+                      00094         END
+MPASM  5.14                            TX.ASM   8-11-2015  3:07:29         PAGE  3
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+COUNT                             00000020
+CREN                              00000004
+DELAYP15                          00000001
+FERR                              00000002
+FLAG                              00000022
+FRAME                             00000000
+LOOPB                             00000002
+OPTION_R                          00000081
+PC                                00000002
+PIR1                              0000000C
+PORTA                             00000005
+PORTB                             00000006
+PORTC                             00000007
+PORTD                             00000008
+PORTE                             00000009
+QAIT                              00000028
+RCIE                              00000005
+RCIF                              00000005
+RCREG                             0000001A
+RCSTA                             00000018
+RECV                              00000021
+SPBRG                             00000099
+START                             00000007
+STATUS                            00000003
+TMR0                              00000001
+TRISA                             00000085
+TRISB                             00000086
+TRISC                             00000087
+TRISD                             00000088
+TRISE                             00000089
+TXEN                              00000005
+TXIE                              00000004
+TXIF                              00000004
+TXREG                             00000019
+TXSTA                             00000098
+WAIT                              00000026
+WAITT                             00000021
+ZEROBIT                           00000002
+__16F877A                         00000001
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXX----- ----------------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    43
+Program Memory Words Free:  8149
+
+MPASM  5.14                            TX.ASM   8-11-2015  3:07:29         PAGE  4
+
+
+
+
+
+
+Errors   :     0
+Warnings :     3 reported,     0 suppressed
+Messages :     8 reported,     0 suppressed
+
+

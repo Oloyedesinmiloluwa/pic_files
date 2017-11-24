@@ -1,0 +1,2061 @@
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  00000001            00001 TMR0    EQU     1
+  00000002            00002 PC              EQU     2
+  00000003            00003 STATUS  EQU     3
+  00000005            00004 PORTA   EQU     5
+  00000006            00005 PORTB   EQU     6
+  00000007            00006 PORTC   EQU     7
+  00000008            00007 PORTD   EQU     8
+  00000009            00008 PORTE   EQU     9
+  00000085            00009 TRISA   EQU     85H
+  00000086            00010 TRISB   EQU     86H
+  00000087            00011 TRISC   EQU     87H
+  00000088            00012 TRISD   EQU     88H
+  00000089            00013 TRISE   EQU     89H
+  00000081            00014 OPTION_R        EQU 81H
+  00000002            00015 ZEROBIT EQU     2
+  00000020            00016 COUNT   EQU     20H
+  00000021            00017 C1              EQU     21H
+  00000022            00018 C2              EQU     22H
+  00000023            00019 C3              EQU     23H
+  00000024            00020 C4              EQU     24H
+  00000025            00021 C5              EQU     25H
+  00000026            00022 DISP1   EQU     26H
+  00000027            00023 DISP2   EQU     27H
+  00000028            00024 DISP3   EQU     28H
+  00000029            00025 DISP4   EQU     29H
+  00000030            00026 DISP5   EQU     30H
+  00000031            00027 DISP6   EQU     31H
+  00000032            00028 DISP7   EQU     32H     
+  00000033            00029 DISP8   EQU     33H
+  00000034            00030 DISP9   EQU     34H
+  00000035            00031 DISP10  EQU     35H
+  00000036            00032 DISP11  EQU     36H
+  00000037            00033 DISP12  EQU     37H
+  00000038            00034 DISP13  EQU     38H
+  00000039            00035 DISP14  EQU     39H
+  00000040            00036 DISP15  EQU     40H
+  00000041            00037 DISP16  EQU     41H
+  00000042            00038 DISP17  EQU     42H     
+  00000043            00039 DISP18  EQU     43H
+  00000044            00040 DISP19  EQU     44H
+  00000045            00041 DISP20  EQU     45H
+  00000046            00042 DISP21  EQU     46H
+  00000047            00043 DISP22  EQU     47H
+  00000048            00044 DISP23  EQU     48H
+  00000049            00045 DISP24  EQU     49H
+  00000050            00046 DISP25  EQU     50H
+  00000051            00047 DISP26  EQU     51H
+  00000052            00048 DISP27  EQU     52H     
+  00000053            00049 DISP28  EQU     53H
+  00000054            00050 DISP29  EQU     54H
+  00000055            00051 DISP30  EQU     55H
+  00000056            00052 DISP31  EQU     56H
+  00000057            00053 DISP32          EQU     57H
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  00000058            00054 DISP33          EQU     58H
+  00000059            00055 DISP34          EQU     59H
+  00000060            00056 DISP35          EQU     60H
+  00000061            00057 DISP36          EQU     61H
+  00000062            00058 DISP37          EQU     62H
+  00000063            00059 DISP38          EQU     63H
+  00000064            00060 DISP39          EQU     64H
+  00000065            00061 DISP40          EQU     65H
+  00000066            00062 STILL   EQU     66H
+  00000067            00063 COUNT1  EQU     67H
+  00000068            00064 DISP    EQU     68H
+  00000017            00065 CCP1CON EQU     17H
+  0000000B            00066 INTCON  EQU 0BH
+  00000007            00067 GIE             EQU     7
+  0000008C            00068 PIE1    EQU     8CH
+  0000000C            00069 PIR1    EQU     0CH
+  00000006            00070 PEIE    EQU     6
+  00000002            00071 CCP1IF  EQU     2
+  00000002            00072 CCP1IE  EQU     2
+  00000000            00073 EDGE    EQU     0
+  00000001            00074 READY   EQU     1
+  0000000C            00075 EEDATA          EQU     0CH
+  0000000D            00076 EEADR           EQU     0DH
+  0000008C            00077 EECON1          EQU     8CH
+  0000008D            00078 EECON2          EQU     8DH
+  00000000            00079 RD EQU 0 ;read bit in EECON1
+  00000001            00080 WR EQU 1 ;Write bit in EECON1
+  00000002            00081 WREN EQU 2
+  00000069            00082 TSTATUS         EQU     69H
+  0000006A            00083 TW              EQU     6AH
+  0000006B            00084 TPORTB          EQU     6BH
+  0000006C            00085 TNUM    EQU     6CH             
+  0000006D            00086 COUNTER         EQU     6DH
+  0000006E            00087 NUM             EQU     6EH
+  0000006F            00088 COUNTER2 EQU    6FH
+  0000005A            00089 FILE1   EQU             5AH
+  0000005B            00090 FILE2   EQU             5BH
+  0000005C            00091 FILE3   EQU             5CH
+  0000005D            00092 STORE   EQU             5DH
+  0000005E            00093 FLAG    EQU             5EH
+  0000005F            00094 ALPHA   EQU             5FH
+  0000004A            00095 DELAYCOUNT      EQU     4AH     
+  0000004B            00096 SHIFTCOUNT      EQU     4BH                                     ; NUM IS FOR COUTIG CHARACTERS
+                      00097                                                 ; COUNTER NUMBER OF BITS
+                      00098                                                 ; COUNTER2      TO READ FROM THE FIRST ADDRESS
+                      00099                                                 ; algorithm; write to eeprom
+                      00100                                                 ;stop whe a special key is pressed
+                      00101                                                 ;read ad save i ram cosecutively
+                      00102                                                 ;decode ad display the stored characters
+                      00103 
+                      00104         LIST    P=16F877
+2100                  00105         ORG             2100H
+2100   0000           00106         DE              00H
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0000                  00107         ORG             0
+0000   2CB1           00108         GOTO    START
+0004                  00109         ORG             4
+0004   28B9           00110         GOTO    ISR
+2007   3F3A           00111         __CONFIG        H'3F3A'
+                      00112 ;SUBROUTINE
+0005   0181           00113 DELAYP5 CLRF TMR0 ;START TMR0.
+0006   0801           00114 LOOPB MOVF TMR0,W ;READ TMR0 INTO W.
+0007   3C02           00115                 SUBLW .2 ;TIME-3  195
+0008   1D03           00116         BTFSS STATUS,ZEROBIT ;Check TIME-W ¼ 0
+0009   2806           00117         GOTO LOOPB ;Time is not ¼ 3.
+000A   3400           00118         RETLW 0
+000B   300A           00119 DELAY3 MOVLW    .10
+000C   00CA           00120                 MOVWF   DELAYCOUNT
+Message[305]: Using default destination of 1 (file).
+000D   0BCA           00121                 DECFSZ  DELAYCOUNT
+000E   2010           00122                 CALL    DELAY4
+000F   3400           00123                 RETLW   .0
+                      00124                 
+0010   0181           00125 DELAY4 CLRF TMR0 ;START TMR0.
+0011   0801           00126 LOOPC MOVF TMR0,W ;READ TMR0 INTO W.
+0012   3CFF           00127                 SUBLW .255 ;TIME-3
+0013   1D03           00128         BTFSS STATUS,ZEROBIT ;Check TIME-W ¼ 0
+0014   2811           00129         GOTO LOOPC ;Time is not ¼ 3.
+0015   0000           00130         NOP ;add extra delay
+0016   0000           00131         NOP
+0017   3400           00132         RETLW 0
+                      00133 
+0018   085D           00134 F1                      MOVF    STORE,W
+0019   00DA           00135                         MOVWF   FILE1
+001A   2D3F           00136                         GOTO    READLOOP
+001B   085D           00137 F2                      MOVF    STORE,W
+001C   00DB           00138                         MOVWF   FILE2
+001D   2D3F           00139                         GOTO    READLOOP
+001E   085D           00140 F3                      MOVF    STORE,W
+001F   00DC           00141                         MOVWF   FILE3
+0020   2D3F           00142                         GOTO    READLOOP
+0021                  00143 DECDISP 
+0021   086F           00144                 MOVF    COUNTER2,W
+0022   026E           00145                 SUBWF   NUM,W
+0023   1903           00146                 BTFSC   STATUS,ZEROBIT
+0024   2829           00147                 GOTO    STARTOVER
+Message[305]: Using default destination of 1 (file).
+0025   0AEF           00148                 INCF    COUNTER2
+0026   086F           00149                         MOVF    COUNTER2,W
+Message[305]: Using default destination of 1 (file).
+0027   0782           00150                         ADDWF   PC
+0028   0000           00151                         NOP                     
+0029   282D           00152 STARTOVER       GOTO    DECDISP1;FAULT;DECDISP1
+002A   282F           00153                         GOTO    DECDISP2
+002B   2831           00154                         GOTO    DECDISP3
+                      00155                         ;
+                      00156                         ;
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+002C   2829           00157                         GOTO    STARTOVER       ; WHEN IT IS LAST FIGURE CLEAR COUTER2 ALSO REPEAT
+002D   085A           00158 DECDISP1        MOVF    FILE1,W
+                      00159                 ;       MOVWF   PORTB
+                      00160                 ;       GOTO    DECDISP1
+002E   2A0F           00161                         GOTO    ALPHABET
+                      00162                 ;       GOTO    DECDISP1        ;REMOVE LATER
+002F   085B           00163 DECDISP2        MOVF    FILE2,W
+0030   2A0F           00164                         GOTO    ALPHABET
+0031   085C           00165 DECDISP3        MOVF    FILE3,W
+0032   2A0F           00166                         GOTO    ALPHABET
+Warning[207]: Found label after column 1. (.)
+0033                  00167                         .
+Warning[207]: Found label after column 1. (.)
+0033                  00168                         .
+Warning[207]: Found label after column 1. (.)
+0033                  00169                         .
+Warning[207]: Found label after column 1. (.)
+0033                  00170                         .
+0033   282D           00171                         GOTO    DECDISP1
+                      00172 
+0034                  00173 RAMSTORE        ;MOVF   COUNTER2,W
+                      00174                         ;SUBWF  NUM
+                      00175                         ;BTFSC  STATUS,ZEROBIT
+                      00176                         ;GOTO   CLEAR   
+0034   086F           00177                         MOVF    COUNTER2,W
+Message[305]: Using default destination of 1 (file).
+0035   0782           00178                         ADDWF   PC
+0036   2D3F           00179                         GOTO    READLOOP
+0037   2818           00180                         GOTO    F1
+0038   281B           00181                         GOTO    F2
+0039   281E           00182                         GOTO    F3      
+                      00183                         ;YOU CA STOP HERE READ WILL TAKECARE OF IT
+003A   01EF           00184 CLEAR           CLRF    COUNTER2                ;FOR DECDISP
+003B   2D41           00185                         GOTO    SAVED
+003C   105D           00186 BIT0    BCF             STORE,0
+003D   1806           00187                 BTFSC   PORTB,0
+003E   145D           00188                 BSF             STORE,0
+003F   28C4           00189                 GOTO    RESTORE
+0040   10DD           00190 BIT1    BCF             STORE,1
+0041   1806           00191                 BTFSC   PORTB,0
+0042   14DD           00192                 BSF             STORE,1
+0043   28C4           00193                 GOTO    RESTORE
+0044   115D           00194 BIT2    BCF             STORE,2
+0045   1806           00195                 BTFSC   PORTB,0
+0046   155D           00196                 BSF             STORE,2
+0047   28C4           00197                 GOTO    RESTORE
+0048   11DD           00198 BIT3    BCF             STORE,3
+0049   1806           00199                 BTFSC   PORTB,0
+004A   15DD           00200                 BSF             STORE,3
+004B   28C4           00201                 GOTO    RESTORE
+004C   125D           00202 BIT4    BCF             STORE,4
+004D   1806           00203                 BTFSC   PORTB,0
+004E   165D           00204                 BSF             STORE,4
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+004F   28C4           00205                 GOTO    RESTORE
+0050   12DD           00206 BIT5    BCF             STORE,5
+0051   1806           00207                 BTFSC   PORTB,0
+0052   16DD           00208                 BSF             STORE,5
+0053   28C4           00209                 GOTO    RESTORE
+0054   135D           00210 BIT6    BCF             STORE,6
+0055   1806           00211                 BTFSC   PORTB,0
+0056   175D           00212                 BSF             STORE,6
+0057   28C4           00213                 GOTO    RESTORE
+0058   13DD           00214 BIT7    BCF             STORE,7
+0059   1806           00215                 BTFSC   PORTB,0
+005A   17DD           00216                 BSF             STORE,7
+005B   28C4           00217                 GOTO    RESTORE
+                      00218 
+005C   084B           00219 WRITE   MOVF    SHIFTCOUNT,W            ;TO OMIT SHIFT VALUE
+005D   3C02           00220                 SUBLW   .2
+005E   1D03           00221                 BTFSS   STATUS,ZEROBIT
+005F   2D27           00222                 GOTO    FORINT
+0060   01CB           00223                 CLRF    SHIFTCOUNT
+Message[305]: Using default destination of 1 (file).
+0061   0AEE           00224                 INCF    NUM 
+0062   138B           00225                 BCF             INTCON,GIE
+0063   1683           00226                 BSF     STATUS,5 ;BANK3
+0064   1703           00227                 BSF             STATUS,6
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0065   150C           00228                 BSF     EECON1,WREN ;set WRITE ENABLE
+0066   1283           00229                 BCF     STATUS,5 ;BANK0
+0067   1303           00230                 BCF             STATUS,6
+0068   085D           00231 WRITENUM MOVF   STORE,W ;move COUNT to EEDATA
+0069   1703           00232                 BSF             STATUS,6
+006A   008C           00233                 MOVWF   EEDATA
+006B   1303           00234                 BCF             STATUS,6
+006C   086E           00235                 MOVF    NUM,W
+006D   1703           00236                 BSF             STATUS,6
+006E   008D           00237                 MOVWF   EEADR
+006F   1683           00238                 BSF     STATUS,5 ;BANK3  
+0070   3055           00239                 MOVLW   55H ;55 and AA initiates write cycle
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0071   008D           00240                 MOVWF   EECON2
+0072   30AA           00241                 MOVLW   0AAH
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0073   008D           00242                 MOVWF   EECON2
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0074   148C           00243                 BSF     EECON1,WR ;WRITE data to EEADR 0
+                      00244                 
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0075   188C           00245 WRDONE  BTFSC   EECON1,WR
+0076   2875           00246                 GOTO    WRDONE 
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0077   110C           00247                 BCF     EECON1,WREN
+0078   1283           00248                 BCF     STATUS,5 ;BANK0
+0079   1303           00249                 BCF             STATUS,6
+007A   178B           00250                 BSF             INTCON,GIE      ; I PUT THIS THERE
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+007B   110C           00251                 BCF             PIR1,CCP1IF
+007C   086E           00252                 MOVF    NUM,W
+007D   3C00           00253                 SUBLW   .0
+007E   1903           00254                 BTFSC   STATUS,ZEROBIT
+007F   2D35           00255                 GOTO    FINISH
+0080   2D27           00256                 GOTO    FORINT          
+                      00257 
+                      00258 
+0081                  00259 READ            ;MOVF           COUNTER2,W
+                      00260                 ;MOVWF  PORTB
+                      00261         ;GOTO   READ
+                      00262                 
+0081   086F           00263                 MOVF    COUNTER2,W
+0082   026E           00264                 SUBWF   NUM,W
+0083   1D03           00265                 BTFSS   STATUS,ZEROBIT
+0084   2887           00266                 GOTO    GO_ON
+0085   01EF           00267                 CLRF    COUNTER2
+0086   2D41           00268                 GOTO    SAVED
+Message[305]: Using default destination of 1 (file).
+0087   0AEF           00269 GO_ON   INCF    COUNTER2                ;TO READ FROM EEPROM SEQUENTIALLY
+0088   086F           00270 READNUM MOVF    COUNTER2,W
+0089   1703           00271                 BSF             STATUS,6
+008A   008D           00272                 MOVWF   EEADR
+008B   1683           00273                 BSF STATUS,5 ;BANK3
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+008C   140C           00274                 BSF EECON1,RD
+008D   1283           00275                 BCF STATUS,5 ;BANK1
+008E   080C           00276                 MOVF EEDATA,W
+008F   1303           00277                 BCF             STATUS,6        ;BANK0
+0090   00DD           00278                 MOVWF STORE
+0091   0008           00279                 RETURN
+                      00280 
+0092                  00281 RECEIVE 
+0092   086D           00282                 MOVF    COUNTER,W
+0093   3C02           00283                 SUBLW   .2
+0094   1903           00284                 BTFSC   STATUS,ZEROBIT
+0095   2858           00285                 GOTO    BIT7
+0096   086D           00286                 MOVF    COUNTER,W
+0097   3C03           00287                 SUBLW   .3
+0098   1903           00288                 BTFSC   STATUS,ZEROBIT
+0099   2854           00289                 GOTO    BIT6
+009A   086D           00290                 MOVF    COUNTER,W
+009B   3C04           00291                 SUBLW   .4
+009C   1903           00292                 BTFSC   STATUS,ZEROBIT
+009D   2850           00293                 GOTO    BIT5
+009E   086D           00294                 MOVF    COUNTER,W
+009F   3C05           00295                 SUBLW   .5
+00A0   1903           00296                 BTFSC   STATUS,ZEROBIT
+00A1   284C           00297                 GOTO    BIT4
+00A2   086D           00298                 MOVF    COUNTER,W
+00A3   3C06           00299                 SUBLW   .6
+00A4   1903           00300                 BTFSC   STATUS,ZEROBIT
+00A5   2848           00301                 GOTO    BIT3
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE  7
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+00A6   086D           00302                 MOVF    COUNTER,W
+00A7   3C07           00303                 SUBLW   .7
+00A8   1903           00304                 BTFSC   STATUS,ZEROBIT
+00A9   2844           00305                 GOTO    BIT2
+00AA   086D           00306                 MOVF    COUNTER,W
+00AB   3C08           00307                 SUBLW   .8
+00AC   1903           00308                 BTFSC   STATUS,ZEROBIT
+00AD   2840           00309                 GOTO    BIT1
+00AE   086D           00310                 MOVF    COUNTER,W
+00AF   3C09           00311                 SUBLW   .9
+00B0   1903           00312                 BTFSC   STATUS,ZEROBIT
+00B1   283C           00313                 GOTO    BIT0
+00B2   086D           00314                 MOVF    COUNTER,W
+00B3   3C0B           00315                 SUBLW   .11
+00B4   1D03           00316                 BTFSS   STATUS,ZEROBIT
+00B5   28C4           00317                 GOTO    RESTORE
+00B6   145E           00318                 BSF             FLAG,0                          ;INDICATE
+00B7   01ED           00319                 CLRF    COUNTER
+                      00320         ;       INCF    NUM             ;COUNTS CHARACTER
+00B8   3400           00321                 RETLW   .0
+00B9   00EA           00322 ISR             MOVWF   TW
+00BA   0E03           00323                 SWAPF   STATUS,W
+00BB   00E9           00324                 MOVWF   TSTATUS
+00BC   0806           00325                 MOVF    PORTB,W
+00BD   00EB           00326                 MOVWF   TPORTB
+                      00327         ;       MOVF    NUM,W
+                      00328         ;       MOVWF   TNUM
+                      00329                 ; CHECK FOR OTHERS TO SAVE
+00BE   224A           00330                 CALL    E
+Message[305]: Using default destination of 1 (file).
+00BF   0AED           00331                 INCF    COUNTER                 ;increase counter here
+                      00332         ;       MOVF    COUNTER,W
+                      00333         ;       MOVWF   PORTB
+                      00334         ;       CALL    DELAY3
+                      00335         ;       CLRF    PORTB
+                      00336 
+00C0   086D           00337                 MOVF    COUNTER,W
+00C1   3C01           00338                 SUBLW   .1
+00C2   1D03           00339                 BTFSS   STATUS,ZEROBIT
+00C3   2892           00340                 GOTO    RECEIVE
+00C4                  00341 RESTORE ;MOVF   TNUM,W
+                      00342         ;       MOVWF   NUM
+00C4   086B           00343                 MOVF    TPORTB,W
+00C5   0086           00344                 MOVWF   PORTB
+00C6   0E69           00345                 SWAPF   TSTATUS,W
+00C7   0083           00346                 MOVWF   STATUS
+00C8   086A           00347                 MOVF    TW,W
+00C9   110C           00348                 BCF             PIR1,CCP1IF
+00CA   0009           00349                 RETFIE
+                      00350 
+00CB   1509           00351 SCANNING        BSF             PORTE,2
+00CC   1109           00352                         BCF             PORTE,2
+00CD   0826           00353                         MOVF    DISP1,W
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE  8
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+00CE   0086           00354                         MOVWF   PORTB
+00CF   2005           00355                         CALL    DELAYP5
+00D0   30FF           00356                         MOVLW   B'11111111'
+00D1   0086           00357                         MOVWF   PORTB
+                      00358 
+00D2   2480           00359                         CALL    CLOCK1
+00D3   0827           00360                         MOVF    DISP2,W
+00D4   0086           00361                         MOVWF   PORTB
+00D5   2005           00362                         CALL    DELAYP5
+00D6   30FF           00363                         MOVLW   B'11111111'
+00D7   0086           00364                         MOVWF   PORTB
+                      00365                         
+00D8   2480           00366                         CALL    CLOCK1
+00D9   0828           00367                         MOVF    DISP3,W
+00DA   0086           00368                         MOVWF   PORTB
+00DB   2005           00369                         CALL    DELAYP5
+00DC   30FF           00370                         MOVLW   B'11111111'
+00DD   0086           00371                         MOVWF   PORTB
+                      00372                         
+00DE   2480           00373                         CALL    CLOCK1
+00DF   0829           00374                         MOVF    DISP4,W
+00E0   0086           00375                         MOVWF   PORTB
+00E1   2005           00376                         CALL    DELAYP5
+00E2   30FF           00377                         MOVLW   B'11111111'
+00E3   0086           00378                         MOVWF   PORTB
+                      00379                         
+00E4   2480           00380                         CALL    CLOCK1
+00E5   0830           00381                         MOVF    DISP5,W
+00E6   0086           00382                         MOVWF   PORTB
+00E7   2005           00383                         CALL    DELAYP5
+00E8   30FF           00384                         MOVLW   B'11111111'
+00E9   0086           00385                         MOVWF   PORTB
+                      00386                         
+00EA   2480           00387                         CALL    CLOCK1
+00EB   0831           00388                         MOVF    DISP6,W
+00EC   0086           00389                         MOVWF   PORTB
+00ED   2005           00390                         CALL    DELAYP5
+00EE   30FF           00391                         MOVLW   B'11111111'
+00EF   0086           00392                         MOVWF   PORTB
+                      00393                         
+00F0   2480           00394                         CALL    CLOCK1
+00F1   0832           00395                         MOVF    DISP7,W
+00F2   0086           00396                         MOVWF   PORTB
+00F3   2005           00397                         CALL    DELAYP5
+00F4   30FF           00398                         MOVLW   B'11111111'
+00F5   0086           00399                         MOVWF   PORTB
+                      00400                         
+00F6   2480           00401                         CALL    CLOCK1
+00F7   0833           00402                         MOVF    DISP8,W
+00F8   0086           00403                         MOVWF   PORTB
+00F9   2005           00404                         CALL    DELAYP5
+00FA   30FF           00405                         MOVLW   B'11111111'
+00FB   0086           00406                         MOVWF   PORTB
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE  9
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00407                         
+00FC   2480           00408                         CALL    CLOCK1
+00FD   0834           00409                         MOVF    DISP9,W
+00FE   0086           00410                         MOVWF   PORTB
+00FF   2005           00411                         CALL    DELAYP5
+0100   30FF           00412                         MOVLW   B'11111111'
+0101   0086           00413                         MOVWF   PORTB
+                      00414                         
+0102   2480           00415                         CALL    CLOCK1
+0103   2483           00416                         CALL    CLOCK2
+                      00417 
+0104   0835           00418                         MOVF    DISP10,W
+0105   0086           00419                         MOVWF   PORTB
+0106   2005           00420                         CALL    DELAYP5
+0107   30FF           00421                         MOVLW   B'11111111'
+0108   0086           00422                         MOVWF   PORTB
+                      00423 
+0109   2483           00424                         CALL    CLOCK2
+010A   0836           00425                         MOVF    DISP11,W
+010B   0086           00426                         MOVWF   PORTB
+010C   2005           00427                         CALL    DELAYP5
+010D   30FF           00428                         MOVLW   B'11111111'
+010E   0086           00429                         MOVWF   PORTB
+                      00430 
+010F   2483           00431                         CALL    CLOCK2
+0110   0837           00432                         MOVF    DISP12,W
+0111   0086           00433                         MOVWF   PORTB
+0112   2005           00434                         CALL    DELAYP5
+0113   30FF           00435                         MOVLW   B'11111111'
+0114   0086           00436                         MOVWF   PORTB
+0115   2483           00437                         CALL    CLOCK2
+0116   0838           00438                         MOVF    DISP13,W
+0117   0086           00439                         MOVWF   PORTB
+0118   2005           00440                         CALL    DELAYP5
+0119   30FF           00441                         MOVLW   B'11111111'
+011A   0086           00442                         MOVWF   PORTB
+                      00443                         
+011B   2483           00444                         CALL    CLOCK2
+011C   0839           00445                         MOVF    DISP14,W
+011D   0086           00446                         MOVWF   PORTB
+011E   2005           00447                         CALL    DELAYP5
+011F   30FF           00448                         MOVLW   B'11111111'
+0120   0086           00449                         MOVWF   PORTB
+                      00450                         
+0121   2483           00451                         CALL    CLOCK2
+0122   0840           00452                         MOVF    DISP15,W
+0123   0086           00453                         MOVWF   PORTB
+0124   2005           00454                         CALL    DELAYP5
+0125   30FF           00455                         MOVLW   B'11111111'
+0126   0086           00456                         MOVWF   PORTB
+                      00457                         
+0127   2483           00458                         CALL    CLOCK2
+0128   0841           00459                         MOVF    DISP16,W
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 10
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0129   0086           00460                         MOVWF   PORTB
+012A   2005           00461                         CALL    DELAYP5
+012B   30FF           00462                         MOVLW   B'11111111'
+012C   0086           00463                         MOVWF   PORTB
+                      00464                         
+012D   2483           00465                         CALL    CLOCK2
+012E   0842           00466                         MOVF    DISP17,W
+012F   0086           00467                         MOVWF   PORTB
+0130   2005           00468                         CALL    DELAYP5
+0131   30FF           00469                         MOVLW   B'11111111'
+0132   0086           00470                         MOVWF   PORTB
+                      00471                         
+0133   2483           00472                         CALL    CLOCK2
+0134   0843           00473                         MOVF    DISP18,W
+0135   0086           00474                         MOVWF   PORTB
+0136   2005           00475                         CALL    DELAYP5
+0137   30FF           00476                         MOVLW   B'11111111'
+0138   0086           00477                         MOVWF   PORTB
+0139   2483           00478                         CALL    CLOCK2
+                      00479 
+013A   0844           00480                         MOVF    DISP19,W
+013B   0086           00481                         MOVWF   PORTB
+013C   3080           00482                         MOVLW   B'10000000'
+013D   0088           00483                         MOVWF   PORTD
+013E   2005           00484                         CALL    DELAYP5
+013F   30FF           00485                         MOVLW   B'11111111'
+0140   0086           00486                         MOVWF   PORTB
+0141   0845           00487                         MOVF    DISP20,W
+0142   0086           00488                         MOVWF   PORTB
+0143   3040           00489                         MOVLW   B'01000000'
+0144   0088           00490                         MOVWF   PORTD
+0145   2005           00491                         CALL    DELAYP5
+0146   30FF           00492                         MOVLW   B'11111111'
+0147   0086           00493                         MOVWF   PORTB
+0148   0846           00494                         MOVF    DISP21,W
+0149   0086           00495                         MOVWF   PORTB
+014A   3020           00496                         MOVLW   B'00100000'
+014B   0088           00497                         MOVWF   PORTD
+014C   2005           00498                         CALL    DELAYP5
+014D   30FF           00499                         MOVLW   B'11111111'
+014E   0086           00500                         MOVWF   PORTB
+014F   0847           00501                         MOVF    DISP22,W
+0150   0086           00502                         MOVWF   PORTB
+0151   3010           00503                         MOVLW   B'00010000'
+0152   0088           00504                         MOVWF   PORTD
+0153   2005           00505                         CALL    DELAYP5
+0154   30FF           00506                         MOVLW   B'11111111'
+0155   0086           00507                         MOVWF   PORTB
+0156   0848           00508                         MOVF    DISP23,W
+0157   0086           00509                         MOVWF   PORTB
+0158   3008           00510                         MOVLW   B'00001000'
+0159   0088           00511                         MOVWF   PORTD
+015A   2005           00512                         CALL    DELAYP5
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 11
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+015B   30FF           00513                         MOVLW   B'11111111'
+015C   0086           00514                         MOVWF   PORTB
+015D   0849           00515                         MOVF    DISP24,W
+015E   0086           00516                         MOVWF   PORTB
+015F   3004           00517                         MOVLW   B'00000100'
+0160   0088           00518                         MOVWF   PORTD
+0161   2005           00519                         CALL    DELAYP5
+0162   30FF           00520                         MOVLW   B'11111111'
+0163   0086           00521                         MOVWF   PORTB
+0164   0850           00522                         MOVF    DISP25,W
+0165   0086           00523                         MOVWF   PORTB
+0166   3002           00524                         MOVLW   B'00000010'
+0167   0088           00525                         MOVWF   PORTD
+0168   2005           00526                         CALL    DELAYP5
+0169   30FF           00527                         MOVLW   B'11111111'
+016A   0086           00528                         MOVWF   PORTB
+016B   0851           00529                         MOVF    DISP26,W
+016C   0086           00530                         MOVWF   PORTB
+016D   3001           00531                         MOVLW   B'00000001'
+016E   0088           00532                         MOVWF   PORTD
+016F   2005           00533                         CALL    DELAYP5
+0170   30FF           00534                         MOVLW   B'11111111'
+0171   0086           00535                         MOVWF   PORTB
+0172   0188           00536                         CLRF    PORTD
+                      00537 
+0173   0852           00538                         MOVF    DISP27,W
+0174   0086           00539                         MOVWF   PORTB
+0175   3080           00540                         MOVLW   B'10000000'
+0176   0087           00541                         MOVWF   PORTC
+0177   2005           00542                         CALL    DELAYP5
+0178   30FF           00543                         MOVLW   B'11111111'
+0179   0086           00544                         MOVWF   PORTB
+017A   0853           00545                         MOVF    DISP28,W
+017B   0086           00546                         MOVWF   PORTB
+017C   3040           00547                         MOVLW   B'01000000'
+017D   0087           00548                         MOVWF   PORTC
+017E   2005           00549                         CALL    DELAYP5
+017F   30FF           00550                         MOVLW   B'11111111'
+0180   0086           00551                         MOVWF   PORTB
+0181   0854           00552                         MOVF    DISP29,W
+0182   0086           00553                         MOVWF   PORTB
+0183   3020           00554                         MOVLW   B'00100000'
+0184   0087           00555                         MOVWF   PORTC
+0185   2005           00556                         CALL    DELAYP5
+0186   30FF           00557                         MOVLW   B'11111111'
+0187   0086           00558                         MOVWF   PORTB
+0188   0855           00559                         MOVF    DISP30,W
+0189   0086           00560                         MOVWF   PORTB
+018A   3010           00561                         MOVLW   B'00010000'
+018B   0087           00562                         MOVWF   PORTC
+018C   2005           00563                         CALL    DELAYP5
+018D   30FF           00564                         MOVLW   B'11111111'
+018E   0086           00565                         MOVWF   PORTB
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 12
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+018F   0856           00566                         MOVF    DISP31,W
+0190   0086           00567                         MOVWF   PORTB
+0191   3008           00568                         MOVLW   B'00001000'
+0192   0087           00569                         MOVWF   PORTC
+0193   2005           00570                         CALL    DELAYP5
+0194   30FF           00571                         MOVLW   B'11111111'
+0195   0086           00572                         MOVWF   PORTB
+0196   0857           00573                         MOVF    DISP32,W
+0197   0086           00574                         MOVWF   PORTB
+0198   3001           00575                         MOVLW   B'00000001' ;MAKING ROOM FOR INTERRUPT
+0199   0087           00576                         MOVWF   PORTC
+019A   2005           00577                         CALL    DELAYP5
+019B   30FF           00578                         MOVLW   B'11111111'
+019C   0086           00579                         MOVWF   PORTB
+019D   0858           00580                         MOVF    DISP33,W
+019E   0086           00581                         MOVWF   PORTB
+019F   3002           00582                         MOVLW   B'00000010'
+01A0   0087           00583                         MOVWF   PORTC
+01A1   2005           00584                         CALL    DELAYP5
+01A2   30FF           00585                         MOVLW   B'11111111'
+01A3   0086           00586                         MOVWF   PORTB
+01A4   0187           00587                         CLRF    PORTC
+                      00588                         
+01A5   0859           00589                         MOVF    DISP34,W
+01A6   0086           00590                         MOVWF   PORTB
+01A7   3001           00591                         MOVLW   B'00000001'
+01A8   0085           00592                         MOVWF   PORTA
+01A9   2005           00593                         CALL    DELAYP5
+01AA   30FF           00594                         MOVLW   B'11111111'
+01AB   0086           00595                         MOVWF   PORTB
+01AC   0860           00596                         MOVF    DISP35,W
+01AD   0086           00597                         MOVWF   PORTB
+01AE   3002           00598                         MOVLW   B'00000010'
+01AF   0085           00599                         MOVWF   PORTA
+01B0   2005           00600                         CALL    DELAYP5
+01B1   30FF           00601                         MOVLW   B'11111111'
+01B2   0086           00602                         MOVWF   PORTB
+01B3   0185           00603                         CLRF    PORTA
+01B4   29C8           00604                         GOTO BACK2
+                      00605 
+01B5                  00606 WHILE1  
+01B5   3007           00607                 MOVLW   .7
+01B6   00A0           00608                 MOVWF   COUNT
+Message[305]: Using default destination of 1 (file).
+01B7   0BA0           00609 BACK    DECFSZ  COUNT
+01B8   29BA           00610                 GOTO    BUFFER
+01B9   3400           00611                 RETLW   0
+                      00612 
+01BA   0821           00613 BUFFER  MOVF    C1,W
+01BB   00A6           00614         MOVWF   DISP1
+                      00615 
+01BC   0822           00616         MOVF    C2,W
+01BD   00A1           00617         MOVWF   C1
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 13
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+01BE   0823           00618         MOVF    C3,W
+01BF   00A2           00619         MOVWF   C2
+01C0   0824           00620         MOVF    C4,W
+01C1   00A3           00621         MOVWF   C3
+01C2   0825           00622         MOVF    C5,W
+01C3   00A4           00623         MOVWF   C4
+01C4   30FF           00624         MOVLW   .255
+01C5   00A5           00625         MOVWF   C5
+01C6   3014           00626         MOVLW   .20
+01C7   00E6           00627         MOVWF   STILL
+Message[305]: Using default destination of 1 (file).
+01C8   0BE6           00628 BACK2   DECFSZ  STILL
+01C9   28CB           00629         GOTO    SCANNING
+01CA   0859           00630                         MOVF    DISP34,W
+01CB   00E0           00631                         MOVWF   DISP35
+01CC   0858           00632                         MOVF    DISP33,W
+01CD   00D9           00633                         MOVWF   DISP34
+01CE   0857           00634                         MOVF    DISP32,W
+01CF   00D8           00635                         MOVWF   DISP33
+01D0   0856           00636                         MOVF    DISP31,W
+01D1   00D7           00637                         MOVWF   DISP32
+01D2   0855           00638                         MOVF    DISP30,W
+01D3   00D6           00639                         MOVWF   DISP31
+01D4   0854           00640                         MOVF    DISP29,W
+01D5   00D5           00641                         MOVWF   DISP30
+01D6   0853           00642                         MOVF    DISP28,W
+01D7   00D4           00643                         MOVWF   DISP29
+01D8   0852           00644                         MOVF    DISP27,W
+01D9   00D3           00645                         MOVWF   DISP28
+01DA   0851           00646                         MOVF    DISP26,W
+01DB   00D2           00647                         MOVWF   DISP27
+01DC   0850           00648                         MOVF    DISP25,W
+01DD   00D1           00649                         MOVWF   DISP26
+01DE   0849           00650                         MOVF    DISP24,W
+01DF   00D0           00651                         MOVWF   DISP25
+01E0   0848           00652                         MOVF    DISP23,W
+01E1   00C9           00653                         MOVWF   DISP24
+01E2   0847           00654                         MOVF    DISP22,W
+01E3   00C8           00655                         MOVWF   DISP23
+01E4   0846           00656                         MOVF    DISP21,W
+01E5   00C7           00657                         MOVWF   DISP22
+01E6   0845           00658                         MOVF    DISP20,W
+01E7   00C6           00659                         MOVWF   DISP21
+01E8   0844           00660                         MOVF    DISP19,W
+01E9   00C5           00661                         MOVWF   DISP20
+01EA   0843           00662                         MOVF    DISP18,W
+01EB   00C4           00663                         MOVWF   DISP19
+01EC   0842           00664                         MOVF    DISP17,W
+01ED   00C3           00665                         MOVWF   DISP18
+01EE   0841           00666                         MOVF    DISP16,W
+01EF   00C2           00667                         MOVWF   DISP17
+01F0   0840           00668                         MOVF    DISP15,W
+01F1   00C1           00669                         MOVWF   DISP16
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 14
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+01F2   0839           00670                         MOVF    DISP14,W
+01F3   00C0           00671                         MOVWF   DISP15
+01F4   0838           00672                         MOVF    DISP13,W
+01F5   00B9           00673                         MOVWF   DISP14
+01F6   0837           00674                         MOVF    DISP12,W
+01F7   00B8           00675                         MOVWF   DISP13
+01F8   0836           00676                         MOVF    DISP11,W
+01F9   00B7           00677                         MOVWF   DISP12          
+01FA   0835           00678                         MOVF    DISP10,W
+01FB   00B6           00679                         MOVWF   DISP11
+01FC   0834           00680                         MOVF    DISP9,W
+01FD   00B5           00681                         MOVWF   DISP10
+01FE   0833           00682                         MOVF    DISP8,W
+01FF   00B4           00683                         MOVWF   DISP9
+0200   0832           00684                         MOVF    DISP7,W
+0201   00B3           00685                         MOVWF   DISP8
+0202   0831           00686                         MOVF    DISP6,W
+0203   00B2           00687                         MOVWF   DISP7
+0204   0830           00688                         MOVF    DISP5,W
+0205   00B1           00689                         MOVWF   DISP6
+0206   0829           00690                         MOVF    DISP4,W
+0207   00B0           00691                         MOVWF   DISP5
+0208   0828           00692                         MOVF    DISP3,W
+0209   00A9           00693                         MOVWF   DISP4
+020A   0827           00694                         MOVF    DISP2,W
+020B   00A8           00695                         MOVWF   DISP3
+020C   0826           00696                         MOVF    DISP1,W
+020D   00A7           00697                         MOVWF   DISP2   
+020E   29B7           00698         GOTO    BACK
+                      00699 
+020F                  00700 ALPHABET
+020F   00DF           00701 A       MOVWF   ALPHA
+0210   3C1C           00702         SUBLW   1CH
+0211   1D03           00703         BTFSS   STATUS,ZEROBIT
+0212   2A1F           00704         GOTO    BB      
+0213   30C1           00705         MOVLW   0C1H
+0214   00A1           00706         MOVWF   C1
+0215   30B7           00707         MOVLW   0B7H
+0216   00A2           00708         MOVWF   C2
+0217   3077           00709         MOVLW   77H
+0218   00A3           00710         MOVWF   C3
+0219   30B7           00711         MOVLW   0B7H
+021A   00A4           00712         MOVWF   C4
+021B   30C1           00713         MOVLW   0C1H
+021C   00A5           00714         MOVWF   C5
+                      00715         
+021D   21B5           00716         CALL    WHILE1
+021E   2821           00717         GOTO    DECDISP
+                      00718 
+021F   085F           00719 BB      MOVF    ALPHA,W
+0220   3C32           00720         SUBLW   32H
+0221   1D03           00721         BTFSS   STATUS,ZEROBIT
+0222   2A2F           00722         GOTO    C       
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 15
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0223   3001           00723         MOVLW   01H
+0224   00A1           00724         MOVWF   C1
+0225   306D           00725         MOVLW   06DH
+0226   00A2           00726         MOVWF   C2
+0227   306D           00727         MOVLW   6DH
+0228   00A3           00728         MOVWF   C3
+0229   306D           00729         MOVLW   06DH
+022A   00A4           00730         MOVWF   C4
+022B   3093           00731         MOVLW   93H
+022C   00A5           00732         MOVWF   C5
+022D   21B5           00733         CALL    WHILE1
+022E   2821           00734         GOTO    DECDISP
+022F   085F           00735 C       MOVF    ALPHA,W
+0230   3C21           00736         SUBLW   21H
+0231   1D03           00737         BTFSS   STATUS,ZEROBIT
+                      00738 ;       GOTO    DEFAULT 
+0232   3083           00739         MOVLW   83H
+0233   00A1           00740         MOVWF   C1
+0234   307D           00741         MOVLW   07DH
+0235   00A2           00742         MOVWF   C2
+0236   307D           00743         MOVLW   7DH
+0237   00A3           00744         MOVWF   C3
+0238   307D           00745         MOVLW   07DH
+0239   00A4           00746         MOVWF   C4
+023A   30BB           00747         MOVLW   0BBH
+023B   00A5           00748         MOVWF   C5
+023C   21B5           00749         CALL    WHILE1
+023D   2821           00750         GOTO    DECDISP
+023E                  00751 D       ;MOVF   ALPHA,W
+                      00752         ;SUBLW  23H
+                      00753         ;BTFSS  STATUS,ZEROBIT
+                      00754         ;GOTO   E
+023E   3001           00755         MOVLW   01H
+023F   00A1           00756         MOVWF   C1
+0240   307D           00757         MOVLW   07DH
+0241   00A2           00758         MOVWF   C2
+0242   307D           00759         MOVLW   07DH
+0243   00A3           00760         MOVWF   C3
+0244   30BB           00761         MOVLW   0BBH
+0245   00A4           00762         MOVWF   C4
+0246   30C7           00763         MOVLW   0C7H
+0247   00A5           00764         MOVWF   C5
+0248   21B5           00765         CALL    WHILE1
+0249   2821           00766         GOTO    DECDISP
+024A                  00767 E       ;MOVF   ALPHA,W
+                      00768         ;SUBLW  24H
+                      00769         ;BTFSS  STATUS,ZEROBIT
+                      00770         ;GOTO   F
+024A   3001           00771         MOVLW   01H
+024B   00A1           00772         MOVWF   C1
+024C   306D           00773         MOVLW   06DH
+024D   00A2           00774         MOVWF   C2
+024E   306D           00775         MOVLW   06DH
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 16
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+024F   00A3           00776         MOVWF   C3
+0250   306D           00777         MOVLW   06DH
+0251   00A4           00778         MOVWF   C4
+0252   307D           00779         MOVLW   7DH
+0253   00A5           00780         MOVWF   C5
+0254   21B5           00781         CALL    WHILE1
+0255   2821           00782         GOTO    DECDISP
+0256   085F           00783 F       MOVF    ALPHA,W
+0257   3C2B           00784         SUBLW   2BH
+0258   1D03           00785         BTFSS   STATUS,ZEROBIT
+0259   2A66           00786         GOTO    G
+025A   3001           00787         MOVLW   01H
+025B   00A1           00788         MOVWF   C1
+025C   306F           00789         MOVLW   6FH
+025D   00A2           00790         MOVWF   C2
+025E   306F           00791         MOVLW   6FH
+025F   00A3           00792         MOVWF   C3
+0260   306F           00793         MOVLW   6FH
+0261   00A4           00794         MOVWF   C4
+0262   307F           00795         MOVLW   7FH
+0263   00A5           00796         MOVWF   C5
+0264   21B5           00797         CALL    WHILE1
+0265   2821           00798         GOTO    DECDISP
+0266   085F           00799 G       MOVF    ALPHA,W
+0267   3C34           00800         SUBLW   34H
+0268   1D03           00801         BTFSS   STATUS,ZEROBIT
+0269   2A76           00802         GOTO    H
+026A   3083           00803         MOVLW   83H
+026B   00A1           00804         MOVWF   C1
+026C   307D           00805         MOVLW   07DH
+026D   00A2           00806         MOVWF   C2
+026E   3065           00807         MOVLW   065H
+026F   00A3           00808         MOVWF   C3
+0270   306D           00809         MOVLW   06DH
+0271   00A4           00810         MOVWF   C4
+0272   30A3           00811         MOVLW   0A3H
+0273   00A5           00812         MOVWF   C5
+0274   21B5           00813         CALL    WHILE1
+0275   2821           00814         GOTO    DECDISP
+                      00815                         
+0276   085F           00816 H       MOVF    ALPHA,W
+0277   3C33           00817         SUBLW   33H
+0278   1D03           00818         BTFSS   STATUS,ZEROBIT
+0279   2A86           00819         GOTO    I
+027A   3001           00820         MOVLW   01H
+027B   00A1           00821         MOVWF   C1
+027C   30EF           00822         MOVLW   0EFH
+027D   00A2           00823         MOVWF   C2
+027E   30EF           00824         MOVLW   0EFH
+027F   00A3           00825         MOVWF   C3
+0280   30EF           00826         MOVLW   0EFH
+0281   00A4           00827         MOVWF   C4
+0282   3001           00828         MOVLW   01H
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 17
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0283   00A5           00829         MOVWF   C5
+0284   21B5           00830         CALL    WHILE1
+0285   2821           00831         GOTO    DECDISP
+0286   085F           00832 I       MOVF    ALPHA,W
+0287   3C43           00833         SUBLW   43H
+0288   1D03           00834         BTFSS   STATUS,ZEROBIT
+0289   2A96           00835         GOTO    J
+028A   307D           00836         MOVLW   7DH
+028B   00A1           00837         MOVWF   C1
+028C   307D           00838         MOVLW   07DH
+028D   00A2           00839         MOVWF   C2
+028E   3001           00840         MOVLW   01H
+028F   00A3           00841         MOVWF   C3
+0290   307D           00842         MOVLW   07DH
+0291   00A4           00843         MOVWF   C4
+0292   307D           00844         MOVLW   7DH
+0293   00A5           00845         MOVWF   C5
+0294   21B5           00846         CALL    WHILE1
+0295   2821           00847         GOTO    DECDISP
+                      00848 
+0296   085F           00849 J       MOVF    ALPHA,W
+0297   3C3B           00850         SUBLW   3BH
+0298   1D03           00851         BTFSS   STATUS,ZEROBIT
+0299   2AA6           00852         GOTO    K
+029A   30F3           00853         MOVLW   0F3H
+029B   00A1           00854         MOVWF   C1
+029C   307D           00855         MOVLW   7DH
+029D   00A2           00856         MOVWF   C2
+029E   307D           00857         MOVLW   7DH
+029F   00A3           00858         MOVWF   C3
+02A0   3003           00859         MOVLW   03H
+02A1   00A4           00860         MOVWF   C4
+02A2   307F           00861         MOVLW   7FH
+02A3   00A5           00862         MOVWF   C5
+02A4   21B5           00863         CALL    WHILE1
+02A5   2821           00864         GOTO    DECDISP
+02A6   085F           00865 K       MOVF    ALPHA,W
+02A7   3C42           00866         SUBLW   42H
+02A8   1D03           00867         BTFSS   STATUS,ZEROBIT
+02A9   2AB6           00868         GOTO    L
+02AA   3001           00869         MOVLW   01H
+02AB   00A1           00870         MOVWF   C1
+02AC   30EF           00871         MOVLW   0EFH
+02AD   00A2           00872         MOVWF   C2
+02AE   30D7           00873         MOVLW   0D7H
+02AF   00A3           00874         MOVWF   C3
+02B0   30BB           00875         MOVLW   0BBH
+02B1   00A4           00876         MOVWF   C4
+02B2   307D           00877         MOVLW   7DH
+02B3   00A5           00878         MOVWF   C5
+02B4   29B5           00879         GOTO    WHILE1
+02B5   2821           00880         GOTO    DECDISP
+02B6   085F           00881 L       MOVF    ALPHA,W
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 18
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+02B7   3C4B           00882         SUBLW   4BH
+02B8   1D03           00883         BTFSS   STATUS,ZEROBIT
+02B9   2AC6           00884         GOTO    M
+02BA   3001           00885         MOVLW   01H
+02BB   00A1           00886         MOVWF   C1
+02BC   30FD           00887         MOVLW   0FDH
+02BD   00A2           00888         MOVWF   C2
+02BE   30FD           00889         MOVLW   0FDH
+02BF   00A3           00890         MOVWF   C3
+02C0   30FD           00891         MOVLW   0FDH
+02C1   00A4           00892         MOVWF   C4
+02C2   30FD           00893         MOVLW   0FDH
+02C3   00A5           00894         MOVWF   C5
+02C4   21B5           00895         CALL    WHILE1
+02C5   2821           00896         GOTO    DECDISP
+Error[108]  : Illegal character (/)
+02C5   2821           00897 //
+02C6   085F           00898 M       MOVF    ALPHA,W
+02C7   3C3A           00899         SUBLW   3AH
+02C8   1D03           00900         BTFSS   STATUS,ZEROBIT
+02C9   2AD6           00901         GOTO    N
+02CA   3083           00902         MOVLW   83H
+02CB   00A1           00903         MOVWF   C1
+02CC   307D           00904         MOVLW   07DH
+02CD   00A2           00905         MOVWF   C2
+02CE   307D           00906         MOVLW   7DH
+02CF   00A3           00907         MOVWF   C3
+02D0   307D           00908         MOVLW   07DH
+02D1   00A4           00909         MOVWF   C4
+02D2   30BB           00910         MOVLW   0BBH
+02D3   00A5           00911         MOVWF   C5
+02D4   21B5           00912         CALL    WHILE1
+02D5   2821           00913         GOTO    DECDISP
+02D6   085F           00914 N       MOVF    ALPHA,W
+02D7   3C31           00915         SUBLW   31H
+02D8   1D03           00916         BTFSS   STATUS,ZEROBIT
+02D9   2AE6           00917         GOTO    O
+02DA   3083           00918         MOVLW   83H
+02DB   00A1           00919         MOVWF   C1
+02DC   307D           00920         MOVLW   07DH
+02DD   00A2           00921         MOVWF   C2
+02DE   307D           00922         MOVLW   7DH
+02DF   00A3           00923         MOVWF   C3
+02E0   307D           00924         MOVLW   07DH
+02E1   00A4           00925         MOVWF   C4
+02E2   30BB           00926         MOVLW   0BBH
+02E3   00A5           00927         MOVWF   C5
+02E4   21B5           00928         CALL    WHILE1
+02E5   2821           00929         GOTO    DECDISP
+02E6   085F           00930 O       MOVF    ALPHA,W
+02E7   3C44           00931         SUBLW   44H
+02E8   1D03           00932         BTFSS   STATUS,ZEROBIT
+02E9   2AF6           00933         GOTO    P
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 19
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+02EA   3083           00934         MOVLW   83H
+02EB   00A1           00935         MOVWF   C1
+02EC   307D           00936         MOVLW   07DH
+02ED   00A2           00937         MOVWF   C2
+02EE   307D           00938         MOVLW   7DH
+02EF   00A3           00939         MOVWF   C3
+02F0   307D           00940         MOVLW   07DH
+02F1   00A4           00941         MOVWF   C4
+02F2   30BB           00942         MOVLW   0BBH
+02F3   00A5           00943         MOVWF   C5
+02F4   21B5           00944         CALL    WHILE1
+02F5   2821           00945         GOTO    DECDISP
+02F6   085F           00946 P       MOVF    ALPHA,W
+02F7   3C4D           00947         SUBLW   4DH
+02F8   1D03           00948         BTFSS   STATUS,ZEROBIT
+02F9   2B06           00949         GOTO    Q
+02FA   3083           00950         MOVLW   83H
+02FB   00A1           00951         MOVWF   C1
+02FC   307D           00952         MOVLW   07DH
+02FD   00A2           00953         MOVWF   C2
+02FE   307D           00954         MOVLW   7DH
+02FF   00A3           00955         MOVWF   C3
+0300   307D           00956         MOVLW   07DH
+0301   00A4           00957         MOVWF   C4
+0302   30BB           00958         MOVLW   0BBH
+0303   00A5           00959         MOVWF   C5
+0304   21B5           00960         CALL    WHILE1
+0305   2821           00961         GOTO    DECDISP
+0306   085F           00962 Q       MOVF    ALPHA,W
+0307   3C15           00963         SUBLW   15H
+0308   1D03           00964         BTFSS   STATUS,ZEROBIT
+0309   2B16           00965         GOTO    R
+030A   3083           00966         MOVLW   83H
+030B   00A1           00967         MOVWF   C1
+030C   307D           00968         MOVLW   07DH
+030D   00A2           00969         MOVWF   C2
+030E   307D           00970         MOVLW   7DH
+030F   00A3           00971         MOVWF   C3
+0310   307D           00972         MOVLW   07DH
+0311   00A4           00973         MOVWF   C4
+0312   30BB           00974         MOVLW   0BBH
+0313   00A5           00975         MOVWF   C5
+0314   21B5           00976         CALL    WHILE1
+0315   2821           00977         GOTO    DECDISP
+0316   085F           00978 R       MOVF    ALPHA,W
+0317   3C2D           00979         SUBLW   2DH
+0318   1D03           00980         BTFSS   STATUS,ZEROBIT
+0319   2B26           00981         GOTO    S
+031A   3083           00982         MOVLW   83H
+031B   00A1           00983         MOVWF   C1
+031C   307D           00984         MOVLW   07DH
+031D   00A2           00985         MOVWF   C2
+031E   307D           00986         MOVLW   7DH
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 20
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+031F   00A3           00987         MOVWF   C3
+0320   307D           00988         MOVLW   07DH
+0321   00A4           00989         MOVWF   C4
+0322   30BB           00990         MOVLW   0BBH
+0323   00A5           00991         MOVWF   C5
+0324   21B5           00992         CALL    WHILE1
+0325   2821           00993         GOTO    DECDISP
+0326   085F           00994 S       MOVF    ALPHA,W
+0327   3C1B           00995         SUBLW   1BH
+0328   1D03           00996         BTFSS   STATUS,ZEROBIT
+0329   2B36           00997         GOTO    T
+032A   3083           00998         MOVLW   83H
+032B   00A1           00999         MOVWF   C1
+032C   307D           01000         MOVLW   07DH
+032D   00A2           01001         MOVWF   C2
+032E   307D           01002         MOVLW   7DH
+032F   00A3           01003         MOVWF   C3
+0330   307D           01004         MOVLW   07DH
+0331   00A4           01005         MOVWF   C4
+0332   30BB           01006         MOVLW   0BBH
+0333   00A5           01007         MOVWF   C5
+0334   21B5           01008         CALL    WHILE1
+0335   2821           01009         GOTO    DECDISP
+0336   085F           01010 T       MOVF    ALPHA,W
+0337   3C2C           01011         SUBLW   2CH
+0338   1D03           01012         BTFSS   STATUS,ZEROBIT
+0339   2B46           01013         GOTO    U
+033A   3083           01014         MOVLW   83H
+033B   00A1           01015         MOVWF   C1
+033C   307D           01016         MOVLW   07DH
+033D   00A2           01017         MOVWF   C2
+033E   307D           01018         MOVLW   7DH
+033F   00A3           01019         MOVWF   C3
+0340   307D           01020         MOVLW   07DH
+0341   00A4           01021         MOVWF   C4
+0342   30BB           01022         MOVLW   0BBH
+0343   00A5           01023         MOVWF   C5
+0344   21B5           01024         CALL    WHILE1
+0345   2821           01025         GOTO    DECDISP
+0346   085F           01026 U       MOVF    ALPHA,W
+0347   3C3C           01027         SUBLW   3CH
+0348   1D03           01028         BTFSS   STATUS,ZEROBIT
+0349   2B56           01029         GOTO    V
+034A   3083           01030         MOVLW   83H
+034B   00A1           01031         MOVWF   C1
+034C   307D           01032         MOVLW   07DH
+034D   00A2           01033         MOVWF   C2
+034E   307D           01034         MOVLW   7DH
+034F   00A3           01035         MOVWF   C3
+0350   307D           01036         MOVLW   07DH
+0351   00A4           01037         MOVWF   C4
+0352   30BB           01038         MOVLW   0BBH
+0353   00A5           01039         MOVWF   C5
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 21
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0354   21B5           01040         CALL    WHILE1
+0355   2821           01041         GOTO    DECDISP
+0356   085F           01042 V       MOVF    ALPHA,W
+0357   3C2A           01043         SUBLW   2AH
+0358   1D03           01044         BTFSS   STATUS,ZEROBIT
+0359   2AD6           01045         GOTO    N
+035A   3083           01046         MOVLW   83H
+035B   00A1           01047         MOVWF   C1
+035C   307D           01048         MOVLW   07DH
+035D   00A2           01049         MOVWF   C2
+035E   307D           01050         MOVLW   7DH
+035F   00A3           01051         MOVWF   C3
+0360   307D           01052         MOVLW   07DH
+0361   00A4           01053         MOVWF   C4
+0362   30BB           01054         MOVLW   0BBH
+0363   00A5           01055         MOVWF   C5
+0364   21B5           01056         CALL    WHILE1
+0365   2821           01057         GOTO    DECDISP
+0366   085F           01058 W       MOVF    ALPHA,W
+0367   3C1D           01059         SUBLW   1DH
+0368   1D03           01060         BTFSS   STATUS,ZEROBIT
+0369   2B76           01061         GOTO    X
+036A   3083           01062         MOVLW   83H
+036B   00A1           01063         MOVWF   C1
+036C   307D           01064         MOVLW   07DH
+036D   00A2           01065         MOVWF   C2
+036E   307D           01066         MOVLW   7DH
+036F   00A3           01067         MOVWF   C3
+0370   307D           01068         MOVLW   07DH
+0371   00A4           01069         MOVWF   C4
+0372   30BB           01070         MOVLW   0BBH
+0373   00A5           01071         MOVWF   C5
+0374   21B5           01072         CALL    WHILE1
+0375   2821           01073         GOTO    DECDISP
+0376   085F           01074 X       MOVF    ALPHA,W
+0377   3C22           01075         SUBLW   22H
+0378   1D03           01076         BTFSS   STATUS,ZEROBIT
+0379   2B86           01077         GOTO    Y
+037A   3083           01078         MOVLW   83H
+037B   00A1           01079         MOVWF   C1
+037C   307D           01080         MOVLW   07DH
+037D   00A2           01081         MOVWF   C2
+037E   307D           01082         MOVLW   7DH
+037F   00A3           01083         MOVWF   C3
+0380   307D           01084         MOVLW   07DH
+0381   00A4           01085         MOVWF   C4
+0382   30BB           01086         MOVLW   0BBH
+0383   00A5           01087         MOVWF   C5
+0384   21B5           01088         CALL    WHILE1
+0385   2821           01089         GOTO    DECDISP
+0386   085F           01090 Y       MOVF    ALPHA,W
+0387   3C35           01091         SUBLW   35H
+0388   1D03           01092         BTFSS   STATUS,ZEROBIT
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 22
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0389   2B96           01093         GOTO    Z
+038A   3083           01094         MOVLW   83H
+038B   00A1           01095         MOVWF   C1
+038C   307D           01096         MOVLW   07DH
+038D   00A2           01097         MOVWF   C2
+038E   307D           01098         MOVLW   7DH
+038F   00A3           01099         MOVWF   C3
+0390   307D           01100         MOVLW   07DH
+0391   00A4           01101         MOVWF   C4
+0392   30BB           01102         MOVLW   0BBH
+0393   00A5           01103         MOVWF   C5
+0394   21B5           01104         CALL    WHILE1
+0395   2821           01105         GOTO    DECDISP
+0396   085F           01106 Z       MOVF    ALPHA,W
+Error[113]  : Symbol not previously defined (XH)
+Error[112]  : Missing operator
+0397   3C00           01107         SUBLW   1AXH
+0398   1D03           01108         BTFSS   STATUS,ZEROBIT
+0399   2AD6           01109         GOTO    N
+039A   3083           01110         MOVLW   83H
+039B   00A1           01111         MOVWF   C1
+039C   307D           01112         MOVLW   07DH
+039D   00A2           01113         MOVWF   C2
+039E   307D           01114         MOVLW   7DH
+039F   00A3           01115         MOVWF   C3
+03A0   307D           01116         MOVLW   07DH
+03A1   00A4           01117         MOVWF   C4
+03A2   30BB           01118         MOVLW   0BBH
+03A3   00A5           01119         MOVWF   C5
+03A4   21B5           01120         CALL    WHILE1
+03A5   2821           01121         GOTO    DECDISP
+03A6   085F           01122 M0      MOVF    ALPHA,W
+03A7   3C45           01123         SUBLW   45H
+03A8   1D03           01124         BTFSS   STATUS,ZEROBIT
+03A9   2BB6           01125         GOTO    M1
+03AA   3083           01126         MOVLW   83H
+03AB   00A1           01127         MOVWF   C1
+03AC   307D           01128         MOVLW   07DH
+03AD   00A2           01129         MOVWF   C2
+03AE   307D           01130         MOVLW   7DH
+03AF   00A3           01131         MOVWF   C3
+03B0   307D           01132         MOVLW   07DH
+03B1   00A4           01133         MOVWF   C4
+03B2   30BB           01134         MOVLW   0BBH
+03B3   00A5           01135         MOVWF   C5
+03B4   21B5           01136         CALL    WHILE1
+03B5   2821           01137         GOTO    DECDISP
+03B6   085F           01138 M1      MOVF    ALPHA,W
+03B7   3C16           01139         SUBLW   16H
+03B8   1D03           01140         BTFSS   STATUS,ZEROBIT
+03B9   2BC6           01141         GOTO    M2
+03BA   3083           01142         MOVLW   83H
+03BB   00A1           01143         MOVWF   C1
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 23
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+03BC   307D           01144         MOVLW   07DH
+03BD   00A2           01145         MOVWF   C2
+03BE   307D           01146         MOVLW   7DH
+03BF   00A3           01147         MOVWF   C3
+03C0   307D           01148         MOVLW   07DH
+03C1   00A4           01149         MOVWF   C4
+03C2   30BB           01150         MOVLW   0BBH
+03C3   00A5           01151         MOVWF   C5
+03C4   21B5           01152         CALL    WHILE1
+03C5   2821           01153         GOTO    DECDISP
+03C6   085F           01154 M2      MOVF    ALPHA,W
+03C7   3C1E           01155         SUBLW   1EH
+03C8   1D03           01156         BTFSS   STATUS,ZEROBIT
+03C9   2BD6           01157         GOTO    M3
+03CA   3083           01158         MOVLW   83H
+03CB   00A1           01159         MOVWF   C1
+03CC   307D           01160         MOVLW   07DH
+03CD   00A2           01161         MOVWF   C2
+03CE   307D           01162         MOVLW   7DH
+03CF   00A3           01163         MOVWF   C3
+03D0   307D           01164         MOVLW   07DH
+03D1   00A4           01165         MOVWF   C4
+03D2   30BB           01166         MOVLW   0BBH
+03D3   00A5           01167         MOVWF   C5
+03D4   21B5           01168         CALL    WHILE1
+03D5   2821           01169         GOTO    DECDISP
+03D6   085F           01170 M3      MOVF    ALPHA,W
+03D7   3C26           01171         SUBLW   26H
+03D8   1D03           01172         BTFSS   STATUS,ZEROBIT
+03D9   2BE6           01173         GOTO    M4
+03DA   3083           01174         MOVLW   83H
+03DB   00A1           01175         MOVWF   C1
+03DC   307D           01176         MOVLW   07DH
+03DD   00A2           01177         MOVWF   C2
+03DE   307D           01178         MOVLW   7DH
+03DF   00A3           01179         MOVWF   C3
+03E0   307D           01180         MOVLW   07DH
+03E1   00A4           01181         MOVWF   C4
+03E2   30BB           01182         MOVLW   0BBH
+03E3   00A5           01183         MOVWF   C5
+03E4   21B5           01184         CALL    WHILE1
+03E5   2821           01185         GOTO    DECDISP
+03E6   085F           01186 M4      MOVF    ALPHA,W
+03E7   3C25           01187         SUBLW   25H
+03E8   1D03           01188         BTFSS   STATUS,ZEROBIT
+03E9   2BF6           01189         GOTO    M5
+03EA   3083           01190         MOVLW   83H
+03EB   00A1           01191         MOVWF   C1
+03EC   307D           01192         MOVLW   07DH
+03ED   00A2           01193         MOVWF   C2
+03EE   307D           01194         MOVLW   7DH
+03EF   00A3           01195         MOVWF   C3
+03F0   307D           01196         MOVLW   07DH
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 24
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+03F1   00A4           01197         MOVWF   C4
+03F2   30BB           01198         MOVLW   0BBH
+03F3   00A5           01199         MOVWF   C5
+03F4   21B5           01200         CALL    WHILE1
+03F5   2821           01201         GOTO    DECDISP
+03F6   085F           01202 M5      MOVF    ALPHA,W
+03F7   3C2E           01203         SUBLW   2EH
+03F8   1D03           01204         BTFSS   STATUS,ZEROBIT
+03F9   2C06           01205         GOTO    M6
+03FA   3083           01206         MOVLW   83H
+03FB   00A1           01207         MOVWF   C1
+03FC   307D           01208         MOVLW   07DH
+03FD   00A2           01209         MOVWF   C2
+03FE   307D           01210         MOVLW   7DH
+03FF   00A3           01211         MOVWF   C3
+0400   307D           01212         MOVLW   07DH
+0401   00A4           01213         MOVWF   C4
+0402   30BB           01214         MOVLW   0BBH
+0403   00A5           01215         MOVWF   C5
+0404   21B5           01216         CALL    WHILE1
+0405   2821           01217         GOTO    DECDISP
+0406   085F           01218 M6      MOVF    ALPHA,W
+0407   3C36           01219         SUBLW   36H
+0408   1D03           01220         BTFSS   STATUS,ZEROBIT
+0409   2C16           01221         GOTO    M7
+040A   3083           01222         MOVLW   83H
+040B   00A1           01223         MOVWF   C1
+040C   307D           01224         MOVLW   07DH
+040D   00A2           01225         MOVWF   C2
+040E   307D           01226         MOVLW   7DH
+040F   00A3           01227         MOVWF   C3
+0410   307D           01228         MOVLW   07DH
+0411   00A4           01229         MOVWF   C4
+0412   30BB           01230         MOVLW   0BBH
+0413   00A5           01231         MOVWF   C5
+0414   21B5           01232         CALL    WHILE1
+0415   2821           01233         GOTO    DECDISP
+0416   085F           01234 M7      MOVF    ALPHA,W
+0417   3C3D           01235         SUBLW   3DH
+0418   1D03           01236         BTFSS   STATUS,ZEROBIT
+0419   2C26           01237         GOTO    M8
+041A   3083           01238         MOVLW   83H
+041B   00A1           01239         MOVWF   C1
+041C   307D           01240         MOVLW   07DH
+041D   00A2           01241         MOVWF   C2
+041E   307D           01242         MOVLW   7DH
+041F   00A3           01243         MOVWF   C3
+0420   307D           01244         MOVLW   07DH
+0421   00A4           01245         MOVWF   C4
+0422   30BB           01246         MOVLW   0BBH
+0423   00A5           01247         MOVWF   C5
+0424   21B5           01248         CALL    WHILE1
+0425   2821           01249         GOTO    DECDISP
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 25
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0426   085F           01250 M8      MOVF    ALPHA,W
+0427   3C3E           01251         SUBLW   3EH
+0428   1D03           01252         BTFSS   STATUS,ZEROBIT
+0429   2C36           01253         GOTO    M9
+042A   3083           01254         MOVLW   83H
+042B   00A1           01255         MOVWF   C1
+042C   307D           01256         MOVLW   07DH
+042D   00A2           01257         MOVWF   C2
+042E   307D           01258         MOVLW   7DH
+042F   00A3           01259         MOVWF   C3
+0430   307D           01260         MOVLW   07DH
+0431   00A4           01261         MOVWF   C4
+0432   30BB           01262         MOVLW   0BBH
+0433   00A5           01263         MOVWF   C5
+0434   21B5           01264         CALL    WHILE1
+0435   2821           01265         GOTO    DECDISP
+0436   085F           01266 M9      MOVF    ALPHA,W
+0437   3C46           01267         SUBLW   46H
+0438   1D03           01268         BTFSS   STATUS,ZEROBIT
+0439   2AD6           01269         GOTO    N
+043A   3083           01270         MOVLW   83H
+043B   00A1           01271         MOVWF   C1
+043C   307D           01272         MOVLW   07DH
+043D   00A2           01273         MOVWF   C2
+043E   307D           01274         MOVLW   7DH
+043F   00A3           01275         MOVWF   C3
+0440   307D           01276         MOVLW   07DH
+0441   00A4           01277         MOVWF   C4
+0442   30BB           01278         MOVLW   0BBH
+0443   00A5           01279         MOVWF   C5
+0444   21B5           01280         CALL    WHILE1
+0445   2821           01281         GOTO    DECDISP
+                      01282 
+0446   30FF           01283 SP      MOVLW   0FFH
+0447   00A1           01284         MOVWF   C1
+0448   30FF           01285         MOVLW   0FFH
+0449   00A2           01286         MOVWF   C2
+044A   30FF           01287         MOVLW   0FFH
+044B   00A3           01288         MOVWF   C3
+044C   30FF           01289         MOVLW   0FFH
+044D   00A4           01290         MOVWF   C4
+044E   30FF           01291         MOVLW   0FFH
+044F   00A5           01292         MOVWF   C5
+0450   29B5           01293         GOTO    WHILE1
+0451   0008           01294                         RETURN
+0452   14DE           01295         BSF             FLAG,1
+                      01296 
+0453                  01297 LOWALPHA                        
+0453   18DE           01298 a               BTFSC   FLAG,1
+0454   2C5B           01299                 GOTO    R_a
+0455   085D           01300                 MOVF    STORE,W
+Error[128]  : Missing argument(s)
+0455   085D           01301                 SUBLW                           
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 26
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0456   1D03           01302                 BTFSS   STATUS,ZEROBIT
+0457   2C6B           01303                 GOTO    bb
+0458   3001           01304                 MOVLW   .1                                      ;IT IS a
+0459   00DD           01305                 MOVWF   STORE
+045A   285C           01306                 GOTO    WRITE
+045B   085D           01307 R_a             MOVF    STORE,W
+045C   3C01           01308                 SUBLW   .1
+045D   1D03           01309                 BTFSS   STATUS,ZEROBIT
+Error[113]  : Symbol not previously defined (R_bb)
+045E   2800           01310                 GOTO    R_bb
+                      01311         
+045F   3001           01312                 MOVLW   01H
+0460   00A1           01313                 MOVWF   C1
+0461   307D           01314                 MOVLW   07DH
+0462   00A2           01315                 MOVWF   C2
+0463   307D           01316                 MOVLW   07DH
+0464   00A3           01317                 MOVWF   C3
+0465   30BB           01318                 MOVLW   0BBH
+0466   00A4           01319                 MOVWF   C4
+0467   30C7           01320                 MOVLW   0C7H
+0468   00A5           01321                 MOVWF   C5
+0469   29B5           01322                 GOTO    WHILE1
+046A   2821           01323                 GOTO    DECDISP
+                      01324                                 
+046B   085D           01325 bb              MOVF    STORE,W
+Error[128]  : Missing argument(s)
+046B   085D           01326                 SUBLW                           
+046C   1D03           01327                 BTFSS   STATUS,ZEROBIT
+046D   2C6B           01328                 GOTO    bb
+046E   3001           01329                 MOVLW   .1                              
+046F   00DD           01330                 MOVWF   STORE
+0470   285C           01331                 GOTO    WRITE
+0471   085D           01332 R_b             MOVF    STORE,W
+0472   3C02           01333                 SUBLW   .2
+0473   1D03           01334                 BTFSS   STATUS,ZEROBIT
+Error[113]  : Symbol not previously defined (R_bb)
+0474   2800           01335                 GOTO    R_bb
+                      01336         
+0475   3001           01337                 MOVLW   01H
+0476   00A1           01338                 MOVWF   C1
+0477   307D           01339                 MOVLW   07DH
+0478   00A2           01340                 MOVWF   C2
+0479   307D           01341                 MOVLW   07DH
+047A   00A3           01342                 MOVWF   C3
+047B   30BB           01343                 MOVLW   0BBH
+047C   00A4           01344                 MOVWF   C4
+047D   30C7           01345                 MOVLW   0C7H
+047E   00A5           01346                 MOVWF   C5
+047F   29B5           01347                 GOTO    WHILE1
+                      01348 
+0480   1489           01349 CLOCK1          BSF             PORTE,1
+0481   1089           01350                         BCF             PORTE,1
+0482   3400           01351                         RETLW   0
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 27
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0483   1409           01352 CLOCK2          BSF             PORTE,0
+0484   1009           01353                         BCF             PORTE,0
+0485   3400           01354                         RETLW   0
+                      01355 
+0486   0868           01356 SCANCOL         MOVF    DISP,W  
+0487   38FE           01357                         IORLW   0FEH ;11111110
+0488   0086           01358                         MOVWF   PORTB
+0489   2005           01359                         CALL    DELAYP5
+048A   0868           01360                         MOVF    DISP,W
+048B   38FD           01361                         IORLW   0FDH ;11111101
+048C   0086           01362                         MOVWF   PORTB
+048D   2005           01363                         CALL    DELAYP5
+048E   0868           01364                         MOVF    DISP,W
+048F   38FB           01365                         IORLW   0FBH ;11111011
+0490   0086           01366                         MOVWF   PORTB
+0491   2005           01367                         CALL    DELAYP5
+0492   0868           01368                         MOVF    DISP,W
+0493   38F7           01369                         IORLW   0F7H ;11110111
+0494   0086           01370                         MOVWF   PORTB
+0495   2005           01371                         CALL    DELAYP5 
+0496   0868           01372                         MOVF    DISP,W
+0497   38EF           01373                         IORLW   0EFH ;11101111
+0498   0086           01374                         MOVWF   PORTB
+0499   2005           01375                         CALL    DELAYP5
+049A   0868           01376                         MOVF    DISP,W
+049B   38DF           01377                         IORLW   0DFH ;11011111
+049C   0086           01378                         MOVWF   PORTB
+049D   2005           01379                         CALL    DELAYP5
+049E   0868           01380                         MOVF    DISP,W
+049F   38BF           01381                         IORLW   0BFH ;10111111
+04A0   0086           01382                         MOVWF   PORTB
+04A1   2005           01383                         CALL    DELAYP5
+04A2   0868           01384                         MOVF    DISP,W
+04A3   387F           01385                         IORLW   07FH ;01111111
+04A4   0086           01386                         MOVWF   PORTB
+04A5   2005           01387                         CALL    DELAYP5
+04A6   30FF           01388                         MOVLW   B'11111111'
+04A7   0086           01389                         MOVWF   PORTB
+04A8   3400           01390                         RETLW   0
+                      01391 
+04A9   2446           01392 GAP                     CALL SP
+04AA   2446           01393                 CALL SP
+04AB   2446           01394                 CALL SP
+04AC   2446           01395                 CALL SP
+04AD   2446           01396                 CALL SP
+04AE   2446           01397                 CALL SP
+04AF   2446           01398                 CALL SP
+04B0   0008           01399                 RETURN
+04B1                  01400 START   
+04B1   1683           01401                 BSF             STATUS,5
+04B2   3000           01402                 MOVLW   .0
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+04B3   0086           01403                 MOVWF   TRISB
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 28
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+04B4   3000           01404                 MOVLW   .0
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+04B5   0085           01405                 MOVWF   TRISA
+04B6   3004           01406                 MOVLW   .4
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+04B7   0087           01407                 MOVWF   TRISC
+04B8   3000           01408                 MOVLW   .0
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+04B9   0088           01409                 MOVWF   TRISD
+04BA   3000           01410                 MOVLW   .0
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+04BB   0089           01411                 MOVWF   TRISE
+04BC   3007           01412                 MOVLW   07H
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+04BD   0081           01413                 MOVWF   OPTION_R
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+04BE   150C           01414                 BSF             PIE1,CCP1IE
+04BF   0183           01415                 CLRF    STATUS
+04C0   0185           01416                 CLRF    PORTA
+04C1   0187           01417                 CLRF    PORTC
+04C2   0188           01418                 CLRF    PORTD           
+04C3   0189           01419                 CLRF    PORTE
+04C4   01ED           01420                 CLRF    COUNTER
+04C5   01EF           01421                 CLRF    COUNTER2
+04C6   01EE           01422                 CLRF    NUM
+04C7   01DE           01423                 CLRF    FLAG
+04C8   01CB           01424                 CLRF    SHIFTCOUNT
+04C9   3004           01425                 MOVLW   .4
+04CA   0097           01426                 MOVWF   CCP1CON
+04CB   018B           01427                 CLRF    INTCON
+                      01428                 
+04CC   110C           01429                 BCF             PIR1,CCP1IF
+04CD   178B           01430                 BSF             INTCON,GIE
+04CE   170B           01431                 BSF             INTCON,PEIE
+                      01432 
+04CF   30FF           01433         MOVLW   .255
+04D0   0086           01434         MOVWF   PORTB
+04D1   30FF           01435         MOVLW   .255
+04D2   00A6           01436         MOVWF   DISP1
+04D3   30FF           01437         MOVLW   .255
+04D4   00A7           01438         MOVWF   DISP2
+04D5   30FF           01439         MOVLW   .255
+04D6   00A8           01440         MOVWF   DISP3
+04D7   30FF           01441         MOVLW   .255
+04D8   00A9           01442         MOVWF   DISP4
+04D9   30FF           01443         MOVLW   .255
+04DA   00B0           01444         MOVWF   DISP5
+04DB   30FF           01445         MOVLW   .255
+04DC   00B1           01446         MOVWF   DISP6
+04DD   30FF           01447         MOVLW   .255
+04DE   00B2           01448         MOVWF   DISP7
+04DF   30FF           01449         MOVLW   .255
+04E0   00B3           01450         MOVWF   DISP8
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 29
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+04E1   30FF           01451         MOVLW   .255
+04E2   00B4           01452         MOVWF   DISP9
+04E3   30FF           01453         MOVLW   .255
+04E4   00B5           01454         MOVWF   DISP10
+04E5   30FF           01455         MOVLW   .255
+04E6   00B6           01456         MOVWF   DISP11
+04E7   30FF           01457         MOVLW   .255
+04E8   00B7           01458         MOVWF   DISP12
+04E9   30FF           01459         MOVLW   .255
+04EA   00B8           01460         MOVWF   DISP13
+04EB   30FF           01461         MOVLW   .255
+04EC   00B9           01462         MOVWF   DISP14
+04ED   30FF           01463         MOVLW   .255
+04EE   00C0           01464         MOVWF   DISP15
+04EF   30FF           01465         MOVLW   .255
+04F0   00C1           01466         MOVWF   DISP16
+04F1   30FF           01467         MOVLW   .255
+04F2   00C2           01468         MOVWF   DISP17
+04F3   30FF           01469         MOVLW   .255
+04F4   00C3           01470         MOVWF   DISP18
+04F5   30FF           01471         MOVLW   .255
+04F6   00C4           01472         MOVWF   DISP19
+04F7   30FF           01473         MOVLW   .255
+04F8   00C5           01474         MOVWF   DISP20
+04F9   30FF           01475         MOVLW   .255
+04FA   00C6           01476         MOVWF   DISP21
+04FB   30FF           01477         MOVLW   .255
+04FC   00C7           01478         MOVWF   DISP22
+04FD   30FF           01479         MOVLW   .255
+04FE   00C8           01480         MOVWF   DISP23
+04FF   30FF           01481         MOVLW   .255
+0500   00C9           01482         MOVWF   DISP24
+0501   30FF           01483         MOVLW   .255
+0502   00D0           01484         MOVWF   DISP25
+0503   30FF           01485         MOVLW   .255
+0504   00D1           01486         MOVWF   DISP26
+0505   30FF           01487         MOVLW   .255
+0506   00D2           01488         MOVWF   DISP27
+0507   30FF           01489         MOVLW   .255
+0508   00D3           01490         MOVWF   DISP28
+0509   30FF           01491         MOVLW   .255
+050A   00D4           01492         MOVWF   DISP29
+050B   30FF           01493         MOVLW   .255
+050C   00D5           01494         MOVWF   DISP30
+050D   30FF           01495         MOVLW   .255
+050E   00D6           01496         MOVWF   DISP31
+050F   30FF           01497         MOVLW   .255
+0510   00D7           01498         MOVWF   DISP32
+0511   30FF           01499         MOVLW   .255
+0512   00D8           01500         MOVWF   DISP33
+0513   30FF           01501         MOVLW   .255
+0514   00D9           01502         MOVWF   DISP34
+0515   30FF           01503         MOVLW   .255
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 30
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0516   00E0           01504         MOVWF   DISP35
+0517   30FF           01505         MOVLW   .255
+0518   00E1           01506         MOVWF   DISP36
+0519   30FF           01507         MOVLW   .255
+051A   00E2           01508         MOVWF   DISP37
+051B   30FF           01509         MOVLW   .255
+051C   00E3           01510         MOVWF   DISP38
+051D   30FF           01511         MOVLW   .255
+051E   00E4           01512         MOVWF   DISP39
+051F   30FF           01513         MOVLW   .255
+0520   00E5           01514         MOVWF   DISP40
+                      01515         
+                      01516 ;PROGRAM STARTS
+                      01517 
+Warning[207]: Found label after column 1. (BEGIN)
+0521                  01518         BEGIN           ;GOTO DEFAULT   ;WELCOME MESSAGE
+0521   200B           01519                 CALL    DELAY3                  ;to wait for input NOT READY
+0522   085D           01520                 MOVF    STORE,W
+0523   3C76           01521                 SUBLW   76H             ;ESC KEY VALUE
+0524   1D03           01522                 BTFSS   STATUS,ZEROBIT
+0525   2D39           01523                 GOTO    SKIPPED
+0526   105E           01524                 BCF             FLAG,0
+                      01525         ;       BCF             FLAG,1                  ;TO CHECK FOR WRITE OR READ
+                      01526                 
+0527   1C5E           01527 FORINT BTFSS    FLAG,0          ;WAIT FOR INPUT
+0528   2D27           01528                 GOTO    FORINT  
+0529   105E           01529                 BCF             FLAG,0
+052A   223E           01530                 CALL D
+                      01531         ; END OF INPUT WHEN ENTER IS PRESSED
+052B   085D           01532                 MOVF    STORE,W
+052C   3C00           01533                 SUBLW   00H;5AH ENTER KEY
+052D   1903           01534                 BTFSC   STATUS,ZEROBIT
+052E   2D35           01535                 GOTO    FINISH          ;END OF INPUT
+                      01536         ; SHIFT OR UNSHIFTED
+052F   085D           01537                 MOVF    STORE,W
+0530   3C11           01538                 SUBLW   11H     ;12H    ; SHIFT
+0531   1D03           01539                 BTFSS   STATUS,ZEROBIT
+0532   2C53           01540                 GOTO    LOWALPHA        ;WRITE LOWCASE
+Message[305]: Using default destination of 1 (file).
+0533   0ACB           01541                 INCF    SHIFTCOUNT
+0534   285C           01542                 GOTO    WRITE           ;WRITE UPPERCASE, IF SHIFT IS PRESSED
+                      01543                                 
+0535   086E           01544 FINISH  MOVF    NUM,W           
+0536   00DD           01545                 MOVWF   STORE
+0537   01EE           01546                 CLRF    NUM
+0538   2868           01547                 GOTO    WRITENUM        ;TO SAVE NUM
+0539   138B           01548 SKIPPED BCF             INTCON,GIE
+053A   130B           01549                 BCF             INTCON,PEIE
+053B   01EF           01550                 CLRF    COUNTER2
+053C   2088           01551                 CALL    READNUM         ;TO READ NUM
+053D   3001           01552                 MOVLW   .1
+053E   00EE           01553                 MOVWF   NUM
+053F   2081           01554 READLOOP CALL   READ    
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 31
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0540   2834           01555                 GOTO    RAMSTORE        ;READS INTO RAM
+0541   2821           01556 SAVED   GOTO    DECDISP         ;DECODE AND DISPLAY
+                      01557                 
+                      01558 
+                      01559         
+0542                  01560 DEFAULT 
+0542   2256           01561                 CALL F
+0543   224A           01562                 CALL E
+0544   224A           01563                 CALL E
+0545   223E           01564                 CALL D
+0546   2446           01565                 CALL SP
+0547   2446           01566                 CALL SP
+0548   2D27           01567         GOTO FORINT
+0549   2276           01568                 CALL H
+054A   220F           01569                 CALL A
+054B   2286           01570                 CALL I
+054C   22B6           01571                 CALL L
+054D   2446           01572                 call SP
+054E   221F           01573                 call    BB
+054F   220F           01574                 call    A
+0550   221F           01575                 call    BB
+0551   220F           01576                 call    A
+0552   24A9           01577                 call GAP
+0553   2D27           01578                         GOTO    FORINT  ;FOR INTERRUPT  
+                      01579         END
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 32
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+.                                 00000033
+A                                 0000020F
+ALPHA                             0000005F
+ALPHABET                          0000020F
+BACK                              000001B7
+BACK2                             000001C8
+BB                                0000021F
+BEGIN                             00000521
+BIT0                              0000003C
+BIT1                              00000040
+BIT2                              00000044
+BIT3                              00000048
+BIT4                              0000004C
+BIT5                              00000050
+BIT6                              00000054
+BIT7                              00000058
+BUFFER                            000001BA
+C                                 0000022F
+C1                                00000021
+C2                                00000022
+C3                                00000023
+C4                                00000024
+C5                                00000025
+CCP1CON                           00000017
+CCP1IE                            00000002
+CCP1IF                            00000002
+CLEAR                             0000003A
+CLOCK1                            00000480
+CLOCK2                            00000483
+COUNT                             00000020
+COUNT1                            00000067
+COUNTER                           0000006D
+COUNTER2                          0000006F
+D                                 0000023E
+DECDISP                           00000021
+DECDISP1                          0000002D
+DECDISP2                          0000002F
+DECDISP3                          00000031
+DEFAULT                           00000542
+DELAY3                            0000000B
+DELAY4                            00000010
+DELAYCOUNT                        0000004A
+DELAYP5                           00000005
+DISP                              00000068
+DISP1                             00000026
+DISP10                            00000035
+DISP11                            00000036
+DISP12                            00000037
+DISP13                            00000038
+DISP14                            00000039
+DISP15                            00000040
+DISP16                            00000041
+DISP17                            00000042
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 33
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+DISP18                            00000043
+DISP19                            00000044
+DISP2                             00000027
+DISP20                            00000045
+DISP21                            00000046
+DISP22                            00000047
+DISP23                            00000048
+DISP24                            00000049
+DISP25                            00000050
+DISP26                            00000051
+DISP27                            00000052
+DISP28                            00000053
+DISP29                            00000054
+DISP3                             00000028
+DISP30                            00000055
+DISP31                            00000056
+DISP32                            00000057
+DISP33                            00000058
+DISP34                            00000059
+DISP35                            00000060
+DISP36                            00000061
+DISP37                            00000062
+DISP38                            00000063
+DISP39                            00000064
+DISP4                             00000029
+DISP40                            00000065
+DISP5                             00000030
+DISP6                             00000031
+DISP7                             00000032
+DISP8                             00000033
+DISP9                             00000034
+E                                 0000024A
+EDGE                              00000000
+EEADR                             0000000D
+EECON1                            0000008C
+EECON2                            0000008D
+EEDATA                            0000000C
+F                                 00000256
+F1                                00000018
+F2                                0000001B
+F3                                0000001E
+FILE1                             0000005A
+FILE2                             0000005B
+FILE3                             0000005C
+FINISH                            00000535
+FLAG                              0000005E
+FORINT                            00000527
+G                                 00000266
+GAP                               000004A9
+GIE                               00000007
+GO_ON                             00000087
+H                                 00000276
+I                                 00000286
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 34
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+INTCON                            0000000B
+ISR                               000000B9
+J                                 00000296
+K                                 000002A6
+L                                 000002B6
+LOOPB                             00000006
+LOOPC                             00000011
+LOWALPHA                          00000453
+M                                 000002C6
+M0                                000003A6
+M1                                000003B6
+M2                                000003C6
+M3                                000003D6
+M4                                000003E6
+M5                                000003F6
+M6                                00000406
+M7                                00000416
+M8                                00000426
+M9                                00000436
+N                                 000002D6
+NUM                               0000006E
+O                                 000002E6
+OPTION_R                          00000081
+P                                 000002F6
+PC                                00000002
+PEIE                              00000006
+PIE1                              0000008C
+PIR1                              0000000C
+PORTA                             00000005
+PORTB                             00000006
+PORTC                             00000007
+PORTD                             00000008
+PORTE                             00000009
+Q                                 00000306
+R                                 00000316
+RAMSTORE                          00000034
+RD                                00000000
+READ                              00000081
+READLOOP                          0000053F
+READNUM                           00000088
+READY                             00000001
+RECEIVE                           00000092
+RESTORE                           000000C4
+R_a                               0000045B
+R_b                               00000471
+S                                 00000326
+SAVED                             00000541
+SCANCOL                           00000486
+SCANNING                          000000CB
+SHIFTCOUNT                        0000004B
+SKIPPED                           00000539
+SP                                00000446
+START                             000004B1
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 35
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+STARTOVER                         00000029
+STATUS                            00000003
+STILL                             00000066
+STORE                             0000005D
+T                                 00000336
+TMR0                              00000001
+TNUM                              0000006C
+TPORTB                            0000006B
+TRISA                             00000085
+TRISB                             00000086
+TRISC                             00000087
+TRISD                             00000088
+TRISE                             00000089
+TSTATUS                           00000069
+TW                                0000006A
+U                                 00000346
+V                                 00000356
+W                                 00000366
+WHILE1                            000001B5
+WR                                00000001
+WRDONE                            00000075
+WREN                              00000002
+WRITE                             0000005C
+WRITENUM                          00000068
+X                                 00000376
+Y                                 00000386
+Z                                 00000396
+ZEROBIT                           00000002
+__16F877                          00000001
+a                                 00000453
+bb                                0000046B
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : X---XXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0080 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+00C0 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0100 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0140 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0180 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+01C0 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0200 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0240 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0280 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+MPASM  5.14                    MATRIXDISP.ASM   4-5-2015  14:07:27         PAGE 36
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+
+02C0 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0300 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0340 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0380 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+03C0 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0400 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0440 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0480 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+04C0 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0500 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0540 : XXXXXXXXXXXXXXXX XXXX------------ ---------------- ----------------
+2000 : -------X-------- ---------------- ---------------- ----------------
+2100 : X--------------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:  1361
+Program Memory Words Free:  6831
+
+
+Errors   :     7
+Warnings :     5 reported,     0 suppressed
+Messages :    24 reported,     0 suppressed
+
+

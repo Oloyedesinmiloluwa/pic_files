@@ -1,0 +1,153 @@
+MPASM  5.14             VOLTAGE INDICATOR.ASM   9-8-2014  20:10:33         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ;HEADER FOR 16F818
+  00000001            00002 TMR0    EQU             1
+  00000003            00003 STATUS  EQU             3
+  00000005            00004 PORTA   EQU             5H
+  00000006            00005 PORTB   EQU             6H
+  00000085            00006 TRISA   EQU             85H
+  00000086            00007 TRISB   EQU             86H
+  0000001F            00008 ADCON0  EQU             1FH
+  0000009F            00009 ADCON1  EQU             9FH
+  0000001E            00010 ADRES   EQU             1EH
+  00000000            00011 CARRY   EQU             0
+  00000002            00012 ZEROBIT EQU             2
+  00000081            00013 OPTION_R        EQU             81H
+  0000008F            00014 OSCCON  EQU             8FH
+  00000020            00015 COUNT   EQU             20H
+                      00016 
+                      00017                 LIST    P=16F818
+0000                  00018                 ORG             0
+0000   280F           00019                 GOTO    START
+Warning[205]: Found directive in column 1. (__CONFIG)
+2007   3F10           00020 __CONFIG        H'3F10'
+                      00021 
+                      00022 ;SUBROUTINE SECTION
+0001   1406           00023 ON              BSF             PORTB,0
+0002   281E           00024                 GOTO    BEGIN
+0003   1006           00025 OFF             BCF             PORTB,0
+0004   281E           00026                 GOTO    BEGIN
+0005   0186           00027 OFFALL  CLRF    PORTB
+0006   281E           00028                 GOTO    BEGIN
+0007   1086           00029 OFF2    BCF             PORTB,1
+0008   281E           00030                 GOTO    BEGIN
+0009   1106           00031 OFF3    BCF             PORTB,2
+000A   281E           00032                 GOTO    BEGIN
+000B   1186           00033 OFF4    BCF             PORTB,3
+000C   281E           00034                 GOTO    BEGIN
+000D   1206           00035 OFF5    BCF             PORTB,4
+000E   281E           00036                 GOTO    BEGIN
+                      00037 ;CONFIGURATION SECTION
+000F   1683           00038 START   BSF             STATUS,5
+0010   30FF           00039                 MOVLW   B'11111111'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0011   0085           00040                 MOVWF   TRISA
+0012   3004           00041                 MOVLW   B'00000100'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0013   009F           00042                 MOVWF   ADCON1
+0014   3000           00043                 MOVLW   B'00000000'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0015   0086           00044                 MOVWF   TRISB
+0016   3000           00045                 MOVLW   B'00000000'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0017   008F           00046                 MOVWF   OSCCON
+0018   3007           00047                 MOVLW   B'00000111'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+MPASM  5.14             VOLTAGE INDICATOR.ASM   9-8-2014  20:10:33         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0019   0081           00048                 MOVWF   OPTION_R
+001A   1283           00049                 BCF             STATUS,5
+001B   141F           00050                 BSF             ADCON0,0
+001C   0185           00051                 CLRF    PORTA
+001D   0186           00052                 CLRF    PORTB
+                      00053 ;PROGRAM STARTS
+001E   151F           00054 BEGIN   BSF             ADCON0,2
+001F   191F           00055 WAIT1   BTFSC   ADCON0,2
+0020   281F           00056                 GOTO    WAIT1
+0021   081E           00057                 MOVF    ADRES,W
+                      00058 
+0022   3C33           00059                 SUBLW   .51
+0023   1803           00060                 BTFSC   STATUS,CARRY
+0024   2803           00061                 GOTO    OFF
+0025   1406           00062                 BSF             PORTB,0
+                      00063                 
+0026   081E           00064                 MOVF    ADRES,W
+0027   3C66           00065                 SUBLW   .102
+0028   1803           00066                 BTFSC   STATUS,CARRY
+0029   281E           00067                 GOTO    BEGIN
+002A   1486           00068                 BSF             PORTB,1
+                      00069                 
+002B   081E           00070                 MOVF    ADRES,W
+002C   3C99           00071                 SUBLW   .153
+002D   1803           00072                 BTFSC   STATUS,CARRY
+002E   2809           00073                 GOTO    OFF3
+002F   1506           00074                 BSF             PORTB,2
+0030   081E           00075                 MOVF    ADRES,W
+0031   3CCC           00076                 SUBLW   .204
+0032   1803           00077                 BTFSC   STATUS,CARRY
+0033   280B           00078                 GOTO    OFF4
+0034   1586           00079                 BSF             PORTB,3
+0035   081E           00080                 MOVF    ADRES,W
+0036   3CF0           00081                 SUBLW   .240
+0037   1803           00082                 BTFSC   STATUS,CARRY
+0038   280D           00083                 GOTO    OFF5
+0039   1606           00084                 BSF             PORTB,4
+003A   281E           00085                 GOTO    BEGIN
+                      00086                 END
+MPASM  5.14             VOLTAGE INDICATOR.ASM   9-8-2014  20:10:33         PAGE  3
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ADCON0                            0000001F
+ADCON1                            0000009F
+ADRES                             0000001E
+BEGIN                             0000001E
+CARRY                             00000000
+COUNT                             00000020
+OFF                               00000003
+OFF2                              00000007
+OFF3                              00000009
+OFF4                              0000000B
+OFF5                              0000000D
+OFFALL                            00000005
+ON                                00000001
+OPTION_R                          00000081
+OSCCON                            0000008F
+PORTA                             00000005
+PORTB                             00000006
+START                             0000000F
+STATUS                            00000003
+TMR0                              00000001
+TRISA                             00000085
+TRISB                             00000086
+WAIT1                             0000001F
+ZEROBIT                           00000002
+__16F818                          00000001
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXX-----
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    59
+Program Memory Words Free:   965
+
+
+Errors   :     0
+Warnings :     1 reported,     0 suppressed
+Messages :     5 reported,     0 suppressed
+
+

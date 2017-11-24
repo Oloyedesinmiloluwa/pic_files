@@ -1,0 +1,7 @@
+Warning[205] C:\USERS\USER\DOCUMENTS\MPLAB_V8\PIC FILES\HEADER16F84.ASM 17 : Found directive in column 1. (LIST)
+Warning[205] C:\USERS\USER\DOCUMENTS\MPLAB_V8\PIC FILES\HEADER16F84.ASM 18 : Found directive in column 1. (ORG)
+Warning[203] C:\USERS\USER\DOCUMENTS\MPLAB_V8\PIC FILES\HEADER16F84.ASM 19 : Found opcode in column 1. (GOTO)
+Warning[205] C:\USERS\USER\DOCUMENTS\MPLAB_V8\PIC FILES\HEADER16F84.ASM 22 : Found directive in column 1. (__CONFIG)
+Message[302] C:\USERS\USER\DOCUMENTS\MPLAB_V8\PIC FILES\HEADER16F84.ASM 45 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\USER\DOCUMENTS\MPLAB_V8\PIC FILES\HEADER16F84.ASM 47 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\USER\DOCUMENTS\MPLAB_V8\PIC FILES\HEADER16F84.ASM 49 : Register in operand not in bank 0.  Ensure that bank bits are correct.

@@ -1,0 +1,24 @@
+main
+	__CC2DW
+	Ps2_Config
+	EEPROM_Read
+	Load_Data
+		EEPROM_Read
+	Div_8x8_U
+	Ps2_Key_Read
+		Keyboard_Active
+			Clock_Enable
+			Clock_Wait_High
+			Clock_Disable
+		Get_Hex
+			Wait_Falling
+			Clock_Disable
+		Ps2_Get_Value
+	Find_StrLength
+		strlen
+	Save_Message
+		EEPROM_Write
+	Mul_16x16_U
+	Mul_32x32_U
+	Send_Data
+		Mul_16x16_U

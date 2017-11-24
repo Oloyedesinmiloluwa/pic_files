@@ -1,0 +1,162 @@
+MPASM  5.14                       COUNT10.ASM   8-16-2014  6:42:33         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ;HEADER FOR 16F84
+  00000003            00002 STATUS  EQU     3
+  00000005            00003 PORTA   EQU     5
+  00000006            00004 PORTB   EQU     6
+  00000001            00005 TMR0    EQU     1
+  00000085            00006 TRISA   EQU     85H
+  00000086            00007 TRISB   EQU     86H
+  00000002            00008 ZEROBIT EQU     2
+  0000000C            00009 COUNT   EQU     0CH
+  00000081            00010 OPTION_R EQU    81H
+                      00011 
+                      00012         LIST P=16F84
+0000                  00013         ORG 0
+0000   2825           00014         GOTO    START
+                      00015 
+Warning[205]: Found directive in column 1. (__CONFIG)
+2007   3FF0           00016 __CONFIG H'3FF0'
+                      00017 
+                      00018 ;SUBROUTINE SECTION
+                      00019 ;3/32 second delay.
+Warning[207]: Found label after column 1. (DELAY)
+0001   0181           00020         DELAY CLRF TMR0 ;START TMR0.
+0002   0801           00021 LOOPA MOVF TMR0,W ;READ TMR0 INTO W.
+0003   3C03           00022         SUBLW .3 ;TIME - 3
+0004   1D03           00023         BTFSS STATUS, ZEROBIT ;Check TIME-W¼0
+0005   2802           00024         GOTO LOOPA ;Time is not¼3.
+Warning[203]: Found opcode in column 1. (RETLW)
+0006   3400           00025 RETLW 0 ;Time is 3, return.
+                      00026 
+0007   0181           00027 DELAYP1 CLRF    TMR0
+0008   0801           00028 LOOPQ   MOVF    TMR0,W
+0009   3C03           00029         SUBLW   .3
+000A   1D03           00030         BTFSS   STATUS,ZEROBIT
+000B   2808           00031         GOTO    LOOPQ
+000C   3400           00032         RETLW   0
+                      00033 
+                      00034 
+                      00035 
+000D   0181           00036 DELAYP25 CLRF   TMR0
+000E   0801           00037 LOOPB   MOVF    TMR0,W
+000F   3C08           00038         SUBLW   .8
+0010   1D03           00039         BTFSS   STATUS,ZEROBIT
+0011   280E           00040         GOTO    LOOPB
+0012   3400           00041         RETLW   0
+                      00042 
+0013   0181           00043 DELAY1  CLRF    TMR0
+0014   0801           00044 LOOPC   MOVF    TMR0,W
+0015   3C20           00045         SUBLW   .32
+0016   1D03           00046         BTFSS   STATUS,ZEROBIT
+0017   2814           00047         GOTO    LOOPC
+0018   3400           00048         RETLW   0
+0019   0181           00049 DELAY125 CLRF   TMR0
+001A   0801           00050 LOOPD   MOVF    TMR0,W
+MPASM  5.14                       COUNT10.ASM   8-16-2014  6:42:33         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+001B   3C04           00051         SUBLW   .4
+001C   1D03           00052         BTFSS   STATUS,ZEROBIT
+001D   281A           00053         GOTO    LOOPD
+001E   3400           00054         RETLW   0
+001F   3002           00055 DELAY2  MOVLW   .2
+0020   008C           00056         MOVWF   COUNT
+0021   2013           00057 DEC     CALL    DELAY1
+Message[305]: Using default destination of 1 (file).
+0022   0B8C           00058         DECFSZ  COUNT
+0023   2821           00059         GOTO    DEC                                                                                     
+                                                                                                                    
+0024   3400           00060         RETLW   0
+                      00061         
+                      00062         ;CONFIGURATION SECTION
+0025   1683           00063 START   BSF     STATUS,5
+0026   3007           00064         MOVLW   B'00000111'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0027   0085           00065         MOVWF   TRISA
+0028   3000           00066         MOVLW   B'00000000'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0029   0086           00067         MOVWF   TRISB
+002A   3007           00068         MOVLW   B'00000111'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+002B   0081           00069         MOVWF   OPTION_R
+002C   1283           00070         BCF     STATUS,5
+002D   0185           00071         CLRF    PORTA
+002E   0186           00072         CLRF    PORTB
+                      00073 
+                      00074 ;PROGRAM STARTS NOW
+002F   3004           00075 BEGIN   MOVLW   .4
+0030   008C           00076                 MOVWF   COUNT
+0031   1C05           00077 CHECK   BTFSS   PORTA,0
+0032   2831           00078                 GOTO    CHECK
+0033   2007           00079                 CALL    DELAYP1
+0034   1006           00080                 BCF             PORTB,0
+0035   1805           00081 CHECK1  BTFSC   PORTA,0
+0036   2835           00082                 GOTO    CHECK1
+0037   2007           00083                 CALL    DELAYP1
+Message[305]: Using default destination of 1 (file).
+0038   0B8C           00084                 DECFSZ  COUNT
+0039   2831           00085                 GOTO    CHECK
+003A   1406           00086                 BSF             PORTB,0
+003B   1086           00087                 BCF             PORTB,1
+                      00088         
+003C   282F           00089                 GOTO    BEGIN
+Warning[205]: Found directive in column 1. (END)
+                      00090 END
+MPASM  5.14                       COUNT10.ASM   8-16-2014  6:42:33         PAGE  3
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+BEGIN                             0000002F
+CHECK                             00000031
+CHECK1                            00000035
+COUNT                             0000000C
+DEC                               00000021
+DELAY                             00000001
+DELAY1                            00000013
+DELAY125                          00000019
+DELAY2                            0000001F
+DELAYP1                           00000007
+DELAYP25                          0000000D
+LOOPA                             00000002
+LOOPB                             0000000E
+LOOPC                             00000014
+LOOPD                             0000001A
+LOOPQ                             00000008
+OPTION_R                          00000081
+PORTA                             00000005
+PORTB                             00000006
+START                             00000025
+STATUS                            00000003
+TMR0                              00000001
+TRISA                             00000085
+TRISB                             00000086
+ZEROBIT                           00000002
+__16F84                           00000001
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXX---
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    61
+Program Memory Words Free:   963
+
+
+Errors   :     0
+Warnings :     4 reported,     0 suppressed
+Messages :     5 reported,     0 suppressed
+
+

@@ -1,0 +1,212 @@
+MPASM  5.14                         CHECK.ASM   9-7-2014  20:02:38         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  00000001            00001 TMR0 EQU 1 ;means TMR0 is file 1.
+  00000003            00002 STATUS EQU 3 ;means STATUS is file 3.
+  00000005            00003 PORTA EQU 5 ;means PORTA is file 5.
+  00000006            00004 PORTB EQU 6 ;means PORTB is file 6.
+  00000002            00005 ZEROBIT EQU 2 ;means ZEROBIT is bit 2.
+  0000001F            00006 ADCON0 EQU 1FH ;A/D Configuration reg.0
+  0000009F            00007 ADCON1 EQU 9FH ;A/D Configuration reg.1
+  0000001E            00008 ADRES EQU 1EH ;A/D Result register.
+  00000000            00009 CARRY EQU 0 ;CARRY IS BIT 0.
+  00000085            00010 TRISA EQU 85H ;PORTA Configuration Register
+  00000086            00011 TRISB EQU 86H ;PORTB Configuration Register
+  00000081            00012 OPTION_R EQU 81H ;Option Register
+  0000008F            00013 OSCCON EQU 8FH ;Oscillator control register.
+  00000020            00014 COUNT EQU 20H ;COUNT a register to count events
+                      00015 ;*********************************************************
+Warning[205]: Found directive in column 1. (LIST)
+                      00016 LIST P=16F818 ;we are using the 16F818.
+Warning[205]: Found directive in column 1. (ORG)
+0000                  00017 ORG 0 ;the start address in memory is 0
+Warning[203]: Found opcode in column 1. (GOTO)
+0000   2801           00018 GOTO START ;goto start!
+                      00019 ;*********************************************************
+                      00020 ; Configuration Bits
+Warning[205]: Found directive in column 1. (__CONFIG)
+2007   3F10           00021 __CONFIG H'3F10' ;sets INTRC-A6 is port I/O, WDT off, PUT on,
+                      00022 ;MCLR tied to VDD A5 is I/O
+                      00023 ;BOD off, LVP disabled, EE protect disabled,
+                      00024 ;Flash Program Write disabled,
+                      00025 
+                      00026 ;Background Debugger Mode disabled, CCP
+                      00027 ;function on B2,
+                      00028 ;Code Protection disabled.
+                      00029 ;*********************************************************
+                      00030 ;CONFIGURATION SECTION.
+0001   1683           00031 START BSF STATUS,5 ;Turns to Bank1.
+Warning[203]: Found opcode in column 1. (MOVLW)
+0002   301F           00032 MOVLW B'00011111' ;5bits of PORTA are I/P
+Warning[203]: Found opcode in column 1. (MOVWF)
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0003   0085           00033 MOVWF TRISA
+Warning[203]: Found opcode in column 1. (MOVLW)
+0004   3002           00034 MOVLW B'00000010' ;A0, A1 are analogue
+Warning[203]: Found opcode in column 1. (MOVWF)
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0005   009F           00035 MOVWF ADCON1 ;A2, A3 are digital I/P.
+Warning[203]: Found opcode in column 1. (MOVLW)
+0006   3000           00036 MOVLW B'00000000'
+Warning[203]: Found opcode in column 1. (MOVWF)
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0007   0086           00037 MOVWF TRISB ;PORTB is OUTPUT
+Warning[203]: Found opcode in column 1. (BCF)
+0008   1283           00038 BCF STATUS,5 ;Return to Bank0.
+Warning[203]: Found opcode in column 1. (MOVLW)
+MPASM  5.14                         CHECK.ASM   9-7-2014  20:02:38         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0009   3001           00039 MOVLW B'00000001' ;Turns on A/D converter,
+Warning[203]: Found opcode in column 1. (MOVWF)
+000A   009F           00040 MOVWF ADCON0 ;and selects channel AN0
+Warning[203]: Found opcode in column 1. (CLRF)
+000B   0185           00041 CLRF PORTA ;Clears PortA.
+Warning[203]: Found opcode in column 1. (CLRF)
+000C   0186           00042 CLRF PORTB ;Clears PortB.
+                      00043 ;PROGRAM STARTS
+                      00044 
+000D   151F           00045 BEGIN BSF ADCON0,2 ;Take Measurement.
+000E   191F           00046 WAIT BTFSC ADCON0,2 ;Wait until reading done.
+Warning[203]: Found opcode in column 1. (GOTO)
+000F   280E           00047 GOTO WAIT
+Warning[203]: Found opcode in column 1. (MOVF)
+0010   081E           00048 MOVF ADRES,W ;Move A/D Result into W
+Warning[203]: Found opcode in column 1. (CLRF)
+0011   0186           00049 CLRF PORTB ;Clear PortB.
+Warning[203]: Found opcode in column 1. (SUBLW)
+0012   3C1A           00050 SUBLW .26 ;26-,W. W is altered
+Warning[203]: Found opcode in column 1. (BTFSC)
+0013   1803           00051 BTFSC STATUS,CARRY ;Is W4 or 526
+Warning[203]: Found opcode in column 1. (GOTO)
+0014   280D           00052 GOTO BEGIN ;W is 526 (0.5v)
+Warning[203]: Found opcode in column 1. (MOVF)
+0015   081E           00053 MOVF ADRES,W ;Move A/D Result into W
+Warning[203]: Found opcode in column 1. (BSF)
+0016   1406           00054 BSF PORTB,0 ;Turn on B0.
+Warning[203]: Found opcode in column 1. (SUBLW)
+0017   3C33           00055 SUBLW .51 ;51-,W. W is altered
+Warning[203]: Found opcode in column 1. (BTFSC)
+0018   1803           00056 BTFSC STATUS,CARRY ;Is W4 or 551
+Warning[203]: Found opcode in column 1. (GOTO)
+0019   280D           00057 GOTO BEGIN ;W is 551 (1.0v)
+Warning[203]: Found opcode in column 1. (MOVF)
+001A   081E           00058 MOVF ADRES,W ;Move A/D Result into W
+Warning[203]: Found opcode in column 1. (BSF)
+001B   1486           00059 BSF PORTB,1 ;Turn on B1.
+Warning[203]: Found opcode in column 1. (SUBLW)
+001C   3C4D           00060 SUBLW .77 ;77-,W. W is altered
+Warning[203]: Found opcode in column 1. (BTFSC)
+001D   1803           00061 BTFSC STATUS,CARRY ;Is W4 or 577
+Warning[203]: Found opcode in column 1. (GOTO)
+001E   280D           00062 GOTO BEGIN ;W is 577 (1.5v)
+Warning[203]: Found opcode in column 1. (MOVF)
+001F   081E           00063 MOVF ADRES,W ;Move A/D Result into W
+Warning[203]: Found opcode in column 1. (BSF)
+0020   1506           00064 BSF PORTB,2 ;Turn on B2.
+Warning[203]: Found opcode in column 1. (SUBLW)
+0021   3C66           00065 SUBLW .102 ;102-,W. W is altered
+Warning[203]: Found opcode in column 1. (BTFSC)
+0022   1803           00066 BTFSC STATUS,CARRY ;Is W4 or 5102
+Warning[203]: Found opcode in column 1. (GOTO)
+0023   280D           00067 GOTO BEGIN ;W is 5102 (2.0v)
+MPASM  5.14                         CHECK.ASM   9-7-2014  20:02:38         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Warning[203]: Found opcode in column 1. (MOVF)
+0024   081E           00068 MOVF ADRES,W ;Move A/D Result into W
+Warning[203]: Found opcode in column 1. (BSF)
+0025   1586           00069 BSF PORTB,3 ;Turn on B3.
+Warning[203]: Found opcode in column 1. (SUBLW)
+0026   3C80           00070 SUBLW .128 ;128-,W. W is altered
+Warning[203]: Found opcode in column 1. (BTFSC)
+0027   1803           00071 BTFSC STATUS,CARRY ;Is W4 or 5128
+Warning[203]: Found opcode in column 1. (GOTO)
+0028   280D           00072 GOTO BEGIN ;W is 5128 (2.5v)
+Warning[203]: Found opcode in column 1. (MOVF)
+0029   081E           00073 MOVF ADRES,W ;Move A/D Result into W
+Warning[203]: Found opcode in column 1. (BSF)
+002A   1606           00074 BSF PORTB,4 ;Turn on B4.
+Warning[203]: Found opcode in column 1. (SUBLW)
+002B   3C99           00075 SUBLW .153 ;153-,W. W is altered
+Warning[203]: Found opcode in column 1. (BTFSC)
+002C   1803           00076 BTFSC STATUS,CARRY ;Is W4 or 5153
+Warning[203]: Found opcode in column 1. (GOTO)
+002D   280D           00077 GOTO BEGIN ;W is 5153 (3.0v)
+Warning[203]: Found opcode in column 1. (MOVF)
+002E   081E           00078 MOVF ADRES,W ;Move A/D Result into W
+Warning[203]: Found opcode in column 1. (BSF)
+002F   1686           00079 BSF PORTB,5 ;Turn on B5.
+Warning[203]: Found opcode in column 1. (SUBLW)
+0030   3CB3           00080 SUBLW .179 ;179-,W. W is altered
+Warning[203]: Found opcode in column 1. (BTFSC)
+0031   1803           00081 BTFSC STATUS,CARRY ;Is W4 or 5179
+Warning[203]: Found opcode in column 1. (GOTO)
+0032   280D           00082 GOTO BEGIN ;W is 5179 (3.5v)
+Warning[203]: Found opcode in column 1. (MOVF)
+0033   081E           00083 MOVF ADRES,W ;Move A/D Result into W
+Warning[203]: Found opcode in column 1. (BSF)
+0034   1706           00084 BSF PORTB,6 ;Turn on B6.
+Warning[203]: Found opcode in column 1. (SUBLW)
+0035   3CCC           00085 SUBLW .204 ;204-,W. W is altered
+Warning[203]: Found opcode in column 1. (BTFSC)
+0036   1803           00086 BTFSC STATUS,CARRY ;Is W4 or 5204
+Warning[203]: Found opcode in column 1. (GOTO)
+0037   280D           00087 GOTO BEGIN ;W is 5204 (4.0v)
+Warning[203]: Found opcode in column 1. (BSF)
+0038   1786           00088 BSF PORTB,7 ;Turn on B7.
+Warning[203]: Found opcode in column 1. (GOTO)
+0039   280D           00089 GOTO BEGIN
+Warning[205]: Found directive in column 1. (END)
+                      00090 END
+MPASM  5.14                         CHECK.ASM   9-7-2014  20:02:38         PAGE  4
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ADCON0                            0000001F
+ADCON1                            0000009F
+ADRES                             0000001E
+BEGIN                             0000000D
+CARRY                             00000000
+COUNT                             00000020
+OPTION_R                          00000081
+OSCCON                            0000008F
+PORTA                             00000005
+PORTB                             00000006
+START                             00000001
+STATUS                            00000003
+TMR0                              00000001
+TRISA                             00000085
+TRISB                             00000086
+WAIT                              0000000E
+ZEROBIT                           00000002
+__16F818                          00000001
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXX------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    58
+Program Memory Words Free:   966
+
+
+Errors   :     0
+Warnings :    59 reported,     0 suppressed
+Messages :     3 reported,     0 suppressed
+
+

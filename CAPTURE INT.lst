@@ -1,0 +1,430 @@
+MPASM  5.14                   CAPTURE INT.ASM   12-31-2014  18:56:36         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  00000001            00001 TMR0    EQU     1
+  00000002            00002 PC              EQU     2
+  00000003            00003 STATUS  EQU     3
+  00000005            00004 PORTA   EQU     5
+  00000006            00005 PORTB   EQU     6
+  00000007            00006 PORTC   EQU     7
+  00000008            00007 PORTD   EQU     8
+  00000009            00008 PORTE   EQU     9
+  00000085            00009 TRISA   EQU     85H
+  00000086            00010 TRISB   EQU     86H
+  00000087            00011 TRISC   EQU     87H
+  00000088            00012 TRISD   EQU     88H
+  00000089            00013 TRISE   EQU     89H
+  00000081            00014 OPTION_R        EQU 81H
+  00000002            00015 ZEROBIT EQU     2
+  00000000            00016 CARRY   EQU     0
+  00000017            00017 CCP1CON EQU     17H
+  0000000B            00018 INTCON  EQU 0BH
+  00000007            00019 GIE             EQU     7
+  0000008C            00020 PIE1    EQU     8CH
+  0000000C            00021 PIR1    EQU     0CH
+  00000006            00022 PEIE    EQU     6
+  00000002            00023 CCP1IF  EQU     2
+  00000002            00024 CCP1IE  EQU     2
+  00000000            00025 EDGE    EQU     0
+  00000001            00026 READY   EQU     1
+  00000020            00027 COUNT   EQU     20H
+  00000021            00028 TSTATUS         EQU     21H
+  00000022            00029 TW              EQU     22H
+  00000023            00030 TPORTB          EQU     23H
+  00000024            00031 COUNTER         EQU     24H
+  00000025            00032 C5              EQU     25H
+  00000026            00033 NUM             EQU     26H
+  00000027            00034 COUNTER2 EQU    27H
+                      00035 
+                      00036 
+                      00037         LIST    P=16F877
+0000                  00038         ORG             0
+0000   2899           00039         GOTO    START
+0004                  00040         ORG             4
+0004   2884           00041         GOTO    ISR
+2007   3FFB           00042         __CONFIG        H'3FFB'
+                      00043 ;SUBROUTINE
+0005   0181           00044 DELAYP5 CLRF TMR0 ;START TMR0.
+0006   0801           00045 LOOPB MOVF TMR0,W ;READ TMR0 INTO W.
+0007   3C02           00046                 SUBLW .2 ;TIME-3  195
+0008   1D03           00047         BTFSS STATUS,ZEROBIT ;Check TIME-W ¼ 0
+0009   2806           00048         GOTO LOOPB ;Time is not ¼ 3.
+000A   3400           00049         RETLW 0
+000B   0181           00050 DELAY3 CLRF TMR0 ;START TMR0.
+000C   0801           00051 LOOPC MOVF TMR0,W ;READ TMR0 INTO W.
+000D   3C40           00052                 SUBLW .64 ;TIME-3
+000E   1D03           00053         BTFSS STATUS,ZEROBIT ;Check TIME-W ¼ 0
+MPASM  5.14                   CAPTURE INT.ASM   12-31-2014  18:56:36         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+000F   280C           00054         GOTO LOOPC ;Time is not ¼ 3.
+0010   0000           00055         NOP ;add extra delay
+0011   0000           00056         NOP
+0012   3400           00057         RETLW 0
+Error[113]  : Symbol not previously defined (STORE)
+0013   0800           00058 FILE1           MOVF    STORE,W
+0014   0093           00059                         MOVWF   FILE1
+Error[113]  : Symbol not previously defined (READLOOP)
+0015   2800           00060                         GOTO    READLOOP
+                      00061 
+0016   0813           00062 DECDISP1        MOVF    FILE1,W
+Error[113]  : Symbol not previously defined (ALPHABET)
+0017   2000           00063                         CALL    ALPHABET
+Error[113]  : Symbol not previously defined (FILE2)
+0018   0800           00064 DECDISP2        MOVF    FILE2,W
+Error[113]  : Symbol not previously defined (ALPHABET)
+0019   2000           00065                         CALL    ALPHABET
+                      00066 
+                      00067 
+                      00068 
+001A                  00069 RAMSTORE
+001A   0827           00070                         MOVF    COUNTER2,W
+Message[305]: Using default destination of 1 (file).
+001B   0782           00071                         ADDWF   PC
+Error[128]  : Missing argument(s)
+001B   0782           00072                         GOTO    ;RETURN PATT
+001C   2813           00073                         GOTO    FILE1
+Error[113]  : Symbol not previously defined (FILE2)
+001D   2800           00074                         GOTO    FILE2
+                      00075 
+Error[113]  : Symbol not previously defined (STORE)
+001E   1000           00076 BIT0    BCF             STORE,0
+001F   1806           00077                 BTFSC   PORTB,0
+Error[113]  : Symbol not previously defined (STORE)
+0020   1400           00078                 BSF             STORE,0
+0021   2892           00079                 GOTO    RESTORE
+Error[113]  : Symbol not previously defined (STORE)
+0022   1080           00080 BIT1    BCF             STORE,1
+0023   1806           00081                 BTFSC   PORTB,0
+Error[113]  : Symbol not previously defined (STORE)
+0024   1480           00082                 BSF             STORE,1
+0025   2892           00083                 GOTO    RESTORE
+Error[113]  : Symbol not previously defined (STORE)
+0026   1100           00084 BIT2    BCF             STORE,2
+0027   1806           00085                 BTFSC   PORTB,0
+Error[113]  : Symbol not previously defined (STORE)
+0028   1500           00086                 BSF             STORE,2
+0029   2892           00087                 GOTO    RESTORE
+Error[113]  : Symbol not previously defined (STORE)
+002A   1180           00088 BIT3    BCF             STORE,3
+002B   1806           00089                 BTFSC   PORTB,0
+Error[113]  : Symbol not previously defined (STORE)
+002C   1580           00090                 BSF             STORE,3
+MPASM  5.14                   CAPTURE INT.ASM   12-31-2014  18:56:36         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+002D   2892           00091                 GOTO    RESTORE
+Error[113]  : Symbol not previously defined (STORE)
+002E   1200           00092 BIT4    BCF             STORE,4
+002F   1806           00093                 BTFSC   PORTB,0
+Error[113]  : Symbol not previously defined (STORE)
+0030   1600           00094                 BSF             STORE,4
+0031   2892           00095                 GOTO    RESTORE
+Error[113]  : Symbol not previously defined (STORE)
+0032   1280           00096 BIT5    BCF             STORE,5
+0033   1806           00097                 BTFSC   PORTB,0
+Error[113]  : Symbol not previously defined (STORE)
+0034   1680           00098                 BSF             STORE,5
+0035   2892           00099                 GOTO    RESTORE
+Error[113]  : Symbol not previously defined (STORE)
+0036   1300           00100 BIT6    BCF             STORE,6
+0037   1806           00101                 BTFSC   PORTB,0
+Error[113]  : Symbol not previously defined (STORE)
+0038   1700           00102                 BSF             STORE,6
+0039   2892           00103                 GOTO    RESTORE
+Error[113]  : Symbol not previously defined (STORE)
+003A   1380           00104 BIT7    BCF             STORE,7
+003B   1806           00105                 BTFSC   PORTB,0
+Error[113]  : Symbol not previously defined (STORE)
+003C   1780           00106                 BSF             STORE,7
+003D   2892           00107                 GOTO    RESTORE
+                      00108 
+003E                  00109 WRITE   
+003E   1683           00110                 BSF     STATUS,5 ;BANK1
+Error[113]  : Symbol not previously defined (EECON1)
+Error[113]  : Symbol not previously defined (WREN)
+003F   1400           00111                 BSF     EECON1,WREN ;set WRITE ENABLE
+0040   1283           00112                 BCF     STATUS,5 ;BANK0
+Error[113]  : Symbol not previously defined (STORE)
+0041   0800           00113                 MOVF    STORE,W ;move COUNT to EEDATA
+Error[113]  : Symbol not previously defined (EEDATA)
+0042   0080           00114                 MOVWF   EEDATA
+0043   0826           00115                 MOVF    NUM,W
+Error[113]  : Symbol not previously defined (EEADR)
+0044   0080           00116                 MOVWF   EEADR
+0045   1683           00117                 BSF     STATUS,5 ;BANK1
+0046   3055           00118                 MOVLW   55H ;55 and AA initiates write cycle
+Error[113]  : Symbol not previously defined (EECON2)
+0047   0080           00119                 MOVWF   EECON2
+0048   30AA           00120                 MOVLW   0AAH
+Error[113]  : Symbol not previously defined (EECON2)
+0049   0080           00121                 MOVWF   EECON2
+Error[113]  : Symbol not previously defined (EECON1)
+Error[113]  : Symbol not previously defined (WR)
+004A   1400           00122                 BSF     EECON1,WR ;WRITE data to EEADR 0
+Error[113]  : Symbol not previously defined (EECON1)
+Error[113]  : Symbol not previously defined (WR)
+004B   1800           00123 WRDONE  BTFSC   EECON1,WR
+004C   284B           00124                 GOTO    WRDONE 
+MPASM  5.14                   CAPTURE INT.ASM   12-31-2014  18:56:36         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Error[113]  : Symbol not previously defined (EECON1)
+Error[113]  : Symbol not previously defined (WREN)
+004D   1000           00125                 BCF     EECON1,WREN
+004E   1283           00126                 BCF     STATUS,5 ;BANK0
+004F   3400           00127                 RETLW   0
+                      00128 
+0050                  00129 READ    
+0050   0827           00130                 MOVF    COUNTER2,W
+Message[305]: Using default destination of 1 (file).
+0051   02A6           00131                 SUBWF   NUM
+0052   1903           00132                 BTFSC   STATUS,ZEROBIT
+Error[113]  : Symbol not previously defined (SAVED)
+0053   2800           00133                 GOTO    SAVED
+Message[305]: Using default destination of 1 (file).
+0054   0AA7           00134                 INCF    COUNTER2                ;TO READ FROM EEPROM SEQUENTIALLY
+0055   0827           00135                 MOVF    COUNTER2,W
+Error[113]  : Symbol not previously defined (EEADR)
+0056   0080           00136                 MOVWF   EEADR
+0057   1683           00137                 BSF STATUS,5 ;BANK1
+Error[113]  : Symbol not previously defined (EECON1)
+Error[113]  : Symbol not previously defined (RD)
+0058   1400           00138                 BSF EECON1,RD
+0059   1283           00139                 BCF STATUS,5 ;BANK0
+Error[113]  : Symbol not previously defined (EEDATA)
+005A   0800           00140                 MOVF EEDATA,W
+Error[113]  : Symbol not previously defined (STORE)
+005B   0080           00141                 MOVWF STORE
+005C   3400           00142                 RETLW 0
+                      00143 
+005D                  00144 RECEIVE 
+005D   0824           00145                 MOVF    COUNTER,W
+005E   3C02           00146                 SUBLW   .2
+005F   1903           00147                 BTFSC   STATUS,ZEROBIT
+0060   281E           00148                 GOTO    BIT0
+0061   0824           00149                 MOVF    COUNTER,W
+0062   3C03           00150                 SUBLW   .3
+0063   1903           00151                 BTFSC   STATUS,ZEROBIT
+0064   2822           00152                 GOTO    BIT1
+0065   0824           00153                 MOVF    COUNTER,W
+0066   3C04           00154                 SUBLW   .4
+0067   1903           00155                 BTFSC   STATUS,ZEROBIT
+0068   2826           00156                 GOTO    BIT2
+0069   0824           00157                 MOVF    COUNTER,W
+006A   3C05           00158                 SUBLW   .5
+006B   1903           00159                 BTFSC   STATUS,ZEROBIT
+006C   282A           00160                 GOTO    BIT3
+006D   0824           00161                 MOVF    COUNTER,W
+006E   3C06           00162                 SUBLW   .6
+006F   1903           00163                 BTFSC   STATUS,ZEROBIT
+0070   282E           00164                 GOTO    BIT4
+0071   0824           00165                 MOVF    COUNTER,W
+0072   3C07           00166                 SUBLW   .7
+0073   1903           00167                 BTFSC   STATUS,ZEROBIT
+MPASM  5.14                   CAPTURE INT.ASM   12-31-2014  18:56:36         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0074   2832           00168                 GOTO    BIT5
+0075   0824           00169                 MOVF    COUNTER,W
+0076   3C08           00170                 SUBLW   .8
+0077   1903           00171                 BTFSC   STATUS,ZEROBIT
+0078   2836           00172                 GOTO    BIT6
+0079   0824           00173                 MOVF    COUNTER,W
+007A   3C09           00174                 SUBLW   .9
+007B   1903           00175                 BTFSC   STATUS,ZEROBIT
+007C   283A           00176                 GOTO    BIT7
+007D   0824           00177                 MOVF    COUNTER,W
+007E   3C0B           00178                 SUBLW   .11
+007F   1D03           00179                 BTFSS   STATUS,ZEROBIT
+0080   2892           00180                 GOTO    RESTORE
+                      00181                                                 ;INDICATE
+0081   01A4           00182                 CLRF    COUNTER
+Message[305]: Using default destination of 1 (file).
+0082   0AA6           00183                 INCF    NUM             ;COUNTS CHARACTER
+0083   3400           00184                 RETLW   .0
+                      00185 
+0084   00A2           00186 ISR             MOVWF   TW
+0085   0E03           00187         SWAPF   STATUS,W
+0086   00A1           00188                 MOVWF   TSTATUS
+0087   0806           00189                 MOVF    PORTB,W
+0088   00A3           00190                 MOVWF   TPORTB
+Message[305]: Using default destination of 1 (file).
+0089   0AA4           00191                 INCF    COUNTER                 ;increase counter here
+008A   0824           00192                 MOVF    COUNTER,W
+008B   0086           00193                 MOVWF   PORTB
+008C   200B           00194                 CALL    DELAY3
+008D   0186           00195                 CLRF    PORTB
+                      00196 
+008E   0824           00197                 MOVF    COUNTER,W
+008F   3C01           00198                 SUBLW   .1
+0090   1D03           00199                 BTFSS   STATUS,ZEROBIT
+0091   285D           00200                 GOTO    RECEIVE
+                      00201                 
+                      00202                 
+0092   0823           00203 RESTORE         MOVF    TPORTB,W
+0093   0086           00204                 MOVWF   PORTB
+0094   0E21           00205                 SWAPF   TSTATUS,W
+0095   0083           00206                 MOVWF   STATUS
+0096   0822           00207                 MOVF    TW,W
+0097   110C           00208                 BCF             PIR1,CCP1IF
+0098   0009           00209                 RETFIE
+                      00210 
+                      00211 
+0099   1683           00212 START   BSF     STATUS,5
+009A   3000           00213                 MOVLW   .0
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+009B   0086           00214                 MOVWF   TRISB
+009C   3000           00215                 MOVLW   .0
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+009D   0085           00216                 MOVWF   TRISA
+MPASM  5.14                   CAPTURE INT.ASM   12-31-2014  18:56:36         PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+009E   300F           00217                 MOVLW   0FH
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+009F   0087           00218                 MOVWF   TRISC
+00A0   3007           00219                 MOVLW   07H
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+00A1   0081           00220                 MOVWF   OPTION_R
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+00A2   150C           00221                 BSF             PIE1,CCP1IE
+00A3   0183           00222                 CLRF    STATUS
+00A4   0185           00223                 CLRF    PORTA
+00A5   0186           00224                 CLRF    PORTB
+00A6   01A4           00225                 CLRF    COUNTER
+00A7   01A7           00226                 CLRF    COUNTER2
+00A8   3004           00227                 MOVLW   .4
+00A9   0097           00228                 MOVWF   CCP1CON
+00AA   018B           00229                 CLRF    INTCON
+                      00230                 
+00AB   110C           00231                 BCF             PIR1,CCP1IF
+00AC   178B           00232                 BSF             INTCON,GIE
+00AD   170B           00233                 BSF             INTCON,PEIE
+                      00234 
+                      00235                 
+Error[113]  : Symbol not previously defined (DEFAULT)
+00AE   2000           00236 BEGIN           CALL DEFAULT
+Error[121]  : Illegal label (CHECK)
+Error[113]  : Symbol not previously defined (COMPLETE)
+                      00237 CHECK IF COMPLETE
+                      00238                 ;CHECK IF COUNTER IS 0
+                      00239                 MOVF    STORE,W
+                      00240                 SUBLW   5AH             ; END OF INPUT WHEN ENTER IS PRESSED
+                      00241                 BTFSS   STATUS,ZEROBIT
+                      00242                 CALL    WRITE
+                      00243                 
+                      00244 READLOOP CALL   READ
+                      00245                 GOTO    RAMSTORE        ;READS INTO RAM
+                      00246 SAVED   CALL    DECDISP         ;DECODE AND DISPLAY
+                      00247 
+                      00248 
+MPASM  5.14                   CAPTURE INT.ASM   12-31-2014  18:56:36         PAGE  7
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+BEGIN                             000000AE
+BIT0                              0000001E
+BIT1                              00000022
+BIT2                              00000026
+BIT3                              0000002A
+BIT4                              0000002E
+BIT5                              00000032
+BIT6                              00000036
+BIT7                              0000003A
+C5                                00000025
+CARRY                             00000000
+CCP1CON                           00000017
+CCP1IE                            00000002
+CCP1IF                            00000002
+COUNT                             00000020
+COUNTER                           00000024
+COUNTER2                          00000027
+DECDISP1                          00000016
+DECDISP2                          00000018
+DELAY3                            0000000B
+DELAYP5                           00000005
+EDGE                              00000000
+FILE1                             00000013
+GIE                               00000007
+INTCON                            0000000B
+ISR                               00000084
+LOOPB                             00000006
+LOOPC                             0000000C
+NUM                               00000026
+OPTION_R                          00000081
+PC                                00000002
+PEIE                              00000006
+PIE1                              0000008C
+PIR1                              0000000C
+PORTA                             00000005
+PORTB                             00000006
+PORTC                             00000007
+PORTD                             00000008
+PORTE                             00000009
+RAMSTORE                          0000001A
+READ                              00000050
+READY                             00000001
+RECEIVE                           0000005D
+RESTORE                           00000092
+START                             00000099
+STATUS                            00000003
+TMR0                              00000001
+TPORTB                            00000023
+TRISA                             00000085
+TRISB                             00000086
+TRISC                             00000087
+TRISD                             00000088
+TRISE                             00000089
+MPASM  5.14                   CAPTURE INT.ASM   12-31-2014  18:56:36         PAGE  8
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TSTATUS                           00000021
+TW                                00000022
+WRDONE                            0000004B
+WRITE                             0000003E
+ZEROBIT                           00000002
+__16F877                          00000001
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : X---XXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0080 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXX- ----------------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:   172
+Program Memory Words Free:  8020
+
+
+Errors   :    45
+Warnings :     0 reported,     0 suppressed
+Messages :    10 reported,     0 suppressed
+
+

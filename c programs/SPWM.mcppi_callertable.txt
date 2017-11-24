@@ -1,0 +1,7 @@
+main
+	PWM1_Init
+	____DoICP
+	PWM1_Set_Duty
+		Mul_16x16_U
+	PWM1_Start
+interrupt

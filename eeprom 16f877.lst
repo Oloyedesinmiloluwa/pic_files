@@ -1,0 +1,233 @@
+MPASM  5.14                 EEPROM 16F877.ASM   3-19-2015  23:56:31         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  00000001            00001 TMR0            EQU 1           ;means TMR0 is file 1.
+  00000003            00002 STATUS          EQU 3           ;means STATUS is file 3.
+  00000005            00003 PORTA           EQU 5           ;means PORTA is file 5.
+  00000006            00004 PORTB           EQU 6   
+  00000007            00005 PORTC           EQU     7
+  00000008            00006 PORTD           EQU     8
+  00000009            00007 PORTE           EQU     9
+                      00008 
+  00000085            00009 TRISA           EQU 85H         ;TRISA (the PORTA I/O selection) is file 85H
+  00000086            00010 TRISB           EQU 86H         ;TRISB (the PORTB I/O selection) is file 86H
+  00000087            00011 TRISC           EQU     87H
+  00000088            00012 TRISD           EQU     88H
+  00000089            00013 TRISE           EQU     89H
+  00000081            00014 OPTION_R        EQU 81H         ;the OPTION register is file 81H
+  00000002            00015 ZEROBIT         EQU 2           ;means ZEROBIT is bit 2.
+  0000000C            00016 COUNT           EQU 0CH         ; COUNT is file 0C, a register to count events.
+  0000000D            00017 STORE           EQU     0DH
+  0000000C            00018 EEDATA          EQU     0CH
+  0000000D            00019 EEADR           EQU     0DH
+  0000008C            00020 EECON1          EQU     8CH
+  0000008D            00021 EECON2          EQU     8DH
+  00000000            00022 RD                      EQU     0
+  00000001            00023 WR                      EQU     1
+  00000002            00024 WREN            EQU     2
+  00000003            00025 WRERR           EQU 3
+  0000000B            00026 INTCON          EQU 0BH
+  00000007            00027 GIE                     EQU 7
+                      00028 ;*********************************************************
+Warning[205]: Found directive in column 1. (LIST)
+                      00029 LIST    P=16F877 ;we are using the 16F84.
+Warning[205]: Found directive in column 1. (ORG)
+0000                  00030 ORG     0       ;the start address in memory is 0
+Warning[203]: Found opcode in column 1. (GOTO)
+0000   2828           00031 GOTO    START ;goto start!
+                      00032 ;******************************************************************
+                      00033 ; Configuration Bits
+Warning[205]: Found directive in column 1. (__CONFIG)
+2007   3F3A           00034 __CONFIG H'3F3A' ;selects LP oscillator, WDT off, PUT on,
+                      00035 ;Code Protection disabled.
+                      00036 ;*****************************************************
+                      00037 ;SUBROUTINE SECTION.
+0001   0181           00038 DELAYP1 CLRF    TMR0
+0002   0801           00039 LOOPA   MOVF    TMR0,W
+0003   3C02           00040                 SUBLW   .2
+0004   1D03           00041                 BTFSS   STATUS,ZEROBIT
+0005   2802           00042                 GOTO    LOOPA
+0006   3400           00043                 RETLW   0
+0007   1703           00044 READ    BSF             STATUS,6
+                      00045         ;       MOVLW   0
+0008   080D           00046                 MOVF    STORE,W
+0009   008D           00047                 MOVWF   EEADR
+000A   1683           00048                 BSF             STATUS,5
+000B   1703           00049                 BSF             STATUS,6
+MPASM  5.14                 EEPROM 16F877.ASM   3-19-2015  23:56:31         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000C   140C           00050                 BSF             EECON1,RD
+000D   1283           00051                 BCF             STATUS,5
+                      00052         
+000E   080C           00053                 MOVF    EEDATA,W
+000F   1303           00054                 BCF             STATUS,6
+0010   008C           00055                 MOVWF   COUNT
+0011   3400           00056                 RETLW   0
+0012   1683           00057 WRITE   BSF             STATUS,5        ;BANK3
+0013   1703           00058                 BSF             STATUS,6
+                      00059         ;       BCF             INTCON,GIE
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0014   150C           00060                 BSF             EECON1,WREN
+0015   1283           00061                 BCF             STATUS,5        ;BANK2
+0016   1303           00062                 BCF             STATUS,6
+0017   080C           00063                 MOVF    COUNT,W
+0018   1703           00064                 BSF             STATUS,6
+0019   008C           00065                 MOVWF   EEDATA
+                      00066         ;       MOVLW   0
+001A   080D           00067                 MOVF    STORE,W
+001B   008D           00068                 MOVWF   EEADR
+001C   1683           00069                 BSF             STATUS,5        ;BANK3
+                      00070                 
+001D   3055           00071                 MOVLW   55H
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+001E   008D           00072                 MOVWF   EECON2
+001F   30AA           00073                 MOVLW   0AAH
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0020   008D           00074                 MOVWF   EECON2
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0021   148C           00075                 BSF             EECON1,WR
+                      00076                 
+Warning[207]: Found label after column 1. (DONE)
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0022   188C           00077  DONE   BTFSC   EECON1,WR
+0023   2822           00078                 GOTO    DONE
+                      00079                 
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0024   110C           00080                 BCF             EECON1,WREN
+0025   1283           00081                 BCF             STATUS,5
+0026   1303           00082                 BCF             STATUS,6
+                      00083 
+0027   3400           00084                 RETLW   0
+                      00085                 
+                      00086         
+                      00087                 
+                      00088 ;*********************************************************
+                      00089 ;CONFIGURATION SECTION.
+0028   1683           00090 START   BSF     STATUS,5 ;Turns to Bank1.
+0029   301F           00091                 MOVLW   B'00011111'     ;5bits of PORTA are I/P
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+002A   0085           00092                 MOVWF   TRISA
+002B   3000           00093                 MOVLW   B'00000000'
+MPASM  5.14                 EEPROM 16F877.ASM   3-19-2015  23:56:31         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+002C   0086           00094                 MOVWF   TRISB 
+002D   3003           00095                 MOVLW   B'00000011'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+002E   0089           00096                 MOVWF   TRISE           ;PORTB is OUTPUT
+002F   3007           00097                 MOVLW   B'00000111'     ;Prescaler is /256
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0030   0081           00098                 MOVWF   OPTION_R        ;TIMER is 1/32 secs.
+0031   1283           00099                 BCF     STATUS,5        ;Return to Bank0.
+0032   0185           00100                 CLRF    PORTA           ;Clears PortA.
+0033   0186           00101                 CLRF    PORTB           ;Clears PortB.
+0034   0187           00102                 CLRF    PORTC
+0035   3001           00103                 MOVLW   1
+0036   008D           00104                 MOVWF   STORE
+                      00105                 ;CLRF   COUNT
+                      00106 ;PROGRAM STARTS
+0037   2007           00107                 CALL    READ
+0038   080C           00108                 MOVF    COUNT,W
+0039   0086           00109                 MOVWF   PORTB
+003A   2001           00110                 CALL    DELAYP1
+003B   0186           00111                 CLRF    PORTB
+003C   2001           00112                 CALL    DELAYP1
+                      00113         ;       GOTO    AD
+                      00114                 
+003D   1C07           00115 PRESS   BTFSS   PORTC,0
+003E   283D           00116                 GOTO    PRESS
+003F   2001           00117                 CALL    DELAYP1
+Error[122]  : Illegal opcode (LEASE)
+003F   2001           00118 RE LEASE        BTFSC   PORTC,0
+Error[113]  : Symbol not previously defined (RELEASE)
+0040   2800           00119                 GOTO    RELEASE
+0041   2001           00120                 CALL    DELAYP1
+Message[305]: Using default destination of 1 (file).
+0042   0A8C           00121                 INCF    COUNT
+0043   080C           00122 AD              MOVF    COUNT,W
+                      00123         ;       CALL    WRITE
+0044   0086           00124         MOVWF   PORTB
+0045   2001           00125                 CALL    DELAYP1
+0046   0186           00126                 CLRF    PORTB
+0047   2001           00127                 CALL    DELAYP1
+0048   2843           00128                 GOTO    AD
+0049   283D           00129                 GOTO    PRESS   
+                      00130                 END
+MPASM  5.14                 EEPROM 16F877.ASM   3-19-2015  23:56:31         PAGE  4
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+AD                                00000043
+COUNT                             0000000C
+DELAYP1                           00000001
+DONE                              00000022
+EEADR                             0000000D
+EECON1                            0000008C
+EECON2                            0000008D
+EEDATA                            0000000C
+GIE                               00000007
+INTCON                            0000000B
+LOOPA                             00000002
+OPTION_R                          00000081
+PORTA                             00000005
+PORTB                             00000006
+PORTC                             00000007
+PORTD                             00000008
+PORTE                             00000009
+PRESS                             0000003D
+RD                                00000000
+READ                              00000007
+START                             00000028
+STATUS                            00000003
+STORE                             0000000D
+TMR0                              00000001
+TRISA                             00000085
+TRISB                             00000086
+TRISC                             00000087
+TRISD                             00000088
+TRISE                             00000089
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+WRITE                             00000012
+ZEROBIT                           00000002
+__16F877                          00000001
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXX------ ---------------- ---------------- ----------------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    74
+Program Memory Words Free:  8118
+
+
+MPASM  5.14                 EEPROM 16F877.ASM   3-19-2015  23:56:31         PAGE  5
+
+
+
+
+
+Errors   :     2
+Warnings :     5 reported,     0 suppressed
+Messages :    12 reported,     0 suppressed
+
+

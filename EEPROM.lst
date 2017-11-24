@@ -1,0 +1,158 @@
+MPASM  5.14                        EEPROM.ASM   2-11-2015  22:06:18         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  00000001            00001 TMR0            EQU 1           ;means TMR0 is file 1.
+  00000003            00002 STATUS          EQU 3           ;means STATUS is file 3.
+  00000005            00003 PORTA           EQU 5           ;means PORTA is file 5.
+  00000006            00004 PORTB           EQU 6           ;means PORTB is file 6.
+  00000085            00005 TRISA           EQU 85H         ;TRISA (the PORTA I/O selection) is file 85H
+  00000086            00006 TRISB           EQU 86H         ;TRISB (the PORTB I/O selection) is file 86H
+  00000081            00007 OPTION_R        EQU 81H         ;the OPTION register is file 81H
+  00000002            00008 ZEROBIT         EQU 2           ;means ZEROBIT is bit 2.
+  0000000C            00009 COUNT           EQU 0CH         ; COUNT is file 0C, a register to count events.
+  00000008            00010 EEDATA          EQU     8
+  00000009            00011 EEADR           EQU     9
+  00000008            00012 EECON1          EQU     8
+  00000009            00013 EECON2          EQU     9
+  00000000            00014 RD                      EQU     0
+  00000001            00015 WR                      EQU     1
+  00000002            00016 WREN            EQU     2
+                      00017 ;*********************************************************
+Warning[205]: Found directive in column 1. (LIST)
+Warning[215]: Processor superseded by command line.  Verify processor symbol.
+                      00018 LIST    P=16F84 ;we are using the 16F84.
+Warning[205]: Found directive in column 1. (ORG)
+0000                  00019 ORG     0       ;the start address in memory is 0
+Warning[203]: Found opcode in column 1. (GOTO)
+0000   281F           00020 GOTO    START ;goto start!
+                      00021 ;******************************************************************
+                      00022 ; Configuration Bits
+Warning[205]: Found directive in column 1. (__CONFIG)
+2007   3FF0           00023 __CONFIG H'3FF0' ;selects LP oscillator, WDT off, PUT on,
+                      00024 ;Code Protection disabled.
+                      00025 ;*****************************************************
+                      00026 ;SUBROUTINE SECTION.
+0001   0181           00027 DELAYP1 CLRF    TMR0
+0002   0801           00028 LOOPA   MOVF    TMR0,W
+0003   3C03           00029                 SUBLW   .3
+0004   1D03           00030                 BTFSS   STATUS,ZEROBIT
+0005   2802           00031                 GOTO    LOOPA
+0006   3400           00032                 RETLW   0
+0007   3000           00033 READ    MOVLW   0
+0008   0089           00034                 MOVWF   EEADR
+0009   1683           00035                 BSF             STATUS,5
+000A   1408           00036                 BSF             EECON1,RD
+000B   1283           00037                 BCF             STATUS,5
+000C   0808           00038                 MOVF    EEDATA,W
+000D   008C           00039                 MOVWF   COUNT
+000E   3400           00040                 RETLW   0
+000F   1683           00041 WRITE   BSF             STATUS,5
+0010   1508           00042                 BSF             EECON1,WREN
+0011   1283           00043                 BCF             STATUS,5
+0012   080C           00044                 MOVF    COUNT,W
+0013   0088           00045                 MOVWF   EEDATA
+0014   3000           00046                 MOVLW   0
+0015   0089           00047                 MOVWF   EEADR
+0016   1683           00048                 BSF             STATUS,5
+MPASM  5.14                        EEPROM.ASM   2-11-2015  22:06:18         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0017   3055           00049                 MOVLW   55H
+0018   0089           00050                 MOVWF   EECON2
+0019   30AA           00051                 MOVLW   0AAH
+001A   0089           00052                 MOVWF   EECON2
+001B   1488           00053                 BSF             EECON1,WR
+                      00054 ;DONE   BTFSC   EECON1,WR
+                      00055                 ;GOTO   DONE
+001C   1108           00056                 BCF             EECON1,WREN
+001D   1283           00057                 BCF             STATUS,5
+001E   3400           00058                 RETLW   0
+                      00059                 
+                      00060         
+                      00061                 
+                      00062 ;*********************************************************
+                      00063 ;CONFIGURATION SECTION.
+001F   1683           00064 START   BSF     STATUS,5 ;Turns to Bank1.
+0020   301F           00065                 MOVLW   B'00011111'     ;5bits of PORTA are I/P
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0021   0085           00066                 MOVWF   TRISA
+0022   3000           00067                 MOVLW   B'00000000'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0023   0086           00068                 MOVWF   TRISB           ;PORTB is OUTPUT
+0024   3007           00069                 MOVLW   B'00000111'     ;Prescaler is /256
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0025   0081           00070                 MOVWF   OPTION_R        ;TIMER is 1/32 secs.
+0026   1283           00071                 BCF     STATUS,5        ;Return to Bank0.
+0027   0185           00072                 CLRF    PORTA           ;Clears PortA.
+0028   0186           00073                 CLRF    PORTB           ;Clears PortB.
+                      00074 ;PROGRAM STARTS
+0029   2007           00075                 CALL    READ
+002A   080C           00076                 MOVF    COUNT,W
+002B   0086           00077                 MOVWF   PORTB
+002C   1C05           00078 PRESS   BTFSS   PORTA,0
+002D   282C           00079                 GOTO    PRESS
+002E   2001           00080                 CALL    DELAYP1
+002F   1805           00081 RELEASE BTFSC   PORTA,0
+0030   282F           00082                 GOTO    RELEASE
+0031   2001           00083                 CALL    DELAYP1
+Message[305]: Using default destination of 1 (file).
+0032   0A8C           00084                 INCF    COUNT
+0033   080C           00085                 MOVF    COUNT,W
+0034   0086           00086                 MOVWF   PORTB
+0035   200F           00087                 CALL    WRITE   
+0036   282C           00088                 GOTO    PRESS   
+                      00089                 END
+MPASM  5.14                        EEPROM.ASM   2-11-2015  22:06:18         PAGE  3
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+COUNT                             0000000C
+DELAYP1                           00000001
+EEADR                             00000009
+EECON1                            00000008
+EECON2                            00000009
+EEDATA                            00000008
+LOOPA                             00000002
+OPTION_R                          00000081
+PORTA                             00000005
+PORTB                             00000006
+PRESS                             0000002C
+RD                                00000000
+READ                              00000007
+RELEASE                           0000002F
+START                             0000001F
+STATUS                            00000003
+TMR0                              00000001
+TRISA                             00000085
+TRISB                             00000086
+WR                                00000001
+WREN                              00000002
+WRITE                             0000000F
+ZEROBIT                           00000002
+__16F877                          00000001
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXX---------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    55
+Program Memory Words Free:  8137
+
+
+Errors   :     0
+Warnings :     5 reported,     0 suppressed
+Messages :     4 reported,     0 suppressed
+
+

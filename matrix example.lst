@@ -1,0 +1,257 @@
+MPASM  5.14                MATRIX EXAMPLE.ASM   11-22-2014  19:16:13         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  00000001            00001 TMR0    EQU     1
+  00000003            00002 STATUS  EQU     3
+  00000005            00003 PORTA   EQU     5
+  00000006            00004 PORTB   EQU     6
+  00000002            00005 ZEROBIT EQU     2
+  00000085            00006 TRISA   EQU     85H
+  00000086            00007 TRISB   EQU     86H
+  00000081            00008 OPTION_R EQU    81H
+  0000008F            00009 OSCCON  EQU     8FH
+  00000020            00010 COUNT   EQU     20H
+  00000021            00011 A1              EQU     21H
+  00000022            00012 A2              EQU     22H
+  00000023            00013 A3              EQU     23H
+  00000024            00014 A4              EQU     24H
+  00000025            00015 A5              EQU     25H
+  00000026            00016 DISP1   EQU     26H
+  00000027            00017 DISP2   EQU     27H
+  00000028            00018 DISP3   EQU     28H
+  00000029            00019 DISP4   EQU     29H
+  00000030            00020 DISP5   EQU     30H
+  00000031            00021 STILL   EQU     31H
+                      00022 
+                      00023         LIST    P=16F818        
+0000                  00024         ORG             0
+0000   2848           00025         GOTO    START
+                      00026 
+2007   3F10           00027         __CONFIG H'3F10'
+                      00028 
+                      00029 ;SUBROUTINE
+                      00030 ;1 second delay.
+0001   0181           00031 DELAYP5 CLRF TMR0 ;START TMR0.
+0002   0801           00032 LOOPB MOVF TMR0,W ;READ TMR0 INTO W.
+0003   3C05           00033                 SUBLW .5 ;TIME-3
+0004   1D03           00034         BTFSS STATUS,ZEROBIT ;Check TIME-W ¼ 0
+0005   2802           00035         GOTO LOOPB ;Time is not ¼ 3.
+0006   0000           00036         NOP ;add extra delay
+0007   0000           00037         NOP
+0008   3400           00038         RETLW 0
+0009   0181           00039 DELAY3 CLRF TMR0 ;START TMR0.
+000A   0801           00040 LOOPC MOVF TMR0,W ;READ TMR0 INTO W.
+000B   3CAA           00041                 SUBLW .170 ;TIME-3
+000C   1D03           00042         BTFSS STATUS,ZEROBIT ;Check TIME-W ¼ 0
+000D   280A           00043         GOTO LOOPC ;Time is not ¼ 3.
+000E   0000           00044         NOP ;add extra delay
+000F   0000           00045         NOP
+0010   3400           00046         RETLW 0
+0011                  00047 SCANNING        
+0011   0826           00048                         MOVF    DISP1,W
+0012   0086           00049                         MOVWF   PORTB
+0013   3001           00050                         MOVLW   B'00000001'
+0014   0085           00051                         MOVWF   PORTA
+0015   2001           00052                         CALL    DELAYP5
+0016   0185           00053                         CLRF    PORTA
+MPASM  5.14                MATRIX EXAMPLE.ASM   11-22-2014  19:16:13         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0017   0827           00054                         MOVF    DISP2,W
+0018   0086           00055                         MOVWF   PORTB
+0019   3002           00056                         MOVLW   B'00000010'
+001A   0085           00057                         MOVWF   PORTA
+001B   2001           00058                         CALL    DELAYP5
+001C   0185           00059                         CLRF    PORTA
+001D   0828           00060                         MOVF    DISP3,W
+001E   0086           00061                         MOVWF   PORTB
+001F   3004           00062                         MOVLW   B'00000100'
+0020   0085           00063                         MOVWF   PORTA
+0021   2001           00064                         CALL    DELAYP5
+0022   0185           00065                         CLRF    PORTA
+0023   0829           00066                         MOVF    DISP4,W
+0024   0086           00067                         MOVWF   PORTB
+0025   3008           00068                         MOVLW   B'00001000'
+0026   0085           00069                         MOVWF   PORTA
+0027   2001           00070                         CALL    DELAYP5
+0028   0185           00071                         CLRF    PORTA
+0029   0830           00072                         MOVF    DISP5,W
+002A   0086           00073                         MOVWF   PORTB
+002B   3010           00074                         MOVLW   B'00010000'
+002C   0085           00075                         MOVWF   PORTA
+002D   2001           00076                         CALL    DELAYP5
+002E   0185           00077                         CLRF    PORTA
+                      00078                         
+002F   283E           00079                         GOTO    BACK2
+0030                  00080 WHILE1  
+0030   0821           00081         MOVF    A1,W
+0031   00A6           00082         MOVWF   DISP1
+                      00083 
+0032   0822           00084         MOVF    A2,W
+0033   00A1           00085         MOVWF   A1
+0034   0823           00086         MOVF    A3,W
+0035   00A2           00087         MOVWF   A2
+0036   0824           00088         MOVF    A4,W
+0037   00A3           00089         MOVWF   A3
+0038   0825           00090         MOVF    A5,W
+0039   00A4           00091         MOVWF   A4
+003A   30FF           00092         MOVLW   .255
+003B   00A5           00093         MOVWF   A5
+003C   3032           00094         MOVLW   .50
+003D   00B1           00095         MOVWF   STILL
+Message[305]: Using default destination of 1 (file).
+003E   0BB1           00096 BACK2   DECFSZ  STILL
+003F   2811           00097         GOTO    SCANNING
+0040   0829           00098                 MOVF    DISP4,W
+0041   00B0           00099                         MOVWF   DISP5
+0042   0828           00100                         MOVF    DISP3,W
+0043   00A9           00101                         MOVWF   DISP4
+0044   0827           00102                         MOVF    DISP2,W
+0045   00A8           00103                         MOVWF   DISP3
+0046   0826           00104                         MOVF    DISP1,W
+0047   00A7           00105                         MOVWF   DISP2
+MPASM  5.14                MATRIX EXAMPLE.ASM   11-22-2014  19:16:13         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00106         
+0048   1683           00107 START BSF STATUS,5 
+0049   30E0           00108         MOVLW B'11100000' ;8 bits of PORTA are I/P
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+004A   0085           00109         MOVWF TRISA
+004B   3000           00110         MOVLW B'00000000'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+004C   0086           00111         MOVWF TRISB ;PORTB is OUTPUT
+                      00112 
+004D   3003           00113         MOVLW B'00000011' ;Prescaler is /256
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+004E   0081           00114         MOVWF OPTION_R ;TIMER is 1/32 secs.
+004F   1283           00115         BCF STATUS,5 ;Return to Bank0.
+0050   0185           00116         CLRF PORTA ;Clears PortA.
+0051   0186           00117         CLRF PORTB
+0052   01A6           00118         CLRF DISP1
+0053   01A7           00119         CLRF DISP2
+0054   01A8           00120         CLRF DISP3
+0055   01A9           00121         CLRF DISP4
+0056   01B0           00122         CLRF DISP5
+                      00123 ;PROGRAM STARTS
+0057   30C1           00124 REPEAT  MOVLW   0C1H
+0058   00A1           00125         MOVWF   A1
+0059   30B7           00126         MOVLW   0B7H
+005A   00A2           00127         MOVWF   A2
+005B   3077           00128         MOVLW   77H
+005C   00A3           00129         MOVWF   A3
+005D   30B7           00130         MOVLW   0B7H
+005E   00A4           00131         MOVWF   A4
+005F   30C1           00132         MOVLW   0C1H
+0060   00A5           00133         MOVWF   A5
+0061   0821           00134 HERE    MOVF    A1,W
+0062   0086           00135         MOVWF   PORTB
+0063   3010           00136         MOVLW   B'00010000'
+0064   0085           00137                         MOVWF   PORTA
+0065   2001           00138                         CALL    DELAYP5
+0066   30FF           00139                         MOVLW   B'11111111'
+0067   0086           00140                         MOVWF   PORTB
+0068   0822           00141                         MOVF    A2,W
+0069   0086           00142                         MOVWF   PORTB
+006A   3008           00143                         MOVLW   B'00001000'
+006B   0085           00144                         MOVWF   PORTA
+006C   2001           00145                         CALL    DELAYP5
+006D   30FF           00146                         MOVLW   B'11111111'
+006E   0086           00147                         MOVWF   PORTB
+006F   0823           00148                         MOVF    A3,W
+0070   0086           00149                         MOVWF   PORTB
+0071   3004           00150                         MOVLW   B'00000100'
+0072   0085           00151                         MOVWF   PORTA
+0073   2001           00152                         CALL    DELAYP5
+0074   30FF           00153                         MOVLW   B'11111111'
+0075   0086           00154                         MOVWF   PORTB
+0076   0824           00155                         MOVF    A4,W
+MPASM  5.14                MATRIX EXAMPLE.ASM   11-22-2014  19:16:13         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0077   0086           00156                         MOVWF   PORTB
+0078   3002           00157                         MOVLW   B'00000010'
+0079   0085           00158                         MOVWF   PORTA
+007A   2001           00159                         CALL    DELAYP5
+007B   30FF           00160                         MOVLW   B'11111111'
+007C   0086           00161                         MOVWF   PORTB
+007D   0825           00162                         MOVF    A5,W
+007E   0086           00163                         MOVWF   PORTB
+007F   3001           00164                         MOVLW   B'00000001'
+0080   0085           00165                         MOVWF   PORTA
+0081   2001           00166                         CALL    DELAYP5
+0082   30FF           00167                         MOVLW   B'11111111'
+0083   0086           00168                         MOVWF   PORTB
+0084   2861           00169                         GOTO    HERE
+                      00170                         
+                      00171         END
+MPASM  5.14                MATRIX EXAMPLE.ASM   11-22-2014  19:16:13         PAGE  5
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+A1                                00000021
+A2                                00000022
+A3                                00000023
+A4                                00000024
+A5                                00000025
+BACK2                             0000003E
+COUNT                             00000020
+DELAY3                            00000009
+DELAYP5                           00000001
+DISP1                             00000026
+DISP2                             00000027
+DISP3                             00000028
+DISP4                             00000029
+DISP5                             00000030
+HERE                              00000061
+LOOPB                             00000002
+LOOPC                             0000000A
+OPTION_R                          00000081
+OSCCON                            0000008F
+PORTA                             00000005
+PORTB                             00000006
+REPEAT                            00000057
+SCANNING                          00000011
+START                             00000048
+STATUS                            00000003
+STILL                             00000031
+TMR0                              00000001
+TRISA                             00000085
+TRISB                             00000086
+WHILE1                            00000030
+ZEROBIT                           00000002
+__16F818                          00000001
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0080 : XXXXX----------- ---------------- ---------------- ----------------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:   133
+Program Memory Words Free:   891
+
+
+Errors   :     0
+Warnings :     0 reported,     0 suppressed
+Messages :     4 reported,     0 suppressed
+
+

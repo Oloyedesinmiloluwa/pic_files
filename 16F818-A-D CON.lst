@@ -1,0 +1,168 @@
+MPASM  5.14                16F818-A-D CON.ASM   8-30-2014  20:13:51         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ;HEADER FOR 16F818
+  00000001            00002 TMR0    EQU             1
+  00000003            00003 STATUS  EQU             3
+  00000005            00004 PORTA   EQU             5H
+  00000006            00005 PORTB   EQU             6H
+  00000085            00006 TRISA   EQU             85H
+  00000086            00007 TRISB   EQU             86H
+  0000001F            00008 ADCON0  EQU             1FH
+  0000009F            00009 ADCON1  EQU             9FH
+  0000001E            00010 ADRES   EQU             1EH
+  00000000            00011 CARRY   EQU             0
+  00000002            00012 ZEROBIT EQU             2
+  00000081            00013 OPTION_R        EQU             81H
+  0000008F            00014 OSCCON  EQU             8FH
+  00000020            00015 COUNT   EQU             20H
+                      00016 
+                      00017                 LIST    P=16F818
+0000                  00018                 ORG             0
+0000   2810           00019                 GOTO    START
+Warning[205]: Found directive in column 1. (__CONFIG)
+2007   3F10           00020 __CONFIG        H'3F10'
+                      00021 
+                      00022 ;SUBROUTINE SECTION
+0001   1406           00023 ON              BSF             PORTB,0
+0002   281F           00024                 GOTO    BEGIN
+0003   1006           00025 OFF             BCF             PORTB,0
+0004   281F           00026                 GOTO    BEGIN
+0005   3000           00027 OFFALL  MOVLW   .0
+0006   0086           00028                 MOVWF   PORTB
+0007   281F           00029                 GOTO    BEGIN
+0008   1086           00030 OFF2    BCF             PORTB,1
+0009   281F           00031                 GOTO    BEGIN
+000A   1106           00032 OFF3    BCF             PORTB,2
+000B   281F           00033                 GOTO    BEGIN
+000C   1186           00034 OFF4    BCF             PORTB,3
+000D   281F           00035                 GOTO    BEGIN
+000E   1206           00036 OFF5    BCF             PORTB,4
+000F   281F           00037                 GOTO    BEGIN
+                      00038 ;CONFIGURATION SECTION
+0010   1683           00039 START   BSF             STATUS,5
+0011   30FF           00040                 MOVLW   B'11111111'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0012   0085           00041                 MOVWF   TRISA
+0013   3004           00042                 MOVLW   B'00000100'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0014   009F           00043                 MOVWF   ADCON1
+0015   3000           00044                 MOVLW   B'00000000'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0016   0086           00045                 MOVWF   TRISB
+0017   3000           00046                 MOVLW   B'00000000'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0018   008F           00047                 MOVWF   OSCCON
+0019   3007           00048                 MOVLW   B'00000111'
+MPASM  5.14                16F818-A-D CON.ASM   8-30-2014  20:13:51         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+001A   0081           00049                 MOVWF   OPTION_R
+001B   1283           00050                 BCF             STATUS,5
+001C   141F           00051                 BSF             ADCON0,0
+001D   0185           00052                 CLRF    PORTA
+001E   0186           00053                 CLRF    PORTB
+                      00054 ;PROGRAM STARTS
+001F   151F           00055 BEGIN   BSF             ADCON0,2
+0020   191F           00056 WAIT1   BTFSC   ADCON0,2
+0021   2820           00057                 GOTO    WAIT1
+0022   081E           00058                 MOVF    ADRES,W
+0023   3C33           00059                 SUBLW   .51
+0024   1803           00060                 BTFSC   STATUS,CARRY
+0025   2803           00061                 GOTO    OFF
+0026   1406           00062                 BSF             PORTB,0
+0027   151F           00063                 BSF             ADCON0,2
+0028   191F           00064 WAIT2   BTFSC   ADCON0,2
+0029   2828           00065                 GOTO    WAIT2
+002A   081E           00066                 MOVF    ADRES,W
+002B   3C66           00067                 SUBLW   .102
+002C   1803           00068                 BTFSC   STATUS,CARRY
+002D   2808           00069                 GOTO    OFF2
+002E   1486           00070                 BSF             PORTB,1
+002F   151F           00071                 BSF             ADCON0,2
+0030   191F           00072 WAIT3   BTFSC   ADCON0,2
+0031   2830           00073                 GOTO    WAIT3
+0032   081E           00074                 MOVF    ADRES,W
+0033   3C99           00075                 SUBLW   .153
+0034   1803           00076                 BTFSC   STATUS,CARRY
+0035   280A           00077                 GOTO    OFF3
+0036   1506           00078                 BSF             PORTB,2
+0037   151F           00079                 BSF             ADCON0,2
+0038   191F           00080 WAIT4   BTFSC   ADCON0,2
+0039   2838           00081                 GOTO    WAIT4
+003A   081E           00082                 MOVF    ADRES,W
+003B   3CCC           00083                 SUBLW   .204
+003C   1803           00084                 BTFSC   STATUS,CARRY
+003D   280C           00085                 GOTO    OFF4
+003E   1586           00086                 BSF             PORTB,3
+003F   151F           00087                 BSF             ADCON0,2
+0040   191F           00088 WAIT5   BTFSC   ADCON0,2
+0041   2840           00089                 GOTO    WAIT5
+0042   081E           00090                 MOVF    ADRES,W
+0043   3CF0           00091                 SUBLW   .240
+0044   1803           00092                 BTFSC   STATUS,CARRY
+0045   280E           00093                 GOTO    OFF5
+0046   1606           00094                 BSF             PORTB,4
+0047   281F           00095                 GOTO    BEGIN
+                      00096                 END
+MPASM  5.14                16F818-A-D CON.ASM   8-30-2014  20:13:51         PAGE  3
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ADCON0                            0000001F
+ADCON1                            0000009F
+ADRES                             0000001E
+BEGIN                             0000001F
+CARRY                             00000000
+COUNT                             00000020
+OFF                               00000003
+OFF2                              00000008
+OFF3                              0000000A
+OFF4                              0000000C
+OFF5                              0000000E
+OFFALL                            00000005
+ON                                00000001
+OPTION_R                          00000081
+OSCCON                            0000008F
+PORTA                             00000005
+PORTB                             00000006
+START                             00000010
+STATUS                            00000003
+TMR0                              00000001
+TRISA                             00000085
+TRISB                             00000086
+WAIT1                             00000020
+WAIT2                             00000028
+WAIT3                             00000030
+WAIT4                             00000038
+WAIT5                             00000040
+ZEROBIT                           00000002
+__16F818                          00000001
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXX-------- ---------------- ---------------- ----------------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    72
+Program Memory Words Free:   952
+
+
+Errors   :     0
+Warnings :     1 reported,     0 suppressed
+Messages :     5 reported,     0 suppressed
+
+

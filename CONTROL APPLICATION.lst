@@ -1,0 +1,151 @@
+MPASM  5.14           CONTROL APPLICATION.ASM   8-9-2014  12:14:34         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ; HEADER84.ASM for 16F84. This sets PORTA as an INPUT 
+                      00002 ; and PORTB as an OUTPUT (NB 0 means output).
+                      00003 ;The OPTION Register is set to /256 to give timing pulses of 1/32 of a second.
+                      00004 ;1second and 0.5 second delays are included in the subroutine section.
+                      00005 ;*******************************************************
+                      00006 ; EQUATES SECTION
+  00000001            00007 TMR0            EQU 1           ;means TMR0 is file 1.
+  00000003            00008 STATUS          EQU 3           ;means STATUS is file 3.
+  00000005            00009 PORTA           EQU 5           ;means PORTA is file 5.
+  00000006            00010 PORTB           EQU 6           ;means PORTB is file 6.
+  00000085            00011 TRISA           EQU 85H         ;TRISA (the PORTA I/O selection) is file 85H
+  00000086            00012 TRISB           EQU 86H         ;TRISB (the PORTB I/O selection) is file 86H
+  00000081            00013 OPTION_R        EQU 81H         ;the OPTION register is file 81H
+  00000002            00014 ZEROBIT         EQU 2           ;means ZEROBIT is bit 2.
+  0000000C            00015 COUNT           EQU 0CH         ; COUNT is file 0C, a register to count events.
+                      00016 ;*********************************************************
+Warning[205]: Found directive in column 1. (LIST)
+                      00017 LIST    P=16F84 ;we are using the 16F84.
+Warning[205]: Found directive in column 1. (ORG)
+0000                  00018 ORG     0       ;the start address in memory is 0
+Warning[203]: Found opcode in column 1. (GOTO)
+0000   280D           00019 GOTO    START ;goto start!
+                      00020 ;******************************************************************
+                      00021 ; Configuration Bits
+Warning[205]: Found directive in column 1. (__CONFIG)
+2007   3FF0           00022 __CONFIG H'3FF0' ;selects LP oscillator, WDT off, PUT on,
+                      00023 ;Code Protection disabled.
+                      00024 ;*****************************************************
+                      00025 ;SUBROUTINE SECTION.
+                      00026 ; 1 second delay.
+0001   0181           00027 DELAY1  CLRF    TMR0    ;START TMR0.
+0002   0801           00028 LOOPA   MOVF    TMR0,W  ;READ TMR0 INTO W.
+0003   3C20           00029                 SUBLW   .32     ;TIME - 32
+0004   1D03           00030                 BTFSS   STATUS,ZEROBIT ; Check TIME-W¼0
+0005   2802           00031                 GOTO    LOOPA   ;Time is not¼32.
+0006   3400           00032                 RETLW   0               ;Time is 32, return.
+                      00033 ; 0.5 second delay.
+                      00034 
+0007   0181           00035 DELAYP5 CLRF    TMR0    ;START TMR0.
+0008   0801           00036 LOOPB   MOVF    TMR0,W  ;READ TMR0 INTO W.
+0009   3C10           00037                 SUBLW   .16     ;TIME - 16
+000A   1D03           00038                 BTFSS   STATUS,ZEROBIT ; Check TIME-W¼0
+000B   2808           00039                 GOTO    LOOPB   ;Time is not¼16.
+000C   3400           00040                 RETLW   0       ;Time is 16, return.
+                      00041 ;*********************************************************
+                      00042 ;CONFIGURATION SECTION.
+000D   1683           00043 START   BSF     STATUS,5 ;Turns to Bank1.
+000E   3000           00044                 MOVLW   B'00000000'     ;5bits of PORTA are I/P
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000F   0085           00045                 MOVWF   TRISA
+0010   30FF           00046                 MOVLW   B'11111111'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0011   0086           00047                 MOVWF   TRISB           ;PORTB is OUTPUT
+MPASM  5.14           CONTROL APPLICATION.ASM   8-9-2014  12:14:34         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0012   3007           00048                 MOVLW   B'00000111'     ;Prescaler is /256
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0013   0081           00049                 MOVWF   OPTION_R        ;TIMER is 1/32 secs.
+0014   1283           00050                 BCF     STATUS,5        ;Return to Bank0.
+0015   0185           00051                 CLRF    PORTA           ;Clears PortA.
+0016   0186           00052                 CLRF    PORTB           ;Clears PortB.
+                      00053 ;*********************************************************
+                      00054 ;Program starts now.
+0017   0806           00055 TEST0   MOVF    PORTB,W
+0018   3C00           00056                 SUBLW   B'00000000'
+0019   1903           00057                 BTFSC   STATUS,ZEROBIT
+001A   2828           00058                 GOTO    COND1
+001B   0806           00059 TEST1   MOVF    PORTB,W
+001C   3C01           00060                 SUBLW   B'00000001'
+001D   1903           00061                 BTFSC   STATUS,ZEROBIT
+001E   282B           00062                 GOTO    COND2
+001F   0806           00063 TEST2   MOVF    PORTB,W
+0020   3C02           00064                 SUBLW   B'00000010'
+0021   1903           00065                 BTFSC   STATUS,ZEROBIT
+0022   282E           00066                 GOTO    COND3
+0023   0806           00067 TEST3   MOVF    PORTB,W
+0024   3C03           00068                 SUBLW   B'00000011'
+0025   1903           00069                 BTFSC   STATUS,ZEROBIT
+0026   2831           00070                 GOTO    COND4
+0027   2817           00071                 GOTO    TEST0
+0028   1005           00072 COND1   BCF             PORTA,0
+0029   1485           00073                 BSF             PORTA,1
+002A   281B           00074                 GOTO    TEST1
+002B   1405           00075 COND2   BSF             PORTA,0
+002C   1085           00076                 BCF             PORTA,1
+002D   281F           00077                 GOTO    TEST2
+002E   1405           00078 COND3   BSF             PORTA,0
+002F   1485           00079                 BSF             PORTA,1
+0030   2823           00080                 GOTO    TEST3
+0031   1405           00081 COND4   BSF             PORTA,0
+0032   1085           00082                 BCF             PORTA,1
+0033   2817           00083                 GOTO    TEST0
+Warning[205]: Found directive in column 1. (END)
+                      00084 END
+MPASM  5.14           CONTROL APPLICATION.ASM   8-9-2014  12:14:34         PAGE  3
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+COND1                             00000028
+COND2                             0000002B
+COND3                             0000002E
+COND4                             00000031
+COUNT                             0000000C
+DELAY1                            00000001
+DELAYP5                           00000007
+LOOPA                             00000002
+LOOPB                             00000008
+OPTION_R                          00000081
+PORTA                             00000005
+PORTB                             00000006
+START                             0000000D
+STATUS                            00000003
+TEST0                             00000017
+TEST1                             0000001B
+TEST2                             0000001F
+TEST3                             00000023
+TMR0                              00000001
+TRISA                             00000085
+TRISB                             00000086
+ZEROBIT                           00000002
+__16F84                           00000001
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXX------------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    52
+Program Memory Words Free:   972
+
+
+Errors   :     0
+Warnings :     5 reported,     0 suppressed
+Messages :     3 reported,     0 suppressed
+
+
